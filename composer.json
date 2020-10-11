@@ -11,7 +11,10 @@
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.18.35",
-        "laravel/tinker": "^2.0"
+        "laravel/passport": "^9.3",
+        "laravel/tinker": "^2.0",
+        "nwidart/laravel-modules": "^6.2",
+        "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -32,12 +35,14 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Modules\\": "Modules/"
         },
         "classmap": [
             "database/seeds",
             "database/factories"
-        ]
+        ],
+        "files": ["app/Lib/GlobalHelper.php"] 
     },
     "autoload-dev": {
         "psr-4": {

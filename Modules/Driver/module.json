@@ -1,0 +1,13 @@
+{
+    "name": "Driver",
+    "alias": "driver",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Driver\\Providers\\DriverServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

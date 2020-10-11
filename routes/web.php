@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('login', 'Admin\AuthController@login')->name('login')->middleware('guest');
+Route::post('login', 'Admin\AuthController@loginPost')->name('admin.login.post');
+
+Route::group(['middleware' => ['validate_session']], function(){
+	Route::get('/', 'Admin\AuthController@dashboard')->name('admin.dashboard');
+	Route::get('logout', 'Admin\AuthController@logout')->name('admin.logout');
 });

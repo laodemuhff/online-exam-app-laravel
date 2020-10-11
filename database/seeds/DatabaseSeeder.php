@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -9,8 +10,22 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+
+    protected $toTruncate = ['user_admin_features','admin_features','users', 'settings'];
+
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        Schema::disableForeignKeyConstraints();
+
+        foreach($this->toTruncate as $table) {
+            DB::table($table)->truncate();
+        }
+
+        Schema::enableForeignKeyConstraints();
+
+        $this->call(UsersTableSeeder::class);
+        $this->call(AdminFeaturesTableSeeder::class);
+        $this->call(SettingsTableSeeder::class);
+
     }
 }
