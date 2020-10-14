@@ -1,0 +1,11 @@
+{
+    "User": true,
+    "Exam": true,
+    "ExamSession": true,
+    "Question": true,
+    "Option": true,
+    "StudentEnroll": true,
+    "InstructorEnroll": true,
+    "Answer": true,
+    "Report": true
+}

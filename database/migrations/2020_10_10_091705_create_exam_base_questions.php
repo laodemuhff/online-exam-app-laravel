@@ -17,7 +17,7 @@ class CreateExamBaseQuestions extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_exam');
             $table->unsignedBigInteger('id_question');
-            $table->enum('question_validity', ['Valid', 'Invalid']);
+            $table->enum('question_validity', ['Valid', 'Invalid'])->nullable();
             $table->timestamps();
 
             $table->foreign('id_exam')->references('id')->on('exams')->onDelete('cascade')->onUpdate('cascade');

@@ -21,6 +21,8 @@ class CreateExamSessionStudentEnroll extends Migration
             $table->timestamps();
 
             $table->foreign('exam_session_code')->references('exam_session_code')->on('exam_sessions')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+
         });
     }
 

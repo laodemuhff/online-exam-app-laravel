@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/examsession",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\ExamSession\\Providers\\ExamSessionServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\ExamSession\\": ""
+        }
+    }
+}

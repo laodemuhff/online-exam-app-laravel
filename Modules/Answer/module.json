@@ -1,0 +1,13 @@
+{
+    "name": "Answer",
+    "alias": "answer",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Answer\\Providers\\AnswerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
