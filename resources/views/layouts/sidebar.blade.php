@@ -88,6 +88,40 @@
 {{-- START::Route FASKES --}}
 @if(adminFeature(['armada_list','armada_create','armada_update','armada_delete']))
     {{-- armada management --}}
+    
+    @if(adminFeature(['armada_list','armada_create','armada_update','armada_delete']))
+        <li class="kt-menu__item  kt-menu__item--submenu @yield('armada')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+            <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                <i class="kt-menu__link-icon flaticon-car"></i>
+                <span class="kt-menu__link-text">Armada</span>
+                <i class="kt-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                <ul class="kt-menu__subnav">
+                    <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">
+                        <span class="kt-menu__link">
+                            <span class="kt-menu__link-text">
+                                Armada
+                            </span>
+                        </span>
+                    </li>
+                    <li class="kt-menu__item {{ Request::route()->getName() == 'armada_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                        <a href="{{route('armada.create')}}" class="kt-menu__link ">
+                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                            <span class="kt-menu__link-text">Add Armada</span>
+                        </a>
+                    </li>
+                    <li class="kt-menu__item {{ Request::route()->getName() == 'armada_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                        <a href="{{route('armada.list')}}" class="kt-menu__link ">
+                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                            <span class="kt-menu__link-text">List Armada</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    @endif
+    
     <li class="kt-menu__section ">
         <h4 class="kt-menu__section-text">Rental Management</h4>
         <i class="kt-menu__section-icon flaticon-more-v2"></i>
@@ -123,39 +157,6 @@
             </ul>
         </div>
     </li>
-
-    @if(adminFeature(['armada_list','armada_create','armada_update','armada_delete']))
-        <li class="kt-menu__item  kt-menu__item--submenu @yield('armada')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
-            <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-                <i class="kt-menu__link-icon flaticon-car"></i>
-                <span class="kt-menu__link-text">Fleet</span>
-                <i class="kt-menu__ver-arrow la la-angle-right"></i>
-            </a>
-            <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
-                <ul class="kt-menu__subnav">
-                    <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">
-                        <span class="kt-menu__link">
-                            <span class="kt-menu__link-text">
-                                Fleet
-                            </span>
-                        </span>
-                    </li>
-                    <li class="kt-menu__item {{ Request::route()->getName() == 'armada_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                        <a href="{{route('armada.create')}}" class="kt-menu__link ">
-                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                            <span class="kt-menu__link-text">Add Fleet</span>
-                        </a>
-                    </li>
-                    <li class="kt-menu__item {{ Request::route()->getName() == 'armada_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                        <a href="{{route('armada.list')}}" class="kt-menu__link ">
-                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                            <span class="kt-menu__link-text">List Fleet</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-    @endif
     
     <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon-cart"></i><span class="kt-menu__link-text">Rent</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
         <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
