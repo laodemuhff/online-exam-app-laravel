@@ -114,6 +114,44 @@ class MyHelper
         return $result;
     }
 
+    public static function uploadImagePublic($dir){
+        $target_dir = $dir;
+        $target_file = public_path(). $target_dir .basename($_FILES["photo"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+        // Check if image file is a actual image or fake image
+        if(isset($_POST["submit"])) {
+            $check = getimagesize($_FILES["photo"]["tmp_name"]);
+            if($check == false) {
+                return  ['status' => 'fail', 'message' => "File is not an image."];
+            }
+        }
+
+        // // Check if file already exists
+        // if (file_exists($target_file)) {
+        //     unlink($target_file);
+        // }
+
+        // Check file size
+        if ($_FILES["photo"]["size"] > 500000) {
+            return  ['status' => 'fail', 'message' => "Sorry, your file is too large."];
+        }
+
+        // Allow certain file formats
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif" ) {
+            return  ['status' => 'fail', 'message' => "Sorry, only JPG, JPEG, PNG & GIF files are allowed."];
+        }
+
+        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            return  ['status' => 'success', 'filename' => $target_dir .basename($_FILES["photo"]["name"]), 'message' => "The file has been uploaded."];
+        } else {
+            return  ['status' => 'fail', 'message' => "Sorry, there was an error uploading your file."];
+        }
+    
+    }
+
     // check extension untuk gambar type base 64
 	public static function checkExtensionImageBase64($imgdata){
         $f = finfo_open();

@@ -10,7 +10,7 @@
     <span class="kt-subheader__separator kt-hidden"></span>
     <div class="kt-subheader__breadcrumbs">
         <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-        <a href="{{route('admin.admin.management.create')}}" class="kt-subheader__breadcrumbs-link">
+        <a href="{{route('admin.admin.management.list')}}" class="kt-subheader__breadcrumbs-link">
             List Admin
         </a>
     </div>
@@ -199,7 +199,7 @@
         function reset() {
             $('#name').val('');
             $('#email').val('');
-            $('#searchBrand').val('').trigger('change');
+            $('#search').val('').trigger('change');
         }
     </script>
 @endsection
