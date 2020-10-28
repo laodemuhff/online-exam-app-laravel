@@ -1,71 +1,39 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Management')
-@section('admin-management', 'kt-menu__item--open')
+@section('title', 'Armada Management')
+@section('armada', 'kt-menu__item--open')
 
 @section('breadcrumb')
     <h3 class="kt-subheader__title">
-        Admin Management
+        Armada Management
     </h3>
     <span class="kt-subheader__separator kt-hidden"></span>
     <div class="kt-subheader__breadcrumbs">
         <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-        <a href="{{route('admin.admin.management.list')}}" class="kt-subheader__breadcrumbs-link">
-            List Admin
+        <a href="{{route('armada.list')}}" class="kt-subheader__breadcrumbs-link">
+            List Tipe Armada
         </a>
     </div>
+
 @endsection
 @section('styles')
     <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
-    {{-- Search Path --}}
-    <div class="kt-portlet">
-        <div class="kt-portlet__body" style="padding-bottom: 0">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group ">
-                        <label>Name</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-user-outline-symbol"></i></span></div>
-                            <input id="name" type="text" class="form-control" placeholder="E.g: Admin Yudi" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group ">
-                        <label>Email</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend"><span class="input-group-text">@</span></div>
-                            <input id="email" type="text" class="form-control" placeholder="E.g: yudi@hemofilia.com" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer col-md-12">
-                <div class="pull-right">
-                    <button id="reset" class="btn btn-secondary btn-sm">
-                        <i class="flaticon2-refresh-button"></i> Reset
-                    </button>
-                    <button id="search" class="btn btn-info btn-sm">
-                        <i class="flaticon-search"></i> Search
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     {{-- Body Path --}}
     <div class="kt-portlet">
         <div class="kt-portlet__body">
             @include('layouts.notification')
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addTipeArmada"><i class="la la-plus"></i></a>
+                </div>
+            </div>
             <table id="datatable" class="table table-hover" style="width:100%">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Admin Name</th>
-                        <th>Admin Email</th>
-                        <th>Action</th>
+                        <th>Tipe Armada</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -76,12 +44,81 @@
             {{-- <div class="kt-separator kt-separator--dashed"></div> --}}
         </div>
     </div>
+
+    <!-- Button trigger modal -->
+    
+    <!-- Modal Store -->
+    <form action="{{ route('tipe_armada.store') }}" method="POST">
+        @csrf
+        <div class="modal fade" id="addTipeArmada" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Tipe Armada</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="" class="col-form-label">Tipe</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="tipe" class="form-control" placeholder="Masukkan Tipe" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal Update -->
+    @foreach ($tipe_armada as $item)
+    <form action="{{ route('tipe_armada.update', [encSlug($item['id'])] ) }}" method="POST">
+        @csrf
+        <div class="modal fade" id="updateTipeArmada{{$item['id']}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update Tipe Armada</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="" class="col-form-label">Tipe</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="tipe" class="form-control" placeholder="Masukkan Tipe" value="{{ $item['tipe'] }}" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @endforeach
 @endsection
 @section('scripts')
+    <script src="{{ asset('assets/js/helper.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}" type="text/javascript"></script>
     <script>
         // $.fn.dataTable.ext.errMode = 'none';
         $(document).ready( function () {
+            var url = $('#url').val();
+
             $('#datatable').DataTable({
             responsive: true,
             processing: true,
@@ -89,11 +126,10 @@
             stateSave: true,
             "bFilter": false,
             "lengthChange": false,
-            ajax: "{{ route('admin.admin.management.table') }}",
+            ajax: "{{ route('tipe_armada.table') }}",
             columns: [
                 {data: 'DT_RowIndex', name: 'id', searchable: false, orderable: false},
-                {data: 'name', name: 'name'},
-                {data: 'email', name: 'email'},
+                {data: 'tipe', name: 'tipe_armada'},
                 {data: 'action', name: 'action', searchable: false, orderable: false}
             ]
         });
@@ -156,50 +192,5 @@
                 }
             });
         });
-    </script>
-    <script>
-        $(document).on('click', '#search', function() {
-            var name    = $('#name').val();
-            var email   = $('#email').val();
-            search(name, email);
-        });
-
-        $(document).on('click', '#reset', function(){
-            reset();
-            search();
-        });
-
-        function search(name = '', email = '') {
-            // $.fn.dataTable.ext.errMode = 'none';
-
-            var table = $('#datatable').DataTable({
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                destroy: true,
-                "bFilter": false,
-                "lengthChange": false,
-                ajax: {
-                    url: "{{ route('admin.admin.management.table') }}",
-                    type: 'get',
-                    data: function(d) {
-                        d.name = name;
-                        d.email = email;
-                    }
-                },
-                columns: [
-                    {data: 'DT_RowIndex', name: 'id', searchable: false, orderable: false},
-                    {data: 'name', name: 'name'},
-                    {data: 'email', name: 'email'},
-                    {data: 'action', name: 'action', searchable: false, orderable: false}
-                ]
-            });
-        }
-
-        function reset() {
-            $('#name').val('');
-            $('#email').val('');
-            $('#search').val('').trigger('change');
-        }
     </script>
 @endsection

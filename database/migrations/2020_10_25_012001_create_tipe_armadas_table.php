@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDriverTable extends Migration
+class CreateTipeArmadasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateDriverTable extends Migration
      */
     public function up()
     {
-        Schema::create('driver', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('tipe_armadas', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('tipe');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ class CreateDriverTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('driver');
+        Schema::dropIfExists('tipe_armadas');
     }
 }

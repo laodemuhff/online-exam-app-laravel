@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRentalTable extends Migration
+class AddPhotoInArmadas extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateRentalTable extends Migration
      */
     public function up()
     {
-        Schema::create('rental', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+        Schema::table('armadas', function (Blueprint $table) {
+            $table->string('photo')->after('price');
         });
     }
 
@@ -26,6 +25,8 @@ class CreateRentalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rental');
+        Schema::table('armadas', function (Blueprint $table) {
+            $table->dropColumn('photo');
+        });
     }
 }

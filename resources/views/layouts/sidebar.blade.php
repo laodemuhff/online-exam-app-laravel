@@ -66,18 +66,22 @@
                             </span>
                         </span>
                     </li>
-                    <li class="kt-menu__item {{ Request::route()->getName() == 'admin.admin.management.create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                        <a href="{{route('admin.admin.management.create')}}" class="kt-menu__link ">
-                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                            <span class="kt-menu__link-text">Create Admin</span>
-                        </a>
-                    </li>
-                    <li class="kt-menu__item {{ Request::route()->getName() == 'admin.admin.management.list' ? 'kt-menu__item--active' : '' }}{{ Request::route()->getName() == 'admin.admin.management.edit' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                        <a href="{{route('admin.admin.management.list')}}" class="kt-menu__link ">
-                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                            <span class="kt-menu__link-text">List Admin</span>
-                        </a>
-                    </li>
+                    @if(adminFeature(['admin_management_create']))
+                        <li class="kt-menu__item {{ Request::route()->getName() == 'admin.admin.management.create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                            <a href="{{route('admin.admin.management.create')}}" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                                <span class="kt-menu__link-text">Create Admin</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if(adminFeature(['admin_management_list','admin_management_update','admin_management_delete']))
+                        <li class="kt-menu__item {{ Request::route()->getName() == 'admin.admin.management.list' ? 'kt-menu__item--active' : '' }}{{ Request::route()->getName() == 'admin.admin.management.edit' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                            <a href="{{route('admin.admin.management.list')}}" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                                <span class="kt-menu__link-text">List Admin</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </li>
@@ -85,10 +89,13 @@
 @endif
 {{-- END::Route USER --}}
 
-{{-- START::Route FASKES --}}
+
 @if(adminFeature(['armada_list','armada_create','armada_update','armada_delete']))
-    {{-- armada management --}}
-    
+    <li class="kt-menu__section ">
+        <h4 class="kt-menu__section-text">Rental Management</h4>
+        <i class="kt-menu__section-icon flaticon-more-v2"></i>
+    </li>
+
     @if(adminFeature(['armada_list','armada_create','armada_update','armada_delete']))
         <li class="kt-menu__item  kt-menu__item--submenu @yield('armada')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
             <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
@@ -105,29 +112,36 @@
                             </span>
                         </span>
                     </li>
-                    <li class="kt-menu__item {{ Request::route()->getName() == 'armada_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                        <a href="{{route('armada.create')}}" class="kt-menu__link ">
-                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                            <span class="kt-menu__link-text">Add Armada</span>
-                        </a>
-                    </li>
-                    <li class="kt-menu__item {{ Request::route()->getName() == 'armada_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                        <a href="{{route('armada.list')}}" class="kt-menu__link ">
-                            <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                            <span class="kt-menu__link-text">List Armada</span>
-                        </a>
-                    </li>
+                    @if(adminFeature(['tipe_armada_list', 'tipe_armada_create', 'tipe_armada_update', 'tipe_armada_delete']))
+                        <li class="kt-menu__item {{ Request::route()->getName() == 'tipe_armada.list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                            <a href="{{route('tipe_armada.list')}}" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                                <span class="kt-menu__link-text">Tipe Armada</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if(adminFeature(['armada_create']))
+                        <li class="kt-menu__item {{ Request::route()->getName() == 'armada.create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                            <a href="{{route('armada.create')}}" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                                <span class="kt-menu__link-text">Add Armada</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if(adminFeature(['armada_list','armada_update','armada_delete']))
+                        <li class="kt-menu__item {{ Request::route()->getName() == 'armada.list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                            <a href="{{route('armada.list')}}" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                                <span class="kt-menu__link-text">List Armada</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </li>
     @endif
-    
-    <li class="kt-menu__section ">
-        <h4 class="kt-menu__section-text">Rental Management</h4>
-        <i class="kt-menu__section-icon flaticon-more-v2"></i>
-    </li>
 
-    <li class="kt-menu__item  kt-menu__item--submenu @yield('armada')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+    {{-- <li class="kt-menu__item  kt-menu__item--submenu @yield('driver')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
         <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
             <i class="kt-menu__link-icon flaticon-users-1"></i>
             <span class="kt-menu__link-text">Driver</span>
@@ -142,21 +156,21 @@
                         </span>
                     </span>
                 </li>
-                <li class="kt-menu__item {{ Request::route()->getName() == 'armada_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                    <a href="{{route('armada.create')}}" class="kt-menu__link ">
+                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('driver.create')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">Add Driver</span>
                     </a>
                 </li>
-                <li class="kt-menu__item {{ Request::route()->getName() == 'armada_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                    <a href="{{route('armada.list')}}" class="kt-menu__link ">
+                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('driver.list')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">List Driver</span>
                     </a>
                 </li>
             </ul>
         </div>
-    </li>
+    </li> --}}
     
     <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon-cart"></i><span class="kt-menu__link-text">Rent</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
         <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
@@ -176,7 +190,6 @@
             </ul>
         </div>
     </li>
-
 @endif
 {{-- END::Route Armada --}}
 
