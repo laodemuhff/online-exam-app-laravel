@@ -26,6 +26,16 @@ class ArmadaController extends Controller
     public function store(Request $request){
         DB::beginTransaction();
         $post = $request->except('_token');
+
+        $request->validate([
+            'id_tipe_armada' => 'required',
+            'kode_armada' => 'required|unique:armadas,kode_armada',
+            'status_armada' => 'required',
+            'status_driver' => 'required',
+            'price' => 'required',
+            'photo' => 'required|image'
+        ]);
+
         //dd($post);
         try {
             $result = MyHelper::uploadImagePublic('\image\armada\\');
@@ -44,7 +54,7 @@ class ArmadaController extends Controller
             }
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->back()->withErrors("create armada error");
+            return redirect()->back()->withErrors('Galat : '.$th->getMessage());
         }
 
     }
@@ -129,14 +139,20 @@ class ArmadaController extends Controller
                 return redirect()->back()->withErrors('update armada failed');
             }
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
-            return redirect()->back()->withErrors("update armada error");
+            return redirect()->back()->withErrors('Galat : '.$th->getMessage());
         }
     }
 
     public function delete($id){
         $id = decSlug($id);
         return Armada::destroy($id);
+    }
+
+    public function generateRandomCode(Request $request){
+        $id = str_replace(' ', '', $request->get('id'));
+        $code = $id.'-'.MyHelper::createrandom(4, null, '123456789');
+
+        return response()->json(['code' => $code]);
     }
 }

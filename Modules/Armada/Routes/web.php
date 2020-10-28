@@ -19,10 +19,12 @@ Route::prefix('armada')->middleware('validate_session')->group(function() {
     Route::get('edit/{id}', 'ArmadaController@edit')->name('armada.edit')->middleware('feature_control:armada_update');
     Route::post('update/{id}', 'ArmadaController@update')->name('armada.update')->middleware('feature_control:armada_update');
     Route::delete('delete/{id}', 'ArmadaController@delete')->name('armada.delete')->middleware('feature_control:armada_delete');
+    Route::get('generate-random-code', 'ArmadaController@generateRandomCode');
 });
 
 Route::prefix('tipe_armada')->middleware('validate_session')->group(function(){
     Route::get('/', 'TipeArmadaController@index')->name('tipe_armada.list');
+    Route::get('table', 'TipeArmadaController@table')->name('tipe_armada.table')->middleware('feature_control:tipe_armada_list,tipe_armada_update,tipe_armada_delete');
     Route::post('store', 'TipeArmadaController@store')->name('tipe_armada.store')->middleware('feature_control:tipe_armada_create');
     Route::post('update/{id}', 'TipeArmadaController@update')->name('tipe_armada.update')->middleware('feature_control:tipe_armada_update');
     Route::delete('delete/{id}', 'TipeArmadaController@delete')->name('tipe_armada.delete')->middleware('feature_control:tipe_armada_delete');

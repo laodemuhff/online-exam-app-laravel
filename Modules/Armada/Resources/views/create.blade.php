@@ -52,7 +52,7 @@
                                 </div>
                             </label>
                             <div class="col-8">
-                                <select class="form-control" name="id_tipe_armada" required>
+                                <select class="form-control" name="id_tipe_armada" id="id_tipe_armada" required>
                                     <option value="">Pilih Tipe Armada</option>
                                     @foreach ($tipe_armada as $item)
                                         <option value="{{ $item['id'] }}">{{ ucfirst($item['tipe']) }}</option>
@@ -68,9 +68,9 @@
                             </label>
                             <div class="col-8">
                                 <div class="input-group">
-                                    <input class="form-control" type="text" name="kode_armada" placeholder="E.g: AVANZA4000cc" autocomplete="off" required>
+                                    <input class="form-control" type="text" name="kode_armada" id="kode_armada" placeholder="E.g: AVANZA4000cc" autocomplete="off" required>
                                     <div class="input-group-append">
-                                        <a class="btn btn-secondary" id="btn-acak">#Acak Kode</a>
+                                        <a class="btn btn-secondary" id="btn-acak" data-url={{url('/')}}>#Acak Kode</a>
                                     </div>
                                 </div>
                             </div>
@@ -142,5 +142,21 @@
         $('#price').on('keyup',function(e){
             $("#price").inputmask({ alias : "currency", prefix: 'Rp ',rightAlign: false, 'digits': '0',autoUnmask: true });
         });
+
+        $('#btn-acak').on('click', function(e){
+            var url = $(this).data('url') +'/armada/generate-random-code?id=' + $('#id_tipe_armada option:selected').text()
+
+            $.ajax({
+                'type' : 'GET',
+                'dataType' : 'json',
+                'url' : url 
+            }).done(function(result){
+                console.log(result.code)
+                $('#kode_armada').val(result.code)
+
+            }).fail(function(jqXHR, textStatus){
+                console.log(textStatus)
+            })
+        })
     </script>
 @endsection
