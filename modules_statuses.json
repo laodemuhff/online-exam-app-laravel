@@ -3,5 +3,6 @@
     "Armada": true,
     "Setting": true,
     "Rental": true,
-    "Driver": true
+    "Driver": true,
+    "Transaction": true
 }

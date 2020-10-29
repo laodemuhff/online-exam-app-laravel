@@ -99,7 +99,7 @@
     @if(adminFeature(['armada_list','armada_create','armada_update','armada_delete']))
         <li class="kt-menu__item  kt-menu__item--submenu @yield('armada')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
             <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-                <i class="kt-menu__link-icon flaticon-car"></i>
+                <i class="kt-menu__link-icon la la-car" style="font-size:1.6em"></i>
                 <span class="kt-menu__link-text">Armada</span>
                 <i class="kt-menu__ver-arrow la la-angle-right"></i>
             </a>
@@ -141,9 +141,9 @@
         </li>
     @endif
 
-    {{-- <li class="kt-menu__item  kt-menu__item--submenu @yield('driver')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('driver')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
         <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-            <i class="kt-menu__link-icon flaticon-users-1"></i>
+            <i class="kt-menu__link-icon flaticon-car"></i>
             <span class="kt-menu__link-text">Driver</span>
             <i class="kt-menu__ver-arrow la la-angle-right"></i>
         </a>
@@ -156,37 +156,110 @@
                         </span>
                     </span>
                 </li>
-                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                    <a href="{{route('driver.create')}}" class="kt-menu__link ">
-                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">Add Driver</span>
-                    </a>
-                </li>
-                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                <li class="kt-menu__item {{ Request::route()->getName() == 'driver.list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
                     <a href="{{route('driver.list')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">List Driver</span>
                     </a>
                 </li>
+                <li class="kt-menu__item {{ Request::route()->getName() == 'driver.assign' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('driver.assign')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Assign Driver</span>
+                    </a>
+                </li>
             </ul>
         </div>
-    </li> --}}
+    </li>
+
+
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('syarat_dan_jaminan')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+        <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+            <i class="kt-menu__link-icon la la-paperclip" style="font-size: 1.6em"></i>
+            <span class="kt-menu__link-text">Syarat & Jaminan</span>
+            <i class="kt-menu__ver-arrow la la-angle-right"></i>
+        </a>
+        <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+            <ul class="kt-menu__subnav">
+                <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">
+                    <span class="kt-menu__link">
+                        <span class="kt-menu__link-text">
+                            Syarat & Jaminan
+                        </span>
+                    </span>
+                </li>
+                {{-- <li class="kt-menu__item {{ Request::route()->getName() == 'driver_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('driver.create')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Add Syarat & Jaminan</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('driver.list')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">List Syarat & Jaminan</span>
+                    </a>
+                </li> --}}
+            </ul>
+        </div>
+    </li>
     
-    <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon-cart"></i><span class="kt-menu__link-text">Rent</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('transaction')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon la la-cart-plus" style="font-size: 1.6em"></i><span class="kt-menu__link-text">Transaction</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
         <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
             <ul class="kt-menu__subnav">
                 <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Transaction</span></span></li>
-                <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">List Transaction</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+                <li class="kt-menu__item  kt-menu__item--submenu @yield('transaction_list')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">List Transaction</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                     <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                         <ul class="kt-menu__subnav">
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-default.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pending</span><span class="kt-menu__link-badge"><span class="kt-badge kt-badge--warning kt-badge--inline" style="color:white">13 fleet</span></span></a></li>
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-datatable.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Cancelled</span></a></li>
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-columns-1.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">On Rent</span><span class="kt-menu__link-badge"><span class="kt-badge kt-badge--success kt-badge--inline">5 fleet</span></span></a></li>
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-columns-2.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">History</span></a></li>
+                            <li class="kt-menu__item @yield('transaction_list_pending')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'pending') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">Pending</span>
+                                    <span class="kt-menu__link-badge">
+                                        <span class="kt-badge kt-badge--warning kt-badge--inline" style="color:white">13 fleet</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="kt-menu__item @yield('transaction_list_cancelled')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'cancelled') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">Cancelled</span>
+                                </a>
+                            </li>
+                            <li class="kt-menu__item @yield('transaction_list_on_rent')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'on_rent') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">On Rent</span>
+                                    <span class="kt-menu__link-badge">
+                                        <span class="kt-badge kt-badge--success kt-badge--inline">5 fleet</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="kt-menu__item @yield('transaction_list_success')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'success') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">Success</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
-                <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/inbox.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Create Transaction</span></a></li>
+                <li class="kt-menu__item {{ Request::route()->getName() == 'transaction.create' ? 'kt-menu__item--active' : ''}}" aria-haspopup="true">
+                    <a href="{{ route('transaction.create') }}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line">
+                            <span></span>
+                        </i>
+                        <span class="kt-menu__link-text">Create Transaction</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </li>
@@ -206,18 +279,16 @@
     @if(adminFeature(['setting_maintenance_mode']))
         <li class="kt-menu__item {{ Request::route()->getName() == 'setting.maintenance.mode' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
             <a href="{{route('setting.maintenance.mode')}}" class="kt-menu__link ">
-                <i class="kt-menu__link-icon la la-gears"></i><span class="kt-menu__link-text">Maintenance Mode</span>
-            </a>
-        </li>
-    @endif
-    @if(adminFeature(['setting_app_version']))
-        <li class="kt-menu__item {{ Request::route()->getName() == 'setting.app-version.index' ? 'kt-menu__item--active' : ''  }}" aria-haspopup="true">
-            <a href="{{route('setting.app-version.index')}}" class="kt-menu__link ">
-                <i class="kt-menu__link-icon la flaticon-app"></i><span class="kt-menu__link-text">App Version</span>
+                <i class="kt-menu__link-icon la la-gears" style="font-size: 1.6em"></i><span class="kt-menu__link-text">Maintenance Mode</span>
             </a>
         </li>
     @endif
 
+    <li class="kt-menu__item {{ Request::route()->getName() == 'setting.wordings' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+        <a href="{{route('setting.wordings')}}" class="kt-menu__link ">
+            <i class="kt-menu__link-icon la la-font" style="font-size: 1.6em"></i><span class="kt-menu__link-text">App Wordings</span>
+        </a>
+    </li>
 
 @endif
 {{-- END::Route SETTING --}}

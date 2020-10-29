@@ -20,6 +20,10 @@ class Armada extends Model
         return $this->belongsTo('App\Models\TipeArmada', 'id_tipe_armada', 'id');
     }
 
+    public function transaction(){
+        return $this->hasMany('App\Models\Transaction', 'id_armada', 'id');
+    }
+
     public static function getEnumValues($column){
         // Create an instance of the model to be able to get the table name
         $instance = new static;

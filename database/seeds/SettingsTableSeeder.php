@@ -4,49 +4,77 @@ use Illuminate\Database\Seeder;
 
 class SettingsTableSeeder extends Seeder
 {
+
     /**
-     * Run the database seeds.
+     * Auto generated seed file
      *
      * @return void
      */
     public function run()
     {
-        DB::table('settings')->insert([
-            'key' => 'maintenance_start_date',
-            'value' => '2020-08-12',
-        ]);
+        
 
-        DB::table('settings')->insert([
-            'key' => 'maintenance_end_date',
-            'value' => '2020-08-19',
-        ]);
-
-        DB::table('settings')->insert([
-            'key' => 'maintenance_background',
-            'value' => 'data/maintenance-mode/2020-08-12_043217.png',
-        ]);
-
-        DB::table('settings')->insert([
-            'key' => 'maintenance_image',
-            'value' => 'data/maintenance-mode/2020-08-12_043218.png',
-        ]);
-
-        DB::table('settings')->insert([
-            'key' => 'maintenance_title',
-            'value' => 'Website is on Maintenance',
-        ]);
-
-         DB::table('settings')->insert([
-            'key' => 'maintenance_content',
-            'value' => 'Please Wait',
-        ]);
+        \DB::table('settings')->delete();
+        
+        \DB::table('settings')->insert(array (
+            0 => 
+            array (
+                'id' => 1,
+                'key' => 'maintenance_start_date',
+                'value' => '2020-08-01',
+                'created_at' => NULL,
+                'updated_at' => '2020-10-29 03:49:48',
+            ),
+            1 => 
+            array (
+                'id' => 2,
+                'key' => 'maintenance_end_date',
+                'value' => '2020-08-28',
+                'created_at' => NULL,
+                'updated_at' => '2020-10-29 03:49:48',
+            ),
+            2 => 
+            array (
+                'id' => 3,
+                'key' => 'maintenance_background',
+                'value' => 'http://localhost/evo_transport/public/image/maintenance/unnamed.png',
+                'created_at' => NULL,
+                'updated_at' => '2020-10-29 03:28:15',
+            ),
+            3 => 
+            array (
+                'id' => 4,
+                'key' => 'maintenance_image',
+                'value' => 'http://localhost/evo_transport/public/image/maintenance/clipart1758033.png',
+                'created_at' => NULL,
+                'updated_at' => '2020-10-29 03:28:15',
+            ),
+            4 => 
+            array (
+                'id' => 5,
+                'key' => 'maintenance_title',
+                'value' => 'Website is on Maintenance',
+                'created_at' => NULL,
+                'updated_at' => '2020-10-29 03:49:48',
+            ),
+            5 => 
+            array (
+                'id' => 6,
+                'key' => 'maintenance_content',
+                'value' => 'Please Wait, We are on Maintenance Mode',
+                'created_at' => NULL,
+                'updated_at' => '2020-10-29 03:49:48',
+            ),
+            6 => 
+            array (
+                'id' => 7,
+                'key' => 'maintenance_status',
+                'value' => '0',
+                'created_at' => NULL,
+                'updated_at' => '2020-10-29 03:49:48',
+            ),
+        ));
+        
+        
     }
 }
-
-Route::get('data', 'Admin\armadaController@data')->name('armada.data')->middleware('feature_control:armada_list');
-Route::get('/', 'Admin\armadaController@index')->name('armada.list')->middleware('feature_control:armada_list');
-Route::get('create', 'Admin\armadaController@create')->name('armada.create')->middleware('feature_control:armada_create');
-Route::post('store', 'Admin\armadaController@store')->name('armada.store')->middleware('feature_control:armada_create');
-Route::get('edit/{id}', 'Admin\armadaController@edit')->name('armada.edit')->middleware('feature_control:armada_update');
-Route::post('update', 'Admin\armadaController@update')->name('armada.update')->middleware('feature_control:armada_update');
-Route::delete('delete/{id}', 'Admin\armadaController@delete')->name('armada.delete')->middleware('feature_control:armada_delete');
