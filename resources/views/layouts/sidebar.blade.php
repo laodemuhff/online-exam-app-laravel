@@ -156,16 +156,16 @@
                         </span>
                     </span>
                 </li>
-                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
-                    <a href="{{route('driver.create')}}" class="kt-menu__link ">
-                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">Add Driver</span>
-                    </a>
-                </li>
-                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                <li class="kt-menu__item {{ Request::route()->getName() == 'driver.list' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
                     <a href="{{route('driver.list')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">List Driver</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item {{ Request::route()->getName() == 'driver.assign' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('driver.assign')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Assign Driver</span>
                     </a>
                 </li>
             </ul>
@@ -173,7 +173,7 @@
     </li>
 
 
-    <li class="kt-menu__item  kt-menu__item--submenu @yield('driver')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('syarat_dan_jaminan')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
         <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
             <i class="kt-menu__link-icon la la-paperclip" style="font-size: 1.6em"></i>
             <span class="kt-menu__link-text">Syarat & Jaminan</span>
@@ -188,7 +188,7 @@
                         </span>
                     </span>
                 </li>
-                <li class="kt-menu__item {{ Request::route()->getName() == 'driver_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
+                {{-- <li class="kt-menu__item {{ Request::route()->getName() == 'driver_create' ? 'kt-menu__item--active' : '' }}" aria-haspopup="true">
                     <a href="{{route('driver.create')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">Add Syarat & Jaminan</span>
@@ -199,7 +199,7 @@
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">List Syarat & Jaminan</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </li>
