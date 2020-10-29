@@ -57,4 +57,17 @@ if (! function_exists('decSlug')) {
     }
 }
 
+if (! function_exists('tgl_indo')) {
+	function tgl_indo($tanggal){
+		return MyHelper::tgl_indo($tanggal);
+	}
+}
+
+
+if (! function_exists('IDR')) {
+	function IDR($price){
+		return MyHelper::IDR($price);
+	}
+}
+
 

@@ -11,6 +11,6 @@ class TipeArmada extends Model
     ];
 
     public function armada(){
-        $this->hasMany('App\Models\Armada', 'id_tipe_armada', 'id');
+        return $this->hasMany('App\Models\Armada', 'id_tipe_armada', 'id');
     }
 }

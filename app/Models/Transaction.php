@@ -5,23 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Armada extends Model
+class Transaction extends Model
 {
     protected $fillable = [
-        'kode_armada',
-        'id_tipe_armada',
-        'status_armada',
-        'status_driver',
-        'price',
-        'photo'
+        'nama_customer',
+        'alamat_customer',
+        'no_hp_customer',
+        'id_armada',
+        'durasi_sewa',
+        'pickup_date',
+        'note',
+        'status_lepas_kunci',
+        'status_pengambilan',
+        'status_transaksi',
+        'grand_total'
     ];
 
-    public function tipe_armada(){
-        return $this->belongsTo('App\Models\TipeArmada', 'id_tipe_armada', 'id');
-    }
-
-    public function transaction(){
-        return $this->hasMany('App\Models\Transaction', 'id_armada', 'id');
+    public function armada(){
+        return $this->belongsTo('App\Models\Armada', 'id_armada', 'id');
     }
 
     public static function getEnumValues($column){
@@ -41,4 +42,5 @@ class Armada extends Model
         // Return matches
         return isset($matches[1]) ? $matches[1] : [];
     }
+
 }

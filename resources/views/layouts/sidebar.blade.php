@@ -204,21 +204,62 @@
         </div>
     </li>
     
-    <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon la la-cart-plus" style="font-size: 1.6em"></i><span class="kt-menu__link-text">Transaction</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('transaction')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon la la-cart-plus" style="font-size: 1.6em"></i><span class="kt-menu__link-text">Transaction</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
         <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
             <ul class="kt-menu__subnav">
                 <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Transaction</span></span></li>
-                <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">List Transaction</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+                <li class="kt-menu__item  kt-menu__item--submenu @yield('transaction_list')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">List Transaction</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                     <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                         <ul class="kt-menu__subnav">
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-default.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pending</span><span class="kt-menu__link-badge"><span class="kt-badge kt-badge--warning kt-badge--inline" style="color:white">13 fleet</span></span></a></li>
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-datatable.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Cancelled</span></a></li>
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-columns-1.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">On Rent</span><span class="kt-menu__link-badge"><span class="kt-badge kt-badge--success kt-badge--inline">5 fleet</span></span></a></li>
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/user/list-columns-2.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">History</span></a></li>
+                            <li class="kt-menu__item @yield('transaction_list_pending')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'pending') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">Pending</span>
+                                    <span class="kt-menu__link-badge">
+                                        <span class="kt-badge kt-badge--warning kt-badge--inline" style="color:white">13 fleet</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="kt-menu__item @yield('transaction_list_cancelled')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'cancelled') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">Cancelled</span>
+                                </a>
+                            </li>
+                            <li class="kt-menu__item @yield('transaction_list_on_rent')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'on_rent') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">On Rent</span>
+                                    <span class="kt-menu__link-badge">
+                                        <span class="kt-badge kt-badge--success kt-badge--inline">5 fleet</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="kt-menu__item @yield('transaction_list_success')" aria-haspopup="true">
+                                <a href="{{ route('transaction.list', 'success') }}" class="kt-menu__link ">
+                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="kt-menu__link-text">Success</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
-                <li class="kt-menu__item " aria-haspopup="true"><a href="custom/apps/inbox.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Create Transaction</span></a></li>
+                <li class="kt-menu__item {{ Request::route()->getName() == 'transaction.create' ? 'kt-menu__item--active' : ''}}" aria-haspopup="true">
+                    <a href="{{ route('transaction.create') }}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line">
+                            <span></span>
+                        </i>
+                        <span class="kt-menu__link-text">Create Transaction</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </li>
