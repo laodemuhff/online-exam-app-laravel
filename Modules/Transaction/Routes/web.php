@@ -12,8 +12,8 @@
 */
 
 Route::prefix('transaction')->middleware('validate_session')->group(function() {
-    Route::get('/{status}', 'TransactionController@index')->name('transaction.list')->middleware('feature_control:transaction_list');
-    Route::get('/{status}/table', 'TransactionController@table')->name('transaction.table')->middleware('feature_control:transaction_list,transaction_update,transaction_delete');
+    Route::get('list/{status}', 'TransactionController@index')->name('transaction.list')->middleware('feature_control:transaction_list');
+    Route::get('list/{status}/table', 'TransactionController@table')->name('transaction.table')->middleware('feature_control:transaction_list,transaction_update,transaction_delete');
     Route::get('create', 'TransactionController@create')->name('transaction.create')->middleware('feature_control:transaction_create');
     Route::post('store', 'TransactionController@store')->name('transaction.store')->middleware('feature_control:transaction_create');
     Route::get('edit/{id}', 'TransactionController@edit')->name('transaction.edit')->middleware('feature_control:transaction_update');

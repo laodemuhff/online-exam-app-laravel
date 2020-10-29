@@ -16,12 +16,11 @@ class TransactionController extends Controller
 {
     public function create()
     {
-        $data['tipe_armada'] = TipeArmada::all()->toArray();
+        $data['tipe_armada'] = TipeArmada::with('armada')->get()->toArray();
         $data['status_lepas_kunci'] = Transaction::getEnumValues('status_lepas_kunci');
         $data['status_pengambilan'] = Transaction::getEnumValues('status_pengambilan');
 
-        // dd($data);
-        return view('transaction::index', $data);
+        return view('transaction::create', $data);
     }
 
     public function store(Request $request){
