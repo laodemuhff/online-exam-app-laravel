@@ -11,6 +11,12 @@
 |
 */
 
-Route::prefix('driver')->group(function() {
-    Route::get('/', 'DriverController@index');
+Route::prefix('driver')->middleware('validate_session')->group(function() {
+    Route::get('/', 'DriverController@index')->name('driver.list')->middleware('feature_control:driver_list');
+    Route::get('table', 'DriverController@table')->name('driver.table')->middleware('feature_control:driver_list,driver_update,driver_delete');
+    Route::get('create', 'DriverController@create')->name('driver.create')->middleware('feature_control:driver_create');
+    Route::post('store', 'DriverController@store')->name('driver.store')->middleware('feature_control:driver_create');
+    Route::get('edit/{id}', 'DriverController@edit')->name('driver.edit')->middleware('feature_control:driver_update');
+    Route::post('update/{id}', 'DriverController@update')->name('driver.update')->middleware('feature_control:driver_update');
+    Route::delete('delete/{id}', 'DriverController@delete')->name('driver.delete')->middleware('feature_control:driver_delete');
 });
