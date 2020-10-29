@@ -19,7 +19,11 @@ class DatabaseSeeder extends Seeder
 
         foreach($this->toTruncate as $table) {
             DB::table($table)->truncate();
-        }
+            $this->call(ArmadasTableSeeder::class);
+        $this->call(DriversTableSeeder::class);
+        $this->call(TipeArmadasTableSeeder::class);
+        $this->call(UserAdminFeaturesTableSeeder::class);
+    }
 
         Schema::enableForeignKeyConstraints();
 
