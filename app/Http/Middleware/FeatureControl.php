@@ -15,7 +15,7 @@ class FeatureControl
      */
     public function handle($request, Closure $next, $feature)
     {
-        if(session('level') == 1)
+        if(session('level') == 'admin')
             return $next($request);
 
         $granted = session('granted_features') ?? [];

@@ -1,0 +1,13 @@
+{
+    "name": "ExamSession",
+    "alias": "examsession",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\ExamSession\\Providers\\ExamSessionServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

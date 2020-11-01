@@ -5,6 +5,8 @@ namespace Modules\User\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use App\Models\User;
+use App\Models\AdminFeature;
 
 class UserController extends Controller
 {
@@ -12,9 +14,12 @@ class UserController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index($level)
     {
-        return view('user::index');
+        $data['users'] = User::where('level', $level)->get();
+        $data['level'] = $level;
+
+        return view('user::index', $data);
     }
 
     /**
@@ -23,7 +28,20 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user::create');
+        $features = AdminFeature::all();
+        $admin_features = array();
+        foreach($features as $key => $item){
+            $admin_features[$item['module']] = [
+                'action' => $item['action'],
+                'id' => $item['id']
+            ];
+        }
+
+
+        $data['features'] = $admin_features;
+        $data['level'] = User::getPossibleEnumValues('level');
+
+        return view('user::create', $data);
     }
 
     /**
@@ -33,7 +51,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = $request->except('_token');
+
+        $save = User::create($post);
+
+        if($save){
+            Session::flash('message', 'User berhasil disimpan!');
+            Session::flash('alert-class', 'alert-outline-success');
+        }else{
+            Session::flash('message', 'User gagal disimpan');
+            Session::flash('alert-class', 'alert-outline-danger');
+        }
+
+        return redirect('user');
+
     }
 
     /**
@@ -43,7 +74,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return view('user::show');
+        $data['user'] = User::find($id);
+
+        return view('user::show', $data);
     }
 
     /**
@@ -53,7 +86,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('user::edit');
+        $data['user'] = User::find($id);
+        $data['level'] = User::getPossibleEnumValues('level');
+
+        return view('user::edit', $data);
     }
 
     /**
@@ -64,7 +100,19 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = $request->except('_token');
+
+        $update = User::where('id', $id)->update($post);
+
+        if($update){
+            Session::flash('message', 'User berhasil diupdate');
+            Session::flash('alert-class', 'alert-success');
+        }else{
+            Session::flash('message', 'User gagal diupdate');
+            Session::flash('alert-class', 'alert-danger');
+        }
+
+        return redirect('user');
     }
 
     /**
@@ -72,8 +120,20 @@ class UserController extends Controller
      * @param int $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->except('_token')['id'];
+
+        $delete = User::where('id', $id)->delete();
+
+        if($delete){
+            Session::flash('message', 'User berhasil dihapus');
+            Session::flash('alert-class', 'alert-success');
+        }else{
+            Session::flash('message', 'User gagal dihapus');
+            Session::flash('alert-class', 'alert-danger');
+        }
+
+        return redirect('user');
     }
 }

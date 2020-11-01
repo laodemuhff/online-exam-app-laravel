@@ -32,8 +32,8 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // check if user level is for apps
-            if ($user->level > 2)
-                return redirect()->back()->withErrors("Credential Invalid #CI541");
+            if (!in_array($user->level, ['entry', 'instructor', 'admin']))
+                return redirect()->back()->withErrors("Invalid Credential");
 
             // get token
             $token = $user->createToken($user->email,['admin'])->accessToken;
@@ -41,7 +41,7 @@ class AuthController extends Controller
             if ($token) {
                 // get feature
                 $features = [];
-                if ($user->level == "1")
+                if ($user->level == "admin")
                     $features = AdminFeature::get()->toArray() ?? [];
                 else{
                     $data_feature = UserAdminFeature::where('id_user', $user->id)->with('adminFeature')->get()->toArray() ?? [];
@@ -60,11 +60,11 @@ class AuthController extends Controller
 
                 return redirect()->route('admin.dashboard');
             }else
-                return redirect()->back()->withErrors("Credential Invalid #CI541");
+                return redirect()->back()->withErrors("Invalid Credential");
         }else
-            return redirect()->back()->withErrors("Credential Invalid #CI543");
+            return redirect()->back()->withErrors("Invalid Credential");
 
-        return redirect()->back()->withErrors("Credential Invalid #CI544");
+        return redirect()->back()->withErrors("Invalid Credential");
     }
 
     public function logout(Request $request) {

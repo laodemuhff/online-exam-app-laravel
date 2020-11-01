@@ -4,5 +4,14 @@
     "Setting": true,
     "Rental": true,
     "Driver": true,
-    "Transaction": true
+    "Transaction": true,
+    "Answer": true,
+    "Exam": true,
+    "ExamSession": true,
+    "InstructorEnroll": true,
+    "Optio": true,
+    "Option": true,
+    "Question": true,
+    "Report": true,
+    "StudentEnroll": true
 }

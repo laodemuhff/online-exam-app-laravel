@@ -11,14 +11,12 @@
 |
 */
 
-Route::prefix('user')->middleware('validate_session')->group(function() {
-    Route::prefix('admin-management')->group(function() {
-        Route::get('create', 'Admin\AdminManagementController@create')->middleware('feature_control:admin_management_create')->name('admin.admin.management.create');
-        Route::post('store', 'Admin\AdminManagementController@store')->middleware('feature_control:admin_management_create')->name('admin.admin.management.store');
-        Route::get('/', 'Admin\AdminManagementController@index')->middleware('feature_control:admin_management_list,admin_management_update,admin_management_delete')->name('admin.admin.management.list');
-        Route::get('table', 'Admin\AdminManagementController@table')->middleware('feature_control:admin_management_list,admin_management_update,admin_management_delete')->name('admin.admin.management.table');
-        Route::get('edit/{id}', 'Admin\AdminManagementController@edit')->middleware('feature_control:admin_management_update')->name('admin.admin.management.edit');
-        Route::post('update/{id}', 'Admin\AdminManagementController@update')->middleware('feature_control:admin_management_update')->name('admin.admin.management.update');
-        Route::delete('delete/{id}', 'Admin\AdminManagementController@delete')->middleware('feature_control:admin_management_delete')->name('admin.admin.management.delete');
-    });
+Route::group(['prefix' => 'user', 'middleware' => 'auth'], function() {
+    Route::get('/{level}', 'UserController@index')->name('user')->middleware('feature_control:user.management.list');
+    Route::get('/create', 'UserController@create')->name('user.create')->middleware('feature_control:user.management.create');
+    Route::post('/store', 'UserController@store')->name('user.store')->middleware('feature_control:user.management.create');
+    Route::get('/edit/{id}', 'UserController@edit')->name('user.edit')->middleware('feature_control:user.management.update');
+    Route::post('/update/{id}', 'UserController@update')->name('user.update')->middleware('feature_control:user.management.update');
+    Route::post('/destroy/{id}', 'UserController@destroy')->name('user.destroy')->middleware('feature_control:user.management.delete');
 });
+
