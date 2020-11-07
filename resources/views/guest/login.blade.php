@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    {{-- begin::Global Theme Styles(used by all pages) --}}
+    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -58,7 +61,7 @@
                         <form id="login-form" class="form" action="{{route('admin.login.post')}}" method="post">
                             @csrf
                             <div class="image">
-                                <img alt="Hemofilia Kita" src="{{env('APP_URL').'assets/img/logo.png'}}" width="130">
+                                <img alt="Online Exam" src="{{env('APP_URL').'assets/img/logo.png'}}" width="130">
                             </div>
                             @include('layouts.notification')
                             <div class="form-group">

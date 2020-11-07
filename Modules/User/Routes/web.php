@@ -12,7 +12,7 @@
 */
 
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function() {
-    Route::get('/{level}', 'UserController@index')->name('user')->middleware('feature_control:user.management.list');
+    Route::get('list/{level}', 'UserController@index')->name('user')->middleware('feature_control:user.management.list');
     Route::get('/create', 'UserController@create')->name('user.create')->middleware('feature_control:user.management.create');
     Route::post('/store', 'UserController@store')->name('user.store')->middleware('feature_control:user.management.create');
     Route::get('/edit/{id}', 'UserController@edit')->name('user.edit')->middleware('feature_control:user.management.update');

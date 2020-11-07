@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Admin Management')
-@section('admin-management', 'kt-menu__item--open')
+@section('user-management', 'kt-menu__item--open')
+@section('user-create', 'kt-menu__item--active')
 
 @section('breadcrumb')
     <h3 class="kt-subheader__title">
@@ -39,21 +40,46 @@
                         <div class="form-group row">
                             <label class="col-4 col-form-label">
                                 <div class="pull-right">
-                                    Name <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Nama Admin"></i>
+                                    Level <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Level User"></i>
                                 </div>
                             </label>
                             <div class="col-8">
-                                <input class="form-control" type="text" name="name" placeholder="E.g: Yudi Purwono">
+                                <select class="form-control" name="level">
+                                    <option value="">Pilih Level User</option>
+                                    <option value="admin" @if(old('level') == 'admin') selected @endif>Admin</option>
+                                    <option value="instructor" @if(old('level') == 'instructor') selected @endif>Instructor</option>
+                                    <option value="entry" @if(old('level') == 'entry') selected @endif>Entry</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-4 col-form-label">
                                 <div class="pull-right">
-                                    Email <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Masukan email admin, email harus unik dan belum pernah dipakai di admin ataupun applikasi"></i>
+                                    Name <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Nama User"></i>
                                 </div>
                             </label>
                             <div class="col-8">
-                                <input class="form-control" type="email" name="email" placeholder="E.g: yudipurwono@hemofilia.com" autocomplete="off">
+                                <input class="form-control" type="text" name="name" placeholder="E.g: Yudi Purwono" value="{{ old('name') }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">
+                                <div class="pull-right">
+                                    Email <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Masukan email user, email harus unik dan belum pernah dipakai di admin ataupun applikasi"></i>
+                                </div>
+                            </label>
+                            <div class="col-8">
+                                <input class="form-control" type="email" name="email" placeholder="E.g: yudipurwono@hemofilia.com" autocomplete="off" value="{{ old('email') }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">
+                                <div class="pull-right">
+                                    Phone <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Masukan No. Telpon user, phone harus unik dan belum pernah dipakai di admin ataupun applikasi"></i>
+                                </div>
+                            </label>
+                            <div class="col-8">
+                                <input class="form-control" type="text" name="phone" placeholder="E.g: 0812xxxxxxxxx" autocomplete="off" value="{{old('phone')}}">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -78,19 +104,19 @@
                         </div>
                     </div>
                     {{-- Feature field --}}
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         @foreach ($features as $feature => $data)
                         <strong>{{$feature}}</strong><br>
-                        <div class="kt-checkbox-inline">
-                            @foreach ($data as $item)
+                        <div class="kt-checkbox-inline" style="margin-bottom: 20px">
+                            @foreach ($data as $key => $value)
                                 <label class="kt-checkbox">
-                                    <input name="feature[]" type="checkbox" value="{{$item['id']}}"> {{$item['action']}}
+                                    <input name="feature[]" type="checkbox" value="{{$value['id']}}"> {{$value['action']}}
                                     <span></span>
                                 </label>
                             @endforeach
                         </div> <br>
                         @endforeach
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="pull-right">
                     <button class="btn btn-primary btn-sm">

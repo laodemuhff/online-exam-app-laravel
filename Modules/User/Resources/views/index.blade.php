@@ -42,9 +42,9 @@
                         <td>{{ $user['level'] }}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-info"><i class="la la-eye"></i> Detail</button>
-                                <button type="button" class="btn btn-warning"><i class="la la-edit"></i> Edit</button>
-                                <button type="button" class="btn btn-danger"><i class="la la-trash"></i> Delete</button>
+                                <button type="button" class="btn btn-info btn-sm"><i class="la la-eye"></i></button>
+                                <button type="button" class="btn btn-warning btn-sm"><i class="la la-edit"></i></button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="la la-trash"></i></button>
                             </div>
                         </td>
                     </tr>

@@ -7,6 +7,10 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\Models\User;
 use App\Models\AdminFeature;
+use App\Models\UserAdminFeature;
+use Validator;
+use DB;
+use Hash;
 
 class UserController extends Controller
 {
@@ -31,12 +35,11 @@ class UserController extends Controller
         $features = AdminFeature::all();
         $admin_features = array();
         foreach($features as $key => $item){
-            $admin_features[$item['module']] = [
+            $admin_features[$item['module']][] = [
                 'action' => $item['action'],
                 'id' => $item['id']
             ];
         }
-
 
         $data['features'] = $admin_features;
         $data['level'] = User::getPossibleEnumValues('level');
@@ -53,18 +56,46 @@ class UserController extends Controller
     {
         $post = $request->except('_token');
 
-        $save = User::create($post);
+        $rules = [
+            'level'                 => ['required'],
+            'name'                  => ['required'],
+            'email'                 => ['required', 'email', 'unique:users,email'],
+            'phone'                 => ['required', 'unique:users,phone'],
+            'password'              => ['min:6'],
+            'password_confirmation' => ['same:password', 'min:6']
+        ];
 
-        if($save){
-            Session::flash('message', 'User berhasil disimpan!');
-            Session::flash('alert-class', 'alert-outline-success');
-        }else{
-            Session::flash('message', 'User gagal disimpan');
-            Session::flash('alert-class', 'alert-outline-danger');
+        $validator = Validator::make($post, $rules);
+
+        if(!empty($validator->errors()->messages())){
+            $request->flash();
+            return redirect()->back()->withErrors($validator->errors()->messages());
         }
 
-        return redirect('user');
+        DB::beginTransaction();
 
+        $save = User::create([
+            'level' => $post['level'],
+            'name' => $post['name'],
+            'email' => $post['email'],
+            'phone' => $post['phone'],
+            'password' => Hash::make($post['password']),
+        ]);
+
+        if($save){
+            if(isset($feature) && !empty($feature)){
+                foreach($feature as $id_admin_feature){
+                    UserAdminFeature::create(['id_user' => $save->id, 'id_admin_feature' => $id_admin_feature]);
+                }
+            }
+
+            DB::commit();
+            return redirect('user/list/'.$post['level'])->with('success', ['User Sukses Dibuat']);
+        }else{
+            DB::rollback();
+            $request->flash();
+            return redirect()->back()->withErrors(['User Gagal Dibuat']);
+        }
     }
 
     /**

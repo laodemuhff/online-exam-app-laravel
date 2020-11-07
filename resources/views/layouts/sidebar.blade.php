@@ -44,51 +44,50 @@
 
 
     {{-- User Management --}}
-    @if (adminFeature(['user_management_list', 'user_management_create', 'user_management_update', 'user_management_delete', 'user_management_detail']))
-        <li class="kt-menu__section ">
-            <h4 class="kt-menu__section-text">User Management</h4>
-            <i class="kt-menu__section-icon flaticon-more-v2"></i>
-        </li>
+    <li class="kt-menu__section ">
+        <h4 class="kt-menu__section-text">User Management</h4>
+        <i class="kt-menu__section-icon flaticon-more-v2"></i>
+    </li>
 
-
-        <li class="kt-menu__item  kt-menu__item--submenu @yield('user-management')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
-            <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-                <i class="kt-menu__link-icon flaticon-users"></i>
-                <span class="kt-menu__link-text">User</span>
-                <i class="kt-menu__ver-arrow la la-angle-right"></i>
-            </a>
-            <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
-                <ul class="kt-menu__subnav">
-                    @if (adminFeature(['user_management_create']))
-                        <li class="kt-menu__item @yield('user-create')" aria-haspopup="true">
-                            <a href="{{ route('user.create') }}" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                                <span class="kt-menu__link-text">Create User</span>
-                            </a>
-                        </li>
-                    @endif
-                    @if (adminFeature(['user_management_list']))
-                        <li class="kt-menu__item @yield('user-list-entry')" aria-haspopup="true">
-                            <a href="{{ route('user', ['level' => 'entry']) }}" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                                <span class="kt-menu__link-text">Entry</span>
-                            </a>
-                        </li>
-                        <li class="kt-menu__item @yield('user-list-instructor')" aria-haspopup="true">
-                            <a href="{{ route('user', ['level' => 'instructor']) }}{{ '?level=instructors'}}" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                                <span class="kt-menu__link-text">Instructors</span>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-        </li>
-    @endif
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('user-management')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+        <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+            <i class="kt-menu__link-icon flaticon-users"></i>
+            <span class="kt-menu__link-text">User</span>
+            <i class="kt-menu__ver-arrow la la-angle-right"></i>
+        </a>
+        <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+            <ul class="kt-menu__subnav">
+                <li class="kt-menu__item @yield('user-create')" aria-haspopup="true">
+                    <a href="{{ route('user.create') }}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Create User</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item @yield('user-list-admin')" aria-haspopup="true">
+                    <a href="{{ route('user', ['level' => 'admin']) }}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Admin</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item @yield('user-list-entry')" aria-haspopup="true">
+                    <a href="{{ route('user', ['level' => 'entry']) }}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Entry</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item @yield('user-list-instructor')" aria-haspopup="true">
+                    <a href="{{ route('user', ['level' => 'instructor']) }}{{ '?level=instructors'}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Instructors</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
     {{-- END::Route USER --}}
 
     <li class="kt-menu__section ">
-        <h4 class="kt-menu__section-text">Exam Session</h4>
+        <h4 class="kt-menu__section-text">Exam Management</h4>
         <i class="kt-menu__section-icon flaticon-more-v2"></i>
     </li>
 
@@ -111,63 +110,6 @@
                     <a href="#" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">List Exam Session</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </li>
-
-
-    <li class="kt-menu__item" aria-haspopup="true">
-        <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
-            <i class="kt-menu__link-icon la la-check-square"></i><span class="kt-menu__link-text">Evaluate</span>
-        </a>
-    </li>
-
-    <li class="kt-menu__item" aria-haspopup="true">
-        <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
-            <i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">User Enroll</span>
-        </a>
-    </li>
-
-    <li class="kt-menu__item" aria-haspopup="true">
-        <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
-            <i class="kt-menu__link-icon la la-file"></i><span class="kt-menu__link-text">Report</span>
-        </a>
-    </li>
-
-{{-- START::Route FASKES --}}
-    {{-- armada management --}}
-    <li class="kt-menu__section ">
-        <h4 class="kt-menu__section-text">Setting</h4>
-        <i class="kt-menu__section-icon flaticon-more-v2"></i>
-    </li>
-
-    <li class="kt-menu__item  kt-menu__item--submenu @yield('armada')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
-        <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-            <i class="kt-menu__link-icon la la-clipboard"></i>
-            <span class="kt-menu__link-text">Exam</span>
-            <i class="kt-menu__ver-arrow la la-angle-right"></i>
-        </a>
-        <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-                <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">
-                    <span class="kt-menu__link">
-                        <span class="kt-menu__link-text">
-                            Exam
-                        </span>
-                    </span>
-                </li>
-                <li class="kt-menu__item" aria-haspopup="true">
-                    <a href="#" class="kt-menu__link ">
-                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">Create New Exam</span>
-                    </a>
-                </li>
-                <li class="kt-menu__item" aria-haspopup="true">
-                    <a href="#" class="kt-menu__link ">
-                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">List Exam</span>
                     </a>
                 </li>
             </ul>
@@ -203,6 +145,57 @@
                 </li>
             </ul>
         </div>
+    </li>
+
+    
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('armada')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+        <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+            <i class="kt-menu__link-icon la la-clipboard"></i>
+            <span class="kt-menu__link-text">Exam</span>
+            <i class="kt-menu__ver-arrow la la-angle-right"></i>
+        </a>
+        <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+            <ul class="kt-menu__subnav">
+                <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">
+                    <span class="kt-menu__link">
+                        <span class="kt-menu__link-text">
+                            Exam
+                        </span>
+                    </span>
+                </li>
+                <li class="kt-menu__item" aria-haspopup="true">
+                    <a href="#" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Create New Exam</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item" aria-haspopup="true">
+                    <a href="#" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">List Exam</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+
+
+    <li class="kt-menu__item" aria-haspopup="true">
+        <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
+            <i class="kt-menu__link-icon la la-check-square"></i><span class="kt-menu__link-text">Evaluate</span>
+        </a>
+    </li>
+
+    <li class="kt-menu__item" aria-haspopup="true">
+        <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
+            <i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">User Enroll</span>
+        </a>
+    </li>
+
+    <li class="kt-menu__item" aria-haspopup="true">
+        <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
+            <i class="kt-menu__link-icon la la-file"></i><span class="kt-menu__link-text">Report</span>
+        </a>
     </li>
 
 
