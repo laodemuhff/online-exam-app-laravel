@@ -13,5 +13,6 @@
     "Option": true,
     "Question": true,
     "Report": true,
-    "StudentEnroll": true
+    "StudentEnroll": true,
+    "Subject": true
 }
