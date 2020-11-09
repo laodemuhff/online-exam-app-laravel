@@ -23,7 +23,7 @@
             <div class="alert alert-light alert-elevate fade show" role="alert">
                 <div class="alert-icon"><i class="flaticon-information kt-font-info"></i></div>
                 <div class="alert-text">
-                    Pada page ini anda dapat membuat user untuk mengatur CMS berdasarkan hak akses yang diberikan
+                    Pada page ini anda dapat membuat user yang terdiri dari Admin, Entry dan Instructor
                 </div>
             </div>
         </div>

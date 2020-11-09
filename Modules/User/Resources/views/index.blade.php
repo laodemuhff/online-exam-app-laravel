@@ -42,9 +42,9 @@
                         <td>{{ $user['level'] }}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-info btn-sm"><i class="la la-eye"></i></button>
-                                <button type="button" class="btn btn-warning btn-sm"><i class="la la-edit"></i></button>
-                                <button type="button" class="btn btn-danger btn-sm"><i class="la la-trash"></i></button>
+                                <a href="{{route('user.info', $user['id'])}}" title="{{$user['email']}}" type="button" class="btn btn-info btn-sm"><i class="la la-eye"></i></a>
+                                <a href="{{route('user.edit', $user['id'])}}" title="{{$user['email']}}" type="button" class="btn btn-warning btn-sm"><i class="la la-edit"></i></a>
+                                <a href="{{route('user.delete', $user['id'])}}" title="{{$user['email']}}" type="button" class="btn btn-danger btn-sm"><i class="la la-trash"></i></a>
                             </div>
                         </td>
                     </tr>

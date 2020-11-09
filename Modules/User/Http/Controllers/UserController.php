@@ -5,6 +5,7 @@ namespace Modules\User\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\AdminFeature;
 use App\Models\UserAdminFeature;
@@ -103,7 +104,7 @@ class UserController extends Controller
      * @param int $id
      * @return Response
      */
-    public function show($id)
+    public function info($id)
     {
         $data['user'] = User::find($id);
 
@@ -132,18 +133,45 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $post = $request->except('_token');
+        
+        $rules = [
+            'level'                 => ['required'],
+            'name'                  => ['required'],
+            'email'                 => ['required', 'email', Rule::unique('users', 'email')->ignore($id)],
+            'phone'                 => ['required', Rule::unique('users', 'phone')->ignore($id)]
+        ];
 
-        $update = User::where('id', $id)->update($post);
-
-        if($update){
-            Session::flash('message', 'User berhasil diupdate');
-            Session::flash('alert-class', 'alert-success');
-        }else{
-            Session::flash('message', 'User gagal diupdate');
-            Session::flash('alert-class', 'alert-danger');
+        if(isset($post['password'])){
+            $rules['password'] = ['min:6'];
+            $rules['password_confirmation'] = ['same:password', 'min:6'];
         }
 
-        return redirect('user');
+        $validator = Validator::make($post, $rules);
+
+        if(!empty($validator->errors()->messages())){
+            $request->flash();
+            return redirect()->back()->withErrors($validator->errors()->messages());
+        }
+
+        DB::beginTransaction();
+
+        $update = User::where('id', $id)->update([
+            'level' => $post['level'],
+            'name' => $post['name'],
+            'email' => $post['email'],
+            'phone' => $post['phone'],
+            'password' => Hash::make($post['password']),
+        ]);
+
+        if($update){
+            DB::commit();
+            return redirect('user/list/'.$post['level'])->with('success', ['User berhasil diupdate']);
+        }
+
+        DB::rollback();
+        $request->flash();
+
+        return redirect()->back()->withErrors(['User gagal diupdate']);
     }
 
     /**
@@ -151,20 +179,14 @@ class UserController extends Controller
      * @param int $id
      * @return Response
      */
-    public function destroy(Request $request)
+    public function delete(Request $request, $id)
     {
-        $id = $request->except('_token')['id'];
+        $user = User::find($id);
 
-        $delete = User::where('id', $id)->delete();
-
-        if($delete){
-            Session::flash('message', 'User berhasil dihapus');
-            Session::flash('alert-class', 'alert-success');
-        }else{
-            Session::flash('message', 'User gagal dihapus');
-            Session::flash('alert-class', 'alert-danger');
+        if($user->delete()){
+            return redirect('user/list/'.$user->level)->with('success',['User berhasil dihapus']);
         }
 
-        return redirect('user');
+        return redirect()->back()->withErrors(['User gagal dihapus']);
     }
 }

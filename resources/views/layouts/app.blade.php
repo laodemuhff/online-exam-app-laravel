@@ -226,7 +226,66 @@
 		{{-- <!--begin::Global Theme Bundle(used by all pages) --> --}}
 		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}" type="text/javascript"></script>
         <script src="{{ asset('assets/js/scripts.bundle.js') }}" type="text/javascript"></script>
+        {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
         {{-- <!--end::Global Theme Bundle --> --}}
+
+        <script>
+            $('body').on('click', '.btn-danger', function (event) {
+                event.preventDefault();
+    
+                var me = $(this),
+                    url = me.attr('href'),
+                    title = me.attr('title'),
+                    csrf_token = $('meta[name="csrf-token"]').attr('content');
+    
+                swal.fire({
+                    title: 'Are you sure want to delete ' + title + ' ?',
+                    text: 'You won\'t be able to revert this!',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: {
+                                '_method': 'DELETE',
+                                '_token': csrf_token,
+                            },
+                            success: function (response) {
+                                // $('#loading').hide();
+                                if (response) {
+                                    swal.fire({
+                                        type: 'success',
+                                        title: 'Success!',
+                                        text: 'Data has been deleted!'
+                                    });
+                                    location.reload();
+                                }else{
+                                    swal.fire({
+                                        type: 'error',
+                                        title: 'Oops...',
+                                        text: response.messages
+                                    });
+                                }
+                            },
+                            error: function (xhr) {
+                                // $('#loading').hide();
+                                swal.fire({
+                                    type: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+
         @yield('scripts')
 	</body>
 
