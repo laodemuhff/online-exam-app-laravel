@@ -15,13 +15,47 @@
 
 
 		{{-- begin::Global Theme Styles(used by all pages) --}}
-		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 		{{-- end::Global Theme Styles --}}
+
+        <link href="{{ url('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
 
         <style>
             .kt-header{
                 background-color: rgb(235, 252, 251) !important;
+            }
+
+            .badge-info{
+                margin-left: 4px !important;
+            }
+    
+            .badge-font{
+                font-size: 0.85em;
+            }
+    
+            .center{
+                text-align: center;
+            }
+
+            .white-text{
+                color: white !important;
+            }
+    
+            /* autocomplete tagsinput*/
+            .label-info {
+                background-color: #5bc0de;
+                display: inline-block;
+                padding: 0.2em 0.6em 0.3em;
+                font-size: 100%;
+                font-weight: 700;
+                line-height: 1;
+                color: #fff;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: baseline;
+                border-radius: 0.25em;
             }
         </style>
         @yield('styles')
@@ -224,13 +258,13 @@
 		<!-- end::Global Config -->
 
 		{{-- <!--begin::Global Theme Bundle(used by all pages) --> --}}
-		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('assets/js/scripts.bundle.js') }}" type="text/javascript"></script>
-        {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
+            <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('assets/js/scripts.bundle.js') }}" type="text/javascript"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
         {{-- <!--end::Global Theme Bundle --> --}}
 
         <script>
-            $('body').on('click', '.btn-danger', function (event) {
+            $('body').on('click', '.btn-delete', function (event) {
                 event.preventDefault();
     
                 var me = $(this),
@@ -286,7 +320,26 @@
             });
         </script>
 
+        <script src="{{url('assets/plugins/custom/datatables/datatables.bundle.js')}}" type="text/javascript"></script>
+        <script>
+            var DatatablesDataSourceHtml = {
+            init: function() {
+                $("#datatable").DataTable({
+                    scrollX: true,
+                    responsive: true,
+                    searching : true,
+                    lengthChange : false,   
+                    paging : true
+                })
+            }
+        };
+        jQuery(document).ready(function() {
+            DatatablesDataSourceHtml.init()
+        });
+        </script>
+
         @yield('scripts')
+        
 	</body>
 
 	<!-- end::Body -->

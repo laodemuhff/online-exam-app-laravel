@@ -17,11 +17,11 @@ class UserAdminFeature extends Model
      */
     public function adminFeature()
     {
-        return $this->belongsTo('App\Models\AdminFeature', 'id_admin_feature', 'id');
+        return $this->belongsTo(AdminFeature::class, 'id_admin_feature', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'id_user', 'id');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 }

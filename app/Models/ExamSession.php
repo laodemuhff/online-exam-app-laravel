@@ -39,7 +39,7 @@ class ExamSession extends Model
      */
     public function exam()
     {
-        return $this->belongsTo('App\Models\Exam', 'id_exam');
+        return $this->belongsTo(Exam::class, 'id_exam');
     }
 
     /**
@@ -47,7 +47,7 @@ class ExamSession extends Model
      */
     public function examSessionInstructorEnrolls()
     {
-        return $this->hasMany('App\Models\ExamSessionInstructorEnroll', 'exam_session_code', 'exam_session_code');
+        return $this->hasMany(ExamSessionInstructorEnroll::class, 'exam_session_code', 'exam_session_code');
     }
 
     /**
@@ -55,7 +55,7 @@ class ExamSession extends Model
      */
     public function examSessionQuestions()
     {
-        return $this->hasMany('App\Models\ExamSessionQuestion', 'exam_session_code', 'exam_session_code');
+        return $this->hasMany(ExamSessionQuestion::class, 'exam_session_code', 'exam_session_code');
     }
 
     /**
@@ -63,7 +63,7 @@ class ExamSession extends Model
      */
     public function examSessionStudentEnrolls()
     {
-        return $this->hasMany('App\Models\ExamSessionStudentEnroll', 'exam_session_code', 'exam_session_code');
+        return $this->hasMany(ExamSessionStudentEnroll::class, 'exam_session_code', 'exam_session_code');
     }
 
     public static function getPossibleEnumValues ($column) {

@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function examSessionInstructorEnrolls()
     {
-        return $this->hasMany('App\Models\ExamSessionInstructorEnroll', 'id_user');
+        return $this->hasMany(ExamSessionInstructorEnroll::class, 'id_user');
     }
 
     public static function getPossibleEnumValues ($column) {
@@ -72,6 +72,6 @@ class User extends Authenticatable
 
     public function userAdminFeature()
     {
-        return $this->hasMany('App\Models\UserAdminFeature', 'id_user', 'id');
+        return $this->hasMany(UserAdminFeature::class, 'id_user', 'id');
     }
 }

@@ -65,39 +65,6 @@
 @endif
 
 @if (session('level') == 'admin' || session('level') == 'instructor')
-    <li class="kt-menu__item  kt-menu__item--submenu @yield('question')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
-        <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-            <i class="kt-menu__link-icon la la-question-circle"></i>
-            <span class="kt-menu__link-text">Questions</span>
-            <i class="kt-menu__ver-arrow la la-angle-right"></i>
-        </a>
-        <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-                <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">
-                    <span class="kt-menu__link">
-                        <span class="kt-menu__link-text">
-                            Questions
-                        </span>
-                    </span>
-                </li>
-                <li class="kt-menu__item @yield('question.create')" aria-haspopup="true">
-                    <a href="{{route('question.create')}}" class="kt-menu__link ">
-                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">Create Question</span>
-                    </a>
-                </li>
-                <li class="kt-menu__item @yield('question.list')" aria-haspopup="true">
-                    <a href="{{route('question.list')}}" class="kt-menu__link ">
-                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">Collections</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </li>
-@endif
-
-@if (session('level') == 'admin' || session('level') == 'instructor')
 <li class="kt-menu__item kt-menu__item--submenu @yield('exam')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
     <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
         <i class="kt-menu__link-icon la la-clipboard"></i>
@@ -113,14 +80,14 @@
                     </span>
                 </span>
             </li>
-            <li class="kt-menu__item @yield('exam.create')" aria-haspopup="true">
-                <a href="#" class="kt-menu__link ">
+            <li class="kt-menu__item @yield('exam-create')" aria-haspopup="true">
+                <a href="{{route('exam.create')}}" class="kt-menu__link ">
                     <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                     <span class="kt-menu__link-text">Create New Exam</span>
                 </a>
             </li>
-            <li class="kt-menu__item @yield('exam.list')" aria-haspopup="true">
-                <a href="#" class="kt-menu__link ">
+            <li class="kt-menu__item @yield('exam-list')" aria-haspopup="true">
+                <a href="{{route('exam.list')}}" class="kt-menu__link ">
                     <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                     <span class="kt-menu__link-text">List Exam</span>
                 </a>
@@ -129,6 +96,39 @@
     </div>
 </li>
 @endif
+
+{{-- @if (session('level') == 'admin' || session('level') == 'instructor')
+    <li class="kt-menu__item  kt-menu__item--submenu @yield('question')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+        <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+            <i class="kt-menu__link-icon la la-question-circle"></i>
+            <span class="kt-menu__link-text">Questions</span>
+            <i class="kt-menu__ver-arrow la la-angle-right"></i>
+        </a>
+        <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+            <ul class="kt-menu__subnav">
+                <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">
+                    <span class="kt-menu__link">
+                        <span class="kt-menu__link-text">
+                            Questions
+                        </span>
+                    </span>
+                </li>
+                <li class="kt-menu__item @yield('question-create')" aria-haspopup="true">
+                    <a href="{{route('question.create')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Create Question</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item @yield('question-list')" aria-haspopup="true">
+                    <a href="{{route('question.list')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Collections</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+@endif --}}
 
 {{-- Exam Management --}}
 @if (session('level') == 'admin' || session('level') == 'instructor')
@@ -146,13 +146,13 @@
         </a>
         <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
             <ul class="kt-menu__subnav">
-                <li class="kt-menu__item @yield('exam-session.create')" aria-haspopup="true">
+                <li class="kt-menu__item @yield('exam-session-create')" aria-haspopup="true">
                     <a href="#" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">New Session</span>
                     </a>
                 </li>
-                <li class="kt-menu__item @yield('exam-session.list')" aria-haspopup="true">
+                <li class="kt-menu__item @yield('exam-session-list')" aria-haspopup="true">
                     <a href="#" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">List Exam Session</span>
@@ -171,7 +171,7 @@
     </li>
 @endif
 
-@if (session('level') == 'admin' || session('level') == 'instructor')
+{{-- @if (session('level') == 'admin' || session('level') == 'instructor')
     <li class="kt-menu__item @yield('evaluate')" aria-haspopup="true">
         <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
             <i class="kt-menu__link-icon la la-check-square"></i><span class="kt-menu__link-text">Evaluate</span>
@@ -185,7 +185,7 @@
             <i class="kt-menu__link-icon la la-file"></i><span class="kt-menu__link-text">Report</span>
         </a>
     </li>
-@endif
+@endif --}}
 
 
  

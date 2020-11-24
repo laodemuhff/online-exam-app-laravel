@@ -33,7 +33,7 @@ class ExamSessionQuestion extends Model
      */
     public function examSession()
     {
-        return $this->belongsTo('App\Models\ExamSession', 'exam_session_code', 'exam_session_code');
+        return $this->belongsTo(ExamSession::class, 'exam_session_code', 'exam_session_code');
     }
 
     /**
@@ -41,7 +41,7 @@ class ExamSessionQuestion extends Model
      */
     public function question()
     {
-        return $this->belongsTo('App\Models\Question', 'id_question');
+        return $this->belongsTo(Question::class, 'id_question');
     }
 
     public static function getPossibleEnumValues ($column) {

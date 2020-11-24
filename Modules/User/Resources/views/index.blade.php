@@ -16,16 +16,14 @@
         </a>
     </div>
 @endsection
-@section('styles')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-@endsection
 @section('content')
 <div class="kt-portlet">
     <div class="kt-portlet__body">
         @include('layouts.notification')
-        <table id="datatable" class="display compact nowrap" style="width:100%">
+        <table id="datatable" class="table table-bordered table-hover table-checkable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -36,6 +34,7 @@
             <tbody>
                 @foreach ($users as $key => $user)
                     <tr>
+                        <td>{{ ++$key }}</td>
                         <td>{{ $user['name'] }}</td>
                         <td>{{ $user['email'] }}</td>
                         <td>{{ $user['phone'] }}</td>
@@ -44,7 +43,7 @@
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <a href="{{route('user.info', $user['id'])}}" title="{{$user['email']}}" type="button" class="btn btn-info btn-sm"><i class="la la-eye"></i></a>
                                 <a href="{{route('user.edit', $user['id'])}}" title="{{$user['email']}}" type="button" class="btn btn-warning btn-sm"><i class="la la-edit"></i></a>
-                                <a href="{{route('user.delete', $user['id'])}}" title="{{$user['email']}}" type="button" class="btn btn-danger btn-sm"><i class="la la-trash"></i></a>
+                                <a href="{{route('user.delete', $user['id'])}}" title="{{$user['email']}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -53,15 +52,4 @@
         </table>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
-    <script>
-        $(document).ready( function () {
-            $('#datatable').DataTable({
-                responsive: true
-            });
-        });
-    </script>
 @endsection

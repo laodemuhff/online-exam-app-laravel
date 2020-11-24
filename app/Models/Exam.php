@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ExamSubject;
 
 /**
  * @property integer $id
@@ -38,12 +39,27 @@ class Exam extends Model
      */
     protected $fillable = ['exam_title', 'total_question', 'max_score', 'default_wrong_point', 'default_correct_point', 'exam_status', 'oecp_1', 'oecp_2', 'oecp_3', 'oecp_4', 'oecp_5', 'oecp_6', 'oecp_8', 'created_at', 'updated_at'];
 
+    protected $appends = [
+        'subjects'
+    ];
+
+    public function getSubjectsAttribute(){
+        $subjects = [];
+
+        $exam_subjects = ExamSubject::with('subject')->where('id_exam',$this->id)->get()->toArray();
+
+        foreach($exam_subjects as $item){
+            $subjects[] = $item['subject'];
+        }
+
+        return json_encode($subjects);
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function examBaseQuestions()
     {
-        return $this->hasMany('App\Models\ExamBaseQuestion', 'id_exam');
+        return $this->hasMany(ExamBaseQuestion::class, 'id_exam');
     }
 
     /**
@@ -51,7 +67,11 @@ class Exam extends Model
      */
     public function examSessions()
     {
-        return $this->hasMany('App\Models\ExamSession', 'id_exam');
+        return $this->hasMany(ExamSession::class, 'id_exam');
+    }
+
+    public function exam_subject(){
+        return $this->hasMany(ExamSubject::class, 'id_exam', 'id');
     }
 
     public static function getPossibleEnumValues ($column) {

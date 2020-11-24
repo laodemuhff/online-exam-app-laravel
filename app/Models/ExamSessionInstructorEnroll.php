@@ -33,7 +33,7 @@ class ExamSessionInstructorEnroll extends Model
      */
     public function examSession()
     {
-        return $this->belongsTo('App\Models\ExamSession', 'exam_session_code', 'exam_session_code');
+        return $this->belongsTo(ExamSession::class, 'exam_session_code', 'exam_session_code');
     }
 
     /**
@@ -41,6 +41,6 @@ class ExamSessionInstructorEnroll extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'id_user');
+        return $this->belongsTo(User::class, 'id_user');
     }
 }

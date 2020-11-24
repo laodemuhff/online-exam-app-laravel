@@ -11,6 +11,12 @@
 |
 */
 
-Route::prefix('exam')->group(function() {
-    Route::get('/', 'ExamController@index');
+Route::group(['prefix' => 'exam', 'middleware' => 'validate_session'], function() {
+    Route::get('/', 'ExamController@index')->name('exam.list');
+    Route::get('/create', 'ExamController@create')->name('exam.create');
+    Route::post('/store', 'ExamController@store')->name('exam.store');
+    Route::get('/edit/{id}', 'ExamController@edit')->name('exam.edit');
+    Route::post('/update/{id}', 'ExamController@update')->name('exam.update');
+    Route::delete('/delete/{id}', 'ExamController@delete')->name('exam.delete');
+    Route::get('/detail/{id}', 'ExamController@detail')->name('exam.detail');
 });

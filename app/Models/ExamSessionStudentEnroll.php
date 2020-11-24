@@ -32,6 +32,6 @@ class ExamSessionStudentEnroll extends Model
      */
     public function examSession()
     {
-        return $this->belongsTo('App\Models\ExamSession', 'exam_session_code', 'exam_session_code');
+        return $this->belongsTo(ExamSession::class, 'exam_session_code', 'exam_session_code');
     }
 }
