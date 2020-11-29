@@ -12,10 +12,10 @@ class QuestionSubject extends Model
     ];
 
     public function subject(){
-        return $this->belongsTo('App/Models/Subject', 'id_subject', 'id');
+        return $this->belongsTo(Subject::class, 'id_subject', 'id');
     }
 
     public function question(){
-        return $this->belongsTo('App/Models/Question', 'id_question', 'id');
+        return $this->belongsTo(Question::class, 'id_question', 'id');
     }
 }

@@ -14,6 +14,6 @@ class AdminFeature extends Model
 
     public function userAdminFeature()
     {
-        return $this->hasMany('App\Models\UserAdminFeature', 'id_admin_feature', 'id');
+        return $this->hasMany(UserAdminFeature::class, 'id_admin_feature', 'id');
     }
 }

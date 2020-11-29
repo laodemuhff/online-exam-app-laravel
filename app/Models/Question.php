@@ -28,14 +28,14 @@ class Question extends Model
     /**
      * @var array
      */
-    protected $fillable = ['question_description', 'type', 'correct_point', 'wrong_point', 'created_at', 'updated_at'];
+    protected $fillable = ['question_description', 'type', 'use_default_correct_point', 'use_default_wrong_point', 'correct_point', 'wrong_point', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function examBaseQuestions()
     {
-        return $this->hasMany('App\Models\ExamBaseQuestion', 'id_question');
+        return $this->hasMany(ExamBaseQuestion::class, 'id_question');
     }
 
     /**
@@ -43,7 +43,7 @@ class Question extends Model
      */
     public function examSessionQuestions()
     {
-        return $this->hasMany('App\Models\ExamSessionQuestion', 'id_question');
+        return $this->hasMany(ExamSessionQuestion::class, 'id_question');
     }
 
     /**
@@ -51,7 +51,12 @@ class Question extends Model
      */
     public function options()
     {
-        return $this->hasMany('App\Models\Option', 'id_question');
+        return $this->hasMany(Option::class, 'id_question');
+    }
+
+    public function question_subject()
+    {
+        return $this->hasMany(QuestionSubject::class, 'id_question', 'id');
     }
 
     public static function getPossibleEnumValues ($column) {

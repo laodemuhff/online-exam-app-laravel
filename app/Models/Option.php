@@ -25,14 +25,14 @@ class Option extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_question', 'option_description', 'answer_status', 'created_at', 'updated_at'];
+    protected $fillable = ['id_question', 'option_label', 'option_description', 'answer_status', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function question()
     {
-        return $this->belongsTo('App\Models\Question', 'id_question');
+        return $this->belongsTo(Question::class, 'id_question');
     }
 
     public static function getPossibleEnumValues ($column) {

@@ -15,9 +15,6 @@
         </a>
     </div>
 @endsection
-@section('styles')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-@endsection
 @section('content')
 <div class="kt-portlet">
     <div class="kt-portlet__body">
@@ -25,9 +22,10 @@
         <div class="col-md-2 mb-4" style="padding-left:0px">
             <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle='modal' data-target='#addModal'><i class="la la-plus"></i> Add New Subject</a>
         </div>
-        <table id="datatable" class="display compact nowrap" style="width:100%">
+        <table id="datatable" class="table table-bordered table-hover table-checkable" style="width:100%">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Name</th>
                     <th>List Exams</th>
                     <th>List Questions</th>
@@ -37,6 +35,7 @@
             <tbody>
                 @foreach ($subjects as $key => $subject)
                     <tr>
+                        <td>{{ ++$key }}</td>
                         <td>{{ $subject->name }}</td>
                         <td>
                             <a href="#" title="{{$subject->count_exam_subject}}" type="button" class="btn btn-success btn-sm"><i class="la la-list"></i></a>
@@ -49,7 +48,7 @@
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <a href="#" title="{{$subject->name}}" type="button" class="btn btn-warning btn-sm" data-toggle='modal' data-target='#editModal{{$subject->id}}'><i class="la la-edit"></i></a>
-                                <a href="{{route('subject.delete', $subject->id)}}" title="{{$subject->name}}" type="button" class="btn btn-danger btn-sm"><i class="la la-trash"></i></a>
+                                <a href="{{route('subject.delete', $subject->id)}}" title="{{$subject->name}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -112,15 +111,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
-    <script>
-        $(document).ready( function () {
-            $('#datatable').DataTable({
-                responsive: true
-            });
-        });
-    </script>
 @endsection

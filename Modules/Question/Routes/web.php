@@ -11,6 +11,7 @@
 |
 */
 
-Route::prefix('question')->group(function() {
-    Route::get('/', 'QuestionController@index');
+Route::group(['prefix' => 'question', 'middleware' => 'validate_session'], function() {
+    Route::get('/', 'QuestionController@index')->name('question.list');
+    Route::get('/create', 'QuestionController@create')->name('question.create');
 });
