@@ -128,7 +128,7 @@
                         <div class="form-group row">
                             <label class="col-4 col-form-label">
                                 <div class="pull-right">
-                                    Exam Subjects <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Subjects"></i>
+                                    Exam Subjects <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Subjects"></i>
                                 </div>
                             </label>
                             <div class="col-8">

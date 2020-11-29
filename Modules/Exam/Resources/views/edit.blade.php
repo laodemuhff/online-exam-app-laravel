@@ -118,7 +118,7 @@
                         <div class="form-group row">
                             <label class="col-4 col-form-label">
                                 <div class="pull-right">
-                                    Exam Subjects <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Subjects"></i>
+                                    Exam Subjects <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Subjects"></i>
                                 </div>
                             </label>
                             <div class="col-8">
@@ -354,6 +354,7 @@
                                             </div>
                                         </div>
                                     </div> --}}
+                                    <input type="hidden" name="id_question" value="{{$question['question']['id']}}">
                                     <div class="form-group row">
                                         <div class="col-md-3">
                                             <label for="" class="col-form-label pull-right">
@@ -375,7 +376,7 @@
                                             </label>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea class="summernote" name="question_description" required>{{$question['question']['question_description']??null}}</textarea>
+                                            <textarea class="summernote question_description" name="question_description" required>{{$question['question']['question_description']??null}}</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group row options" @if(isset($question['question']['options']) && !empty($question['question']['options']))  @else style="display: none" @endif>
@@ -473,7 +474,7 @@
                                 <i class="la la-edit" style="font-weight: bold"></i> <span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Create Questions & Answers</span> 
                             </a>
                             <button type="submit" class="btn btn-primary btn-sm">
-                                <span style="font-size: 1.1em; font-weight:bold">Submit Create</span> 
+                                <span style="font-size: 1.1em; font-weight:bold">Submit Update</span> 
                             </button>
                         </div>
                     </div>
@@ -595,6 +596,8 @@
                 $('#kt_repeater_2').find(".inner-repeater:last").find(".option_label").eq(0).val('A')
                 $('#kt_repeater_2').find(".inner-repeater:last").find(".option_description").eq(0).val('Jawaban Option')
                 $('#kt_repeater_2').find(".inner-repeater:last").find(".answer_status").eq(0).prop('checked', true)
+                $('#kt_repeater_2').find(".question_description:last").prop('disabled', false)
+
 
                 // handle bug delete confirmation on inner repeater triggering twice
                 handleErrorDeleteOption();
