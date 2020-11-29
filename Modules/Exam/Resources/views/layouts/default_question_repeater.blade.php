@@ -1,4 +1,4 @@
-<div data-repeater-item="" class="row repeater-item" style="margin-top:5%; border-bottom:dashed 1px rgb(138, 132, 132); display: none">
+<div data-repeater-item="" class="row repeater-item" style="margin-top:5%; border-bottom:dashed 1px rgb(138, 132, 132); display:none">
     <div class="col-md-10">
         {{-- <div class="form-group row">
             <div class="col-md-3">
@@ -33,7 +33,7 @@
                 </label>
             </div>
             <div class="col-md-9">
-                <textarea class="summernote" name="question_description" required></textarea>
+                <textarea class="summernote" name="question_description" required disabled></textarea>
             </div>
         </div>
         <div class="form-group row options" style="display: none">

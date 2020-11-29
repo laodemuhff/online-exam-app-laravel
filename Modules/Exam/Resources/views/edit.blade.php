@@ -341,6 +341,7 @@
                         @foreach ($exam_base_questions as $key => $question)
                             @include('exam::layouts.default_question_repeater')
                             <div data-repeater-item="" class="row repeater-item" style="margin-top:5%; border-bottom:dashed 1px rgb(138, 132, 132)">
+                                <input type="hidden" name="id_question" value="{{$question['question']['id']}}">
                                 <div class="col-md-10">
                                     {{-- <div class="form-group row">
                                         <div class="col-md-3">

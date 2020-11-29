@@ -97,7 +97,7 @@
 </li>
 @endif
 
-{{-- @if (session('level') == 'admin' || session('level') == 'instructor')
+@if (session('level') == 'admin' || session('level') == 'instructor')
     <li class="kt-menu__item  kt-menu__item--submenu @yield('question')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
         <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
             <i class="kt-menu__link-icon la la-question-circle"></i>
@@ -128,7 +128,7 @@
             </ul>
         </div>
     </li>
-@endif --}}
+@endif
 
 {{-- Exam Management --}}
 @if (session('level') == 'admin' || session('level') == 'instructor')

@@ -197,7 +197,142 @@ class ExamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // help im stuck
+        $post = $request->except('_token');
+
+        dd($post);
+
+        DB::beginTransaction();
+
+        try{
+            $update_exam = Exam::where('id', $id)->update([
+                'exam_title' => $post['exam_title'],
+                'max_score' => $post['max_score'],
+                'default_wrong_point' => $post['default_wrong_point'],
+                'default_correct_point' => $post['default_correct_point'],
+                'exam_status' => isset($post['oecp_1']) ? 'Active' : 'Inactive',
+                'oecp_1' => isset($post['oecp_1']) ? '1' : '0',
+                'oecp_2' => isset($post['oecp_2']) ? '1' : '0',
+                'oecp_3' => isset($post['oecp_3']) ? '1' : '0',
+                'oecp_4' => isset($post['oecp_4']) ? '1' : '0',
+                'oecp_5' => isset($post['oecp_5']) ? '1' : '0',
+                'oecp_6' => isset($post['oecp_6']) ? '1' : '0',
+                'oecp_8' => isset($post['oecp_8']) ? '1' : '0',
+            ]);
+    
+            if($update_exam){
+                // insert exam subject
+                if(isset($post['exam_subjects'])){
+
+                    // truncate exam subject related to this exam
+                    ExamSubject::where('id_exam', $id)->delete();
+
+                    $exam_subjects = explode(',',rtrim($post['exam_subjects']));
+                    $base_question_subjects = [];
+
+                    foreach($exam_subjects as $key => $exsub){
+                        $base_question_subjects[$key] = $exsub;
+                        ExamSubject::create(['id_exam' => $id, 'id_subject' => $exsub]);
+                    }
+                }
+
+                // cek if group questions is exist
+                if(isset($post['group-questions'])){
+                    
+                    // truncate all question in exam base question
+                    ExamBaseQuestion::where('id_exam', $id)->delete();
+
+                    foreach($post['group-questions'] as $key => $question){
+                        if(isset($question['type'])){
+                            if(isset($question['question_description'])){
+                                $update_question = Question::updateOrcreate(
+                                [
+                                    'id_question' => $question['id_question'] ?? null
+                                ],
+                                [
+                                    'type' => $question['type'],
+                                    'question_description' => $question['question_description'],
+                                    'use_default_correct_point' => isset($question['use_default_correct_point']) ? '1' : '0',
+                                    'use_default_wrong_point' => isset($question['use_default_wrong_point']) ? '1' : '0',
+                                    'correct_point' => $question['correct_point'] ?? $post['default_correct_point'] ?? null,
+                                    'wrong_point' => $question['wrong_point'] ?? $post['default_wrong_point'] ?? null
+                                ]);
+
+                                if($update_question){
+                                    if($question['type'] == 'multiple_choice' && isset($question['group-options'])){
+                                        
+                                        //truncate options if exist
+                                        Option::where('id_question', $question['id_question'])->delete();
+
+                                        foreach($question['group-options'] as $key => $option){
+                                            $update_option = Option::create([
+                                                'id_question' => $question['id_question'],
+                                                'option_label' => $option['option_label'],
+                                                'option_description' => $option['option_description'],
+                                                'answer_status' => isset($option['answer_status']) ? '1' : '0' 
+                                            ]);
+
+                                            if(!$update_option){
+                                                DB::rollback();
+    
+                                                return redirect()->back()->withErrors(['Something went wrong #ABC123']);
+                                            }
+                                            
+                                        }
+                                    }
+
+                                    if(isset($base_question_subjects) && !empty($base_question_subjects )){
+                                        foreach($base_question_subjects as $id_subject){
+                                            $update_question_subject = QuestionSubject::create([
+                                                'id_question' => $update_question->id,
+                                                'id_subject' => $id_subject
+                                            ]);
+
+                                            if(!$update_question_subject){
+                                                DB::rollback();
+    
+                                                return redirect()->back()->withErrors(['Something went wrong #KIUDGF']);
+                                            }
+                                        }
+                                    }
+                                    
+                                    $update_exam_base_question = ExamBaseQuestion::create([
+                                        'id_exam' => $update_exam->id,
+                                        'id_question' => $update_question->id,
+                                        'question_validity' => 'valid'
+                                    ]);
+
+                                    if(!$update_exam_base_question){
+                                        DB::rollback();
+    
+                                        return redirect()->back()->withErrors(['Something went wrong #CCCDGF']);
+                                    }
+                                
+                                }else{
+                                    DB::rollback();
+
+                                    return redirect()->back()->withErrors(['Something went wrong #BBCV43']);
+                                }
+                            }else{
+                                DB::rollback();
+
+                                return redirect()->back()->withErrors(['Question Description can\'t be empty!']);
+                            }
+                        }
+                    }
+                }
+
+                DB::commit();
+
+                return redirect()->back()->with('success', ['Exam berhasil dibuat']);
+            }
+
+            DB::rollback();
+            return redirect()->back()->withErrors(['Exam gagal dibuat']);
+
+        }catch(\Throwable $th){
+            DB::rollback();
+            return redirect()->back()->withErrors([$th->getMessage()]);
+        }
     }
 
     /**
