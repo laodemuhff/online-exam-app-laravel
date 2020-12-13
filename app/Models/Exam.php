@@ -54,6 +54,11 @@ class Exam extends Model
 
         return json_encode($subjects);
     }
+
+    public function newQuery($excludeDeleted = true) {
+        return parent::newQuery($excludeDeleted)
+            ->where('exam_status', '=', 'Active');
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

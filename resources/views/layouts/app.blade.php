@@ -11,7 +11,7 @@
 
 		{{-- begin::Fonts --}}
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Asap+Condensed:500">
-		{{-- end::Fonts --}}
+		{{-- end::Fonts --}}    
 
 
 		{{-- begin::Global Theme Styles(used by all pages) --}}

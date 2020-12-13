@@ -147,13 +147,13 @@
         <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
             <ul class="kt-menu__subnav">
                 <li class="kt-menu__item @yield('exam-session-create')" aria-haspopup="true">
-                    <a href="#" class="kt-menu__link ">
+                    <a href="{{route('exam-session.create')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">New Session</span>
                     </a>
                 </li>
                 <li class="kt-menu__item @yield('exam-session-list')" aria-haspopup="true">
-                    <a href="#" class="kt-menu__link ">
+                    <a href="{{route('exam-session')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">List Exam Session</span>
                     </a>

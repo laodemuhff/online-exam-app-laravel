@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('title', 'Exam Management')
-@section('exam', 'kt-menu__item--active')
+@section('exam', 'kt-menu__item--open')
+@section('exam-list', 'kt-menu__item--active')
 
 {{-- @section('styles')
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-    
+
 @endsection --}}
 
 @section('breadcrumb')
@@ -26,7 +27,7 @@
     <div class="kt-portlet__body">
         @include('layouts.notification')
         <div class="col-md-2 mb-4" style="padding-left:0px">
-            <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle='modal' data-target='#addModal'><i class="la la-plus"></i> Add New Exam</a>
+            <a href="{{route('exam.create')}}" type="button" class="btn btn-primary btn-sm"><i class="la la-plus"></i> Add New Exam</a>
         </div>
         <table id="datatable" class="table table-bordered table-hover table-checkable">
             <thead>
@@ -47,6 +48,7 @@
                     <th>OECP 5</th>
                     <th>OECP 6</th>
                     <th>OECP 8</th>
+                    <th>New Session</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,6 +80,9 @@
                         <td class="center">@if($exam['oecp_5']) <span class='badge badge-primary badge-font'>Enabled</span> @else <span class='badge badge-secondary badge-font'>Disabled</span> @endif</td>
                         <td class="center">@if($exam['oecp_6']) <span class='badge badge-primary badge-font'>Enabled</span> @else <span class='badge badge-secondary badge-font'>Disabled</span> @endif</td>
                         <td class="center">@if($exam['oecp_8']) <span class='badge badge-primary badge-font'>Enabled</span> @else <span class='badge badge-secondary badge-font'>Disabled</span> @endif</td>
+                        <td class="center">
+                            <a href="{{route('exam.create-session', $exam['id'])}}" title="Add Session {{$exam['exam_title']}}" type="button" class="btn btn-success btn-sm"><i class="la la-plus"></i><i class="kt-menu__link-icon la la-laptop"></i></a>
+                        </td>
                     </tr>
 
                     <!-- Button trigger modal -->
