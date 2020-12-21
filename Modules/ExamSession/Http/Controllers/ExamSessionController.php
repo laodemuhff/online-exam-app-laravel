@@ -126,7 +126,10 @@ class ExamSessionController extends Controller
      */
     public function edit($id)
     {
-        return view('examsession::edit');
+        $data['exam_session'] = ExamSession::where('id', $id)->first();
+        $data['exams'] = Exam::all();
+
+        return view('examsession::edit', $data);
     }
 
     /**
@@ -137,7 +140,44 @@ class ExamSessionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = $request->except('_token');
+
+
+        if(isset($post['start_anytime'])){
+            unset($post['start_anytime']);
+            $post['exam_datetime'] = isset($post['exam_datetime']) ? date('Y-m-d H:i', strtotime($post['exam_datetime'])) : null;
+        }else{
+            $post['exam_datetime'] = null;
+        }
+
+        if(isset($post['end_anytime'])){
+            unset($post['end_anytime']);
+        }else{
+            $post['exam_duration'] = null;
+        }
+
+        if(isset($post['unbound_registration'])){
+            unset($post['unbound_registration']);
+        }else{
+            $post['register_duration'] = null;
+        }
+
+
+        $post['allow_scrambled_questions'] =  isset($post['allow_scrambled_questions']) ? '1' : '0';
+        $post['allow_scrambled_options'] = isset($post['allow_scrambled_options']) ? '1' : '0';
+        $post['disallow_multiple_login'] = isset($post['disallow_multiple_login']) ? '1' : '0';
+        $post['disallow_navigation'] = isset($post['disallow_navigation']) ? '1' : '0';
+        $post['check_on_exam_similarity'] = isset($post['check_on_exam_similarity']) ? '1' : '0';
+        $post['exam_similarity_value'] = isset($post['check_on_exam_similarity']) ? Self::determineExamSimilarityValue() : '0';
+
+
+        $update_session = ExamSession::where('id',$id)->update($post);
+
+        if($update_session){
+            return redirect('exam-session')->with('success', ['Exam Session berhasil diupdate']);
+        }
+
+        return redirect()->back()->withErrors(['Exam Session gagal diupdate'])->withInput();
     }
 
     /**
