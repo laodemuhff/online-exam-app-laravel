@@ -32,7 +32,22 @@ class ExamSession extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_exam', 'exam_session_code', 'exam_datetime', 'exam_duration', 'register_duration', 'use_base_questions', 'exam_session_status', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'id_exam',
+        'exam_session_code',
+        'exam_datetime',
+        'exam_duration',
+        'register_duration',
+        'use_base_questions',
+        'allow_scrambled_questions',
+        'allow_scrambled_options',
+        'disallow_multiple_login',
+        'disallow_navigation',
+        'check_on_exam_similarity',
+        'exam_similarity_value',
+        'exam_session_status',
+        'created_at',
+        'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

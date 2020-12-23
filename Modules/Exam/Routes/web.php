@@ -18,5 +18,6 @@ Route::group(['prefix' => 'exam', 'middleware' => 'validate_session'], function(
     Route::get('/edit/{id}', 'ExamController@edit')->name('exam.edit');
     Route::post('/update/{id}', 'ExamController@update')->name('exam.update');
     Route::delete('/delete/{id}', 'ExamController@delete')->name('exam.delete');
-    Route::get('/detail/{id}', 'ExamController@detail')->name('exam.detail');
+    Route::get('/info/{id}', 'ExamController@info')->name('exam.info');
+    Route::get('/create-session/{id}', 'ExamController@createSession')->name('exam.create-session');
 });

@@ -128,7 +128,7 @@
                         <div class="form-group row">
                             <label class="col-4 col-form-label">
                                 <div class="pull-right">
-                                    Exam Subjects <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Subjects"></i>
+                                    Exam Subjects <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Subjects"></i>
                                 </div>
                             </label>
                             <div class="col-8">
@@ -196,8 +196,8 @@
                                         </div>
                                     </div>
                                     <div class="oecps-explanation-body">
-                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-success" style="font-size:0.9em">Enabled</span>&nbsp;, maka pengaturan jadwal ujian pada tanggal dan waktu yang spesifik akan diaktifkan saat pembuatan sesi</div>
-                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-danger" style="font-size:0.9em">Disabled</span>&nbsp;, maka tidak ada penjadwalan ujian dan petugas bebas mengaktifkan sesi kapan saja</div>
+                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-success" style="font-size:0.9em">Enabled</span>&nbsp;, maka pengaturan jadwal ujian pada tanggal dan waktu yang spesifik akan diaktifkan secara otomatis</div>
+                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-danger" style="font-size:0.9em">Disabled</span>&nbsp;, maka tidak ada pengaturan jadwal ujian pada tanggal dan waktu yang spesifik, sehingga petugas bebas mengaktifkan sesi kapan saja</div>
                                     </div>
                                 </div>
                                 <br>
@@ -213,7 +213,7 @@
                                         </div>
                                     </div>
                                     <div class="oecps-explanation-body">
-                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-success" style="font-size:0.9em">Enabled</span>&nbsp;, maka pengaturan <i>timer</i> batas registrasi sesi ujian akan dimunculkan pada saat membuat sesi dan sifatnya adalah <i>required</i></div>
+                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-success" style="font-size:0.9em">Enabled</span>&nbsp;, maka <i>timer</i> untuk batas registrasi sesi ujian akan diaktifkan secara otomatis ketika sesi dibuka. Perlu diingat bahwa waktu registrasi akan mengambil maksimal 15 menit dari durasi/waktu ujian</div>
                                         <div class="oecps-explanation-item">Jika Status <span class="badge badge-danger" style="font-size:0.9em">Disabled</span>&nbsp;, maka tidak ada pengaturan untuk <i>timer</i> registrasi sesi ujian saat pembuatan sesi, sehingga peserta dapat masuk ke sesi kapan saja selama sesi masih berlangsung.</div>
                                     </div>
                                 </div>
@@ -264,7 +264,7 @@
                                         </div>
                                     </div>
                                     <div class="oecps-explanation-body">
-                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-success" style="font-size:0.9em">Enabled</span>&nbsp;, maka akan dimunculkan pengaturan interval ujian pada saat pembuatan sesi, sehingga ujian akan otomatis berakhir ketika interval habis</div>
+                                        <div class="oecps-explanation-item">Jika Status <span class="badge badge-success" style="font-size:0.9em">Enabled</span>&nbsp;, maka interval/durasi ujian pada saat sesi dibuka akan diaktifkan , sehingga ujian akan otomatis berakhir ketika waktu telah habis</div>
                                         <div class="oecps-explanation-item">Jika Status <span class="badge badge-danger" style="font-size:0.9em">Disabled</span>&nbsp;, maka tidak ada pengaturan interval ujian saat pembuatan sesi, sehingga lama ujian adalah sampai petugas memberhentikan secara manual di sistem</div>
                                     </div>
                                 </div>

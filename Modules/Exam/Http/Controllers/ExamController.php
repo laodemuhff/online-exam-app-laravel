@@ -45,7 +45,6 @@ class ExamController extends Controller
     public function store(Request $request)
     {
         $post = $request->except('_token');
-
         DB::beginTransaction();
 
         try{
@@ -63,7 +62,7 @@ class ExamController extends Controller
                 'oecp_6' => isset($post['oecp_6']) ? '1' : '0',
                 'oecp_8' => isset($post['oecp_8']) ? '1' : '0',
             ]);
-    
+
             if($create_exam){
                 // insert exam subject
                 if(isset($post['exam_subjects'])){
@@ -97,15 +96,15 @@ class ExamController extends Controller
                                                 'id_question' => $create_question->id,
                                                 'option_label' => $option['option_label'],
                                                 'option_description' => $option['option_description'],
-                                                'answer_status' => isset($option['answer_status']) ? '1' : '0' 
+                                                'answer_status' => isset($option['answer_status']) ? '1' : '0'
                                             ]);
 
                                             if(!$create_option){
                                                 DB::rollback();
-    
+
                                                 return redirect()->back()->withErrors(['Something went wrong #ABC123']);
                                             }
-                                           
+
                                         }
                                     }
 
@@ -118,12 +117,12 @@ class ExamController extends Controller
 
                                             if(!$create_question_subject){
                                                 DB::rollback();
-    
+
                                                 return redirect()->back()->withErrors(['Something went wrong #KIUDGF']);
                                             }
                                         }
                                     }
-                                    
+
                                     $create_exam_base_question = ExamBaseQuestion::create([
                                         'id_exam' => $create_exam->id,
                                         'id_question' => $create_question->id,
@@ -132,10 +131,10 @@ class ExamController extends Controller
 
                                     if(!$create_exam_base_question){
                                         DB::rollback();
-    
+
                                         return redirect()->back()->withErrors(['Something went wrong #CCCDGF']);
                                     }
-                                
+
                                 }else{
                                     DB::rollback();
 
@@ -170,9 +169,9 @@ class ExamController extends Controller
      * @param int $id
      * @return Response
      */
-    public function show($id)
+    public function info($id)
     {
-        return view('exam::show');
+        return response()->json(Exam::where('id', $id)->first(), 200);
     }
 
     /**
@@ -181,7 +180,7 @@ class ExamController extends Controller
      * @return Response
      */
     public function edit($id)
-    {   
+    {
         $data['exam'] = Exam::find($id)->toArray();
         $data['subjects'] = json_encode(Subject::all()->toArray());
         $data['exam_base_questions'] = ExamBaseQuestion::with(['question' => function($query){ $query->with('options'); }])->where('id_exam', $id)->get()->toArray();
@@ -199,8 +198,11 @@ class ExamController extends Controller
     {
         $post = $request->except('_token');
 
+<<<<<<< HEAD
         dd($post);
 
+=======
+>>>>>>> a3f29fc05eb4fff412b6bdaee11970b084fec206
         DB::beginTransaction();
 
         try{
@@ -218,6 +220,7 @@ class ExamController extends Controller
                 'oecp_6' => isset($post['oecp_6']) ? '1' : '0',
                 'oecp_8' => isset($post['oecp_8']) ? '1' : '0',
             ]);
+<<<<<<< HEAD
     
             if($update_exam){
                 // insert exam subject
@@ -229,6 +232,19 @@ class ExamController extends Controller
                     $exam_subjects = explode(',',rtrim($post['exam_subjects']));
                     $base_question_subjects = [];
 
+=======
+
+            if($update_exam){
+                // update exam subject
+                if(isset($post['exam_subjects'])){
+                    $exam_subjects = explode(',',rtrim($post['exam_subjects']));
+                    $base_question_subjects = [];
+
+                    // truncate exam subjects
+                    ExamSubject::where('id_exam', $id)->delete();
+
+                    // re-create exam subjects
+>>>>>>> a3f29fc05eb4fff412b6bdaee11970b084fec206
                     foreach($exam_subjects as $key => $exsub){
                         $base_question_subjects[$key] = $exsub;
                         ExamSubject::create(['id_exam' => $id, 'id_subject' => $exsub]);
@@ -236,6 +252,7 @@ class ExamController extends Controller
                 }
 
                 // cek if group questions is exist
+<<<<<<< HEAD
                 if(isset($post['group-questions'])){
                     
                     // truncate all question in exam base question
@@ -312,6 +329,130 @@ class ExamController extends Controller
 
                                     return redirect()->back()->withErrors(['Something went wrong #BBCV43']);
                                 }
+=======
+                if(isset($post['group-questions'][0])){
+                    // remove initial questions for repeater
+                    unset($post['group-questions'][0]);
+
+                    // truncate exam base question
+                    ExamBaseQuestion::where('id_exam', $id)->delete();
+
+                    // looping through all questions
+                    foreach(array_values($post['group-questions']) as $key => $question){
+                        if(isset($question['type'])){
+                            if(isset($question['question_description'])){
+                                // if existing question, update question
+                                if(isset($question['id_question'])){
+
+                                    $id_question = $question['id_question'];
+
+                                    $update_question = Question::where('id', $question['id_question'])->update([
+                                        'type' => $question['type'],
+                                        'question_description' => $question['question_description'],
+                                        'use_default_correct_point' => isset($question['use_default_correct_point']) ? '1' : '0',
+                                        'use_default_wrong_point' => isset($question['use_default_wrong_point']) ? '1' : '0',
+                                        'correct_point' => $question['correct_point'] ?? $post['default_correct_point'] ?? null,
+                                        'wrong_point' => $question['wrong_point'] ?? $post['default_wrong_point'] ?? null
+                                    ]);
+
+                                    if($update_question){
+                                        // cek if type is multiple choice, if yes, update group options
+                                        if($question['type'] == 'multiple_choice' && isset($question['group-options'])){
+                                            // truncate existing group options
+                                            Option::where('id_question', $question['id_question'])->delete();
+                                            // re-create group options
+                                            foreach($question['group-options'] as $key => $option){
+                                                $create_option = Option::create([
+                                                    'id_question' => $question['id_question'],
+                                                    'option_label' => $option['option_label'],
+                                                    'option_description' => $option['option_description'],
+                                                    'answer_status' => isset($option['answer_status']) ? '1' : '0'
+                                                ]);
+
+                                                if(!$create_option){
+                                                    DB::rollback();
+                                                    return redirect()->back()->withErrors(['Options not creating properly']);
+                                                }
+
+                                            }
+                                        }
+
+                                    }else{
+                                        DB::rollback();
+                                        return redirect()->back()->withErrors(['Questions not updating properly']);
+                                    }
+                                }else{
+                                    // if not an existing question, create a new one
+                                    $create_question = Question::create([
+                                        'type' => $question['type'],
+                                        'question_description' => $question['question_description'],
+                                        'use_default_correct_point' => isset($question['use_default_correct_point']) ? '1' : '0',
+                                        'use_default_wrong_point' => isset($question['use_default_wrong_point']) ? '1' : '0',
+                                        'correct_point' => $question['correct_point'] ?? $post['default_correct_point'] ?? null,
+                                        'wrong_point' => $question['wrong_point'] ?? $post['default_wrong_point'] ?? null
+                                    ]);
+
+                                    if($create_question){
+
+                                        $id_question = $create_question->id;
+
+                                        if($question['type'] == 'multiple_choice' && isset($question['group-options'])){
+                                            foreach($question['group-options'] as $key => $option){
+                                                $create_option = Option::create([
+                                                    'id_question' => $create_question->id,
+                                                    'option_label' => $option['option_label'],
+                                                    'option_description' => $option['option_description'],
+                                                    'answer_status' => isset($option['answer_status']) ? '1' : '0'
+                                                ]);
+
+                                                if(!$create_option){
+                                                    DB::rollback();
+                                                    return redirect()->back()->withErrors(['Options not creating properly']);
+                                                }
+
+                                            }
+                                        }
+
+                                    }else{
+                                        DB::rollback();
+
+                                        return redirect()->back()->withErrors(['Question not creating properly']);
+                                    }
+                                }
+
+                                if(isset($base_question_subjects) && !empty($base_question_subjects)){
+                                    // truncate question subjects
+                                    QuestionSubject::where('id_question', $id_question)->delete();
+
+                                    // re-create question subjects
+                                    foreach($base_question_subjects as $id_subject){
+                                        $create_question_subject = QuestionSubject::create([
+                                            'id_question' => $id_question,
+                                            'id_subject' => $id_subject
+                                        ]);
+
+                                        if(!$create_question_subject){
+                                            DB::rollback();
+
+                                            return redirect()->back()->withErrors(['Question subject not creating properly']);
+                                        }
+                                    }
+                                }
+
+                                 // re-create exam base question
+                                 $create_exam_base_question = ExamBaseQuestion::create([
+                                     'id_exam' => $id,
+                                     'id_question' => $id_question,
+                                     'question_validity' => 'valid'
+                                 ]);
+
+                                 if(!$create_exam_base_question){
+                                     DB::rollback();
+
+                                     return redirect()->back()->withErrors(['Exam Base Question not creating properly']);
+                                 }
+
+>>>>>>> a3f29fc05eb4fff412b6bdaee11970b084fec206
                             }else{
                                 DB::rollback();
 
@@ -323,16 +464,34 @@ class ExamController extends Controller
 
                 DB::commit();
 
+<<<<<<< HEAD
                 return redirect()->back()->with('success', ['Exam berhasil dibuat']);
             }
 
             DB::rollback();
             return redirect()->back()->withErrors(['Exam gagal dibuat']);
+=======
+                return redirect()->back()->with('success', ['Exam berhasil diupdate']);
+            }
+
+            DB::rollback();
+            return redirect()->back()->withErrors(['Exam gagal diupdate']);
+>>>>>>> a3f29fc05eb4fff412b6bdaee11970b084fec206
 
         }catch(\Throwable $th){
             DB::rollback();
             return redirect()->back()->withErrors([$th->getMessage()]);
         }
+<<<<<<< HEAD
+=======
+
+    }
+
+    public function createSession($id){
+        $data['exams'] = Exam::all();
+        $data['id_exam'] = $id;
+        return view('examsession::create', $data);
+>>>>>>> a3f29fc05eb4fff412b6bdaee11970b084fec206
     }
 
     /**

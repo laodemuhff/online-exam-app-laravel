@@ -33,7 +33,11 @@
                 </label>
             </div>
             <div class="col-md-9">
+<<<<<<< HEAD
                 <textarea class="summernote" name="question_description" required disabled></textarea>
+=======
+                <textarea class="summernote question_description" name="question_description" required disabled></textarea>
+>>>>>>> a3f29fc05eb4fff412b6bdaee11970b084fec206
             </div>
         </div>
         <div class="form-group row options" style="display: none">
