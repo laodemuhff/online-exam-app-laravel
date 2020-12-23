@@ -1,0 +1,13 @@
+{
+    "name": "InstructorEnroll",
+    "alias": "instructorenroll",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\InstructorEnroll\\Providers\\InstructorEnrollServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

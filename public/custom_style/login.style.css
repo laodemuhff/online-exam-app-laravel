@@ -1,0 +1,88 @@
+/* Ini adalah CSS untuk Login Page BE, jangan diedit atau digunakan selain untuk LOGIN PAGE! */
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box
+}
+
+:root{
+    --main-font: "Pacifico", cursive;
+}
+html {
+    font-family: sans-serif;
+}
+
+header{
+    height: 100vh;
+    width: 100%;
+    background-color:rgba(206, 76, 16, 0.75);
+    background-image: url("login-bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.main-header {
+   text-align: center;
+   transition: 0.5s;
+   width: 430px;
+   background-color: white;
+   border-radius: 25px;
+}
+
+.main-header:hover{
+    -webkit-box-shadow: 0px 11px 54px 0px rgba(0,0,0,0.50);
+    -moz-box-shadow: 0px 11px 54px 0px rgba(0,0,0,.50);
+    box-shadow: 0px 11px 54px rgba(0,0,0,0.50);
+}
+.main-header h1{
+    font-size: 3.5rem;
+    font-family: var(--main-font);
+    color: #5F5FB0;
+    margin: 20px
+}
+.main-header img {
+    width: 40%;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    padding: 5px;
+    border: none;
+}
+
+.main-header h3 {
+    margin: 20px;
+    color: #5F5FB0;
+    font-size: 1.7rem
+}
+
+.main-header input  {
+    width: 90%;
+    padding: 1rem;
+    margin: 20px 0px;
+    border: none;
+    border-bottom: 2px solid #5f5f5f;
+    background: transparent;
+    outline: none;
+}
+
+.main-header button {
+    padding:  1rem 3rem;
+    font-size: 1.2rem;
+    background: #1E1E2D;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.5ms;
+    outline: none;
+    margin: 20px;
+}
+
+.main-header button:hover{
+    transform: scale(1.2)
+}
