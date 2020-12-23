@@ -165,7 +165,7 @@
 
 @if (session('level') == 'admin' || session('level') == 'instructor')
     <li class="kt-menu__item @yield('user-enroll')" aria-haspopup="true">
-        <a href="{{ route('admin.dashboard') }}" class="kt-menu__link ">
+        <a href="{{ route('user-enroll') }}" class="kt-menu__link ">
             <i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">User Enroll</span>
         </a>
     </li>
@@ -188,6 +188,6 @@
 @endif --}}
 
 
- 
+
 
 

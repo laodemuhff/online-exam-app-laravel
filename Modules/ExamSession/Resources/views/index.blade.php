@@ -57,19 +57,19 @@
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     @if ($session['exam_session_status'] != 'On Going')
                                         @if ($session['exam_session_status'] == 'Pending')
-                                            <a title="Start Exam Session {{$session['exam']['exam_title']}}" type="button" class="btn btn-success btn-sm" data-toggle='modal' data-target="#startSessionModal{{$session['id']}}"><i class="la la-play" style="color: white"></i></a>
+                                            <a title="Start Exam Session {{$session['exam_session_code']}}" type="button" class="btn btn-success btn-sm" data-toggle='modal' data-target="#startSessionModal{{$session['id']}}"><i class="la la-play" style="color: white"></i></a>
                                             <a href="{{route('exam-session.edit',$session['id'])}}" title="Edit {{$session['exam_session_code']}}" type="button" class="btn btn-warning btn-sm"><i class="la la-edit"></i></a>
                                         @endif
                                         <a href="{{route('exam-session.delete', $session['id'])}}" title="Delete {{$session['exam_session_code']}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a>
                                     @else
-                                        <a title="End Exam Session {{$session['exam']['exam_title']}}" type="button" class="btn btn-danger btn-sm" data-toggle='modal' data-target="#endSessionModal{{$session['id']}}"><i class="la la-stop" style="color: white"></i></a>
-
+                                        <a title="End Exam Session {{$session['exam_session_code']}}" type="button" class="btn btn-danger btn-sm" data-toggle='modal' data-target="#endSessionModal{{$session['id']}}"><i class="la la-stop" style="color: white"></i></a>
                                     @endif
+                                    <a title="User Enrollment - {{$session['exam_session_code']}}" type="button" class="btn btn-info btn-sm" data-toggle='modal' data-target="#userEnroll{{$session['id']}}"><i class="la la-users" style="color: white"></i></a>
                                 </div>
                             </td>
                             <td>{{ $session['exam']['exam_title'] }}</td>
                             <td>{{ $session['exam_session_code'] }}</td>
-                            <td>{{ $session['exam_datetime'] ?? 'Not Set' }}</td>
+                            <td>{{ isset($session['exam_datetime']) ? tgl_indo(date('Y-m-d', strtotime($session['exam_datetime']))).' - '.date('H.i', strtotime($session['exam_datetime']))  : 'Not Set' }}</td>
                             <td>{{ $session['exam_duration'] ?? 'Not Set'}}</td>
                             <td>{{ $session['register_duration'] ?? 'Not Set' }}</td>
                             <td class="center">
