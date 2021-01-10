@@ -8,8 +8,7 @@ use Illuminate\Routing\Controller;
 use App\Models\Exam;
 use App\Models\ExamSession;
 use App\Models\ExamSessionQuestion;
-use App\Models\ExamSessionInstructorEnrolls;
-use App\Models\ExamSessionStudentEnrolls;
+use App\Models\ExamSessionUserEnroll;
 use Carbon;
 
 class ExamSessionController extends Controller
@@ -18,9 +17,10 @@ class ExamSessionController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index($status)
     {
-        $data['exam_sessions'] = ExamSession::with('exam')->get();
+        $data['exam_sessions'] = ExamSession::with('exam', 'examSessionUserEnrolls')->where('exam_session_status', $status)->get();
+        $data['status'] = str_replace(' ', '-', strtolower($status));
 
         return view('examsession::index', $data);
     }
@@ -43,6 +43,20 @@ class ExamSessionController extends Controller
 
     public function determineExamSimilarityValue(){
         return 0;
+    }
+
+    public function generateUserExamSessionCode($user_type, $rand = 3){
+        do{
+            $rand_number = '';
+            for ($i=0; $i < $rand; $i++) {
+                $rand_number .= rand(0,9);
+            }
+
+            $user_session = $user_type.'-'.$rand_number;
+
+        }while((ExamSessionUserEnroll::where('user_session_code', $user_session)->first()));
+
+        return $user_session;
     }
 
     public function generateExamSessionCode($rand = 3){
@@ -102,7 +116,7 @@ class ExamSessionController extends Controller
         $create_session = ExamSession::create($post);
 
         if($create_session){
-            return redirect('exam-session')->with('success', ['Exam Session berhasil ditambahkan']);
+            return redirect()->back()->with('success', ['Exam Session berhasil ditambahkan']);
         }
 
         return redirect()->back()->withErrors(['Exam Session gagal ditambahkan'])->withInput();
@@ -174,7 +188,7 @@ class ExamSessionController extends Controller
         $update_session = ExamSession::where('id',$id)->update($post);
 
         if($update_session){
-            return redirect('exam-session')->with('success', ['Exam Session berhasil diupdate']);
+            return redirect()->back()->with('success', ['Exam Session berhasil diupdate']);
         }
 
         return redirect()->back()->withErrors(['Exam Session gagal diupdate'])->withInput();
@@ -194,6 +208,17 @@ class ExamSessionController extends Controller
         $update = ExamSession::where('id', $id)->update(['exam_session_status' => 'On Going']);
 
         if($update){
+            $user_enrolls = ExamSessionUserEnroll::with('user')->where('id_exam_session', $id)->get();
+
+            foreach($user_enrolls as $enroll){
+                $type = 'EN';
+                if($enroll['user']->level == 'instructor'){
+                    $type = 'INS';
+                }
+
+                $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => Self::generateUserExamSessionCode($type, 4)]);
+            }
+
             return redirect()->back()->with('success',['Exam Session Started At :'.date('Y-m-d H:i:s')]);
         }
 
@@ -204,6 +229,12 @@ class ExamSessionController extends Controller
         $update = ExamSession::where('id', $id)->update(['exam_session_status' => 'Terminated']);
 
         if($update){
+            $user_enrolls = ExamSessionUserEnroll::with('user')->where('id_exam_session', $id)->get();
+
+            foreach($user_enrolls as $enroll){
+                $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => null]);
+            }
+
             return redirect()->back()->with('success',['Exam Session Ended At :'.date('Y-m-d H:i:s')]);
         }
 

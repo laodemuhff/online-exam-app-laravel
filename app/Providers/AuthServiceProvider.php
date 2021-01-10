@@ -29,6 +29,8 @@ class AuthServiceProvider extends ServiceProvider
         Passport::tokensCan([
             'apps' => 'token for apps',
             'admin' => 'token for panel admin ',
+            'instructor' => 'token for panel instructor',
+            'entry' => 'token for panel entry'
         ]);
 
         Passport::routes();

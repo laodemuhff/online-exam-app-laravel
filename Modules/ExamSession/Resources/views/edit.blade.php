@@ -240,7 +240,7 @@
                 <div class="kt-portlet__foot kt-portlet__foot--fit" id="create-portlet" style="border-top: 0">
                     <div class="kt-form__actions ">
                         <div class="pull-right">
-                            <a class="btn btn-secondary btn-sm white-text" id="add-questions-button" href="{{route('exam-session')}}">
+                            <a class="btn btn-secondary btn-sm white-text" id="add-questions-button" href="{{route('exam-session', 'Pending')}}">
                                 <i class="la la-ban"></i><span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Cancel</span>
                             </a>
                             <button type="submit" class="btn btn-primary btn-sm">

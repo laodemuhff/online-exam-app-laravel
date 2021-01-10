@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Question;
+use App\Models\ExamBaseQuestion;
+use App\Models\ExamSessionQuestion;
 
 /**
  * @property integer $id
@@ -49,20 +52,16 @@ class ExamSession extends Model
         'created_at',
         'updated_at'];
 
+    protected $appends = [
+        'total_question',
+        'question_type'
+    ];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function exam()
     {
         return $this->belongsTo(Exam::class, 'id_exam');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function examSessionInstructorEnrolls()
-    {
-        return $this->hasMany(ExamSessionInstructorEnroll::class, 'exam_session_code', 'exam_session_code');
     }
 
     /**
@@ -76,9 +75,44 @@ class ExamSession extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function examSessionStudentEnrolls()
+    public function examSessionUserEnrolls()
     {
-        return $this->hasMany(ExamSessionStudentEnroll::class, 'exam_session_code', 'exam_session_code');
+        return $this->hasMany(ExamSessionUserEnroll::class, 'id_exam_session', 'id');
+    }
+
+    public function getTotalQuestionAttribute(){
+        if((bool) $this->use_base_questions){
+            return ExamBaseQuestion::where('id_exam', $this->id_exam)->get()->count();
+        }else{
+            return ExamSessionQuestion::where('id_exam', $this->id_exam)->get()->count();
+        }
+    }
+
+    public function getQuestionTypeAttribute(){
+        if((bool) $this->use_base_questions){
+            $multiple_choice = new ExamBaseQuestion;
+            $essay = new ExamBaseQuestion;
+        }else{
+            $multiple_choice = new ExamSessionQuestion;
+            $essay = new ExamSessionQuestion;
+        }
+
+        $multiple_choice = $multiple_choice::with(['question' => function($query){$query->where('type', 'multiple_choice');}])->where('id_exam', $this->id_exam)->get()->toArray();
+        $multiple_choice = sizeof(array_filter($multiple_choice,function($item){return $item['question'] != null;}));
+
+        $essay = $essay::with(['question' => function($query){$query->where('type', 'essay');}])->where('id_exam', $this->id_exam)->get()->toArray();
+        $essay =  sizeof(array_filter($essay,function($item){return $item['question'] != null;}));
+
+        if($multiple_choice > 0 && $essay > 0)
+            $type = 'multiple choice & essay';
+        else if($multiple_choice == 0 && $essay > 0)
+            $type = 'essay';
+        else if($multiple_choice > 0 && $essay == 0)
+            $type = 'multiple choice';
+        else
+            $type = 'unrecognizable';
+
+        return $type;
     }
 
     public static function getPossibleEnumValues ($column) {
