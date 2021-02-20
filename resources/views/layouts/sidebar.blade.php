@@ -4,12 +4,12 @@
     </a>
 </li>
 
-@if (session('level') == 'admin' || session('level') == 'instructor')
+{{-- @if (session('level') == 'admin' || session('level') == 'instructor')
 <li class="kt-menu__section ">
     <h4 class="kt-menu__section-text">Master Data</h4>
     <i class="kt-menu__section-icon la la-cogs"></i>
 </li>
-@endif
+@endif --}}
 
 {{-- User Management --}}
 @if (session('level') == 'admin')
@@ -132,10 +132,10 @@
 
 {{-- Exam Management --}}
 @if (session('level') == 'admin' || session('level') == 'instructor')
-    <li class="kt-menu__section ">
+    {{-- <li class="kt-menu__section ">
         <h4 class="kt-menu__section-text">Exam Management</h4>
         <i class="kt-menu__section-icon flaticon-more-v2"></i>
-    </li>
+    </li> --}}
 
 
     <li class="kt-menu__item  kt-menu__item--submenu @yield('exam-session')" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
@@ -149,27 +149,42 @@
                 <li class="kt-menu__item @yield('exam-session-create')" aria-haspopup="true">
                     <a href="{{route('exam-session.create')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">New Session</span>
+                        <span class="kt-menu__link-text">Create Exam Session</span>
                     </a>
                 </li>
-                <li class="kt-menu__item @yield('exam-session-list')" aria-haspopup="true">
-                    <a href="{{route('exam-session')}}" class="kt-menu__link ">
+                <li class="kt-menu__item @yield('exam-session-list-pending')" aria-haspopup="true">
+                    <a href="{{route('exam-session', 'Pending')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
-                        <span class="kt-menu__link-text">List Exam Session</span>
+                        <span class="kt-menu__link-text">Pending</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item @yield('exam-session-list-on-going')" aria-haspopup="true">
+                    <a href="{{route('exam-session', 'On Going')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">On Going</span>
+                        <span class="kt-menu__link-badge">
+                            <span class="kt-badge kt-badge--primary kt-badge--inline" style="color: white">6</span>
+                        </span>
+                    </a>
+                </li>
+                <li class="kt-menu__item @yield('exam-session-list-terminated')" aria-haspopup="true">
+                    <a href="{{route('exam-session', 'Terminated')}}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
+                        <span class="kt-menu__link-text">Terminated</span>
                     </a>
                 </li>
             </ul>
         </div>
     </li>
 @endif
-
+{{--
 @if (session('level') == 'admin' || session('level') == 'instructor')
-    <li class="kt-menu__item @yield('user-enroll')" aria-haspopup="true">
-        <a href="{{ route('user-enroll') }}" class="kt-menu__link ">
-            <i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">User Enroll</span>
+    <li class="kt-menu__item @yield('user-enrollment')" aria-haspopup="true">
+        <a href="{{ route('user-enrollment') }}" class="kt-menu__link ">
+            <i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">Monitoring & Evaluation</span>
         </a>
     </li>
-@endif
+@endif --}}
 
 {{-- @if (session('level') == 'admin' || session('level') == 'instructor')
     <li class="kt-menu__item @yield('evaluate')" aria-haspopup="true">

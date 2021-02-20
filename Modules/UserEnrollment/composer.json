@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/userenrollment",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\UserEnrollment\\Providers\\UserEnrollmentServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\UserEnrollment\\": ""
+        }
+    }
+}

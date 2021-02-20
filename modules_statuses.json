@@ -14,5 +14,7 @@
     "Question": true,
     "Report": true,
     "StudentEnroll": true,
-    "Subject": true
+    "Subject": true,
+    "UserEnrollment": true,
+    "DoExam": true
 }

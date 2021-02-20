@@ -11,7 +11,7 @@
 
 		{{-- begin::Fonts --}}
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Asap+Condensed:500">
-		{{-- end::Fonts --}}    
+		{{-- end::Fonts --}}
 
 
 		{{-- begin::Global Theme Styles(used by all pages) --}}
@@ -30,11 +30,11 @@
             .badge-info{
                 margin-left: 4px !important;
             }
-    
+
             .badge-font{
                 font-size: 0.85em;
             }
-    
+
             .center{
                 text-align: center;
             }
@@ -42,7 +42,7 @@
             .white-text{
                 color: white !important;
             }
-    
+
             /* autocomplete tagsinput*/
             .label-info {
                 background-color: #5bc0de;
@@ -167,7 +167,7 @@
 					<div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
 						<div class="kt-container  kt-container--fluid  kt-grid kt-grid--ver">
 
-                            @if (Auth::user())
+                            @if (Auth::user() && Auth::user()->level != 'entry')
                                 <!-- begin:: Aside -->
                                 <button class="kt-aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button>
                                 <div class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside">
@@ -186,7 +186,7 @@
                             @endif
 
 							<!-- end:: Aside -->
-							<div class="@if(Auth::user()) kt-content @endif  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+							<div class="@if(Auth::user() && Auth::user()->level != 'entry') kt-content @endif  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 
 								<!-- begin:: Subheader -->
 								<div class="kt-subheader   kt-grid__item" id="kt_subheader">
@@ -266,12 +266,12 @@
         <script>
             $('body').on('click', '.btn-delete', function (event) {
                 event.preventDefault();
-    
+
                 var me = $(this),
                     url = me.attr('href'),
                     title = me.attr('title'),
                     csrf_token = $('meta[name="csrf-token"]').attr('content');
-    
+
                 swal.fire({
                     title: 'Are you sure want to delete ' + title + ' ?',
                     text: 'You won\'t be able to revert this!',
@@ -299,6 +299,7 @@
                                     });
                                     location.reload();
                                 }else{
+                                    console.log(response.messages)
                                     swal.fire({
                                         type: 'error',
                                         title: 'Oops...',
@@ -328,7 +329,15 @@
                     scrollX: true,
                     responsive: true,
                     searching : true,
-                    lengthChange : false,   
+                    lengthChange : false,
+                    paging : true
+                }),
+
+                $("#datatable2").DataTable({
+                    scrollX: true,
+                    responsive: true,
+                    searching : true,
+                    lengthChange : false,
                     paging : true
                 })
             }
@@ -339,7 +348,7 @@
         </script>
 
         @yield('scripts')
-        
+
 	</body>
 
 	<!-- end::Body -->

@@ -1,0 +1,13 @@
+{
+    "name": "UserEnrollment",
+    "alias": "userenrollment",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\UserEnrollment\\Providers\\UserEnrollmentServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

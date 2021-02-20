@@ -1,0 +1,13 @@
+{
+    "name": "DoExam",
+    "alias": "doexam",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\DoExam\\Providers\\DoExamServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

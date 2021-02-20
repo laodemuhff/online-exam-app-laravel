@@ -12,7 +12,7 @@
 */
 
 Route::group(['prefix' => 'exam-session', 'middleware' => 'validate_session'], function() {
-    Route::get('/', 'ExamSessionController@index')->name('exam-session');
+    Route::get('/list/{status}', 'ExamSessionController@index')->name('exam-session');
     Route::get('/create', 'ExamSessionController@create')->name('exam-session.create');
     Route::post('/store', 'ExamSessionController@store')->name('exam-session.store');
     Route::get('/edit/{id}', 'ExamSessionController@edit')->name('exam-session.edit');

@@ -18,14 +18,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 
-        'email', 
-        'phone', 
-        'email_verified_at', 
-        'password', 
-        'level', 
-        'remember_token', 
-        'created_at', 
+        'name',
+        'email',
+        'phone',
+        'email_verified_at',
+        'password',
+        'level',
+        'remember_token',
+        'created_at',
         'updated_at'
     ];
 
@@ -47,9 +47,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function examSessionInstructorEnrolls()
+    public function examSessionUserEnroll()
     {
-        return $this->hasMany(ExamSessionInstructorEnroll::class, 'id_user');
+        return $this->hasMany(ExamSessionUserEnroll::class, 'id_user');
     }
 
     public static function getPossibleEnumValues ($column) {

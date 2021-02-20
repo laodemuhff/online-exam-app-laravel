@@ -19,3 +19,12 @@ function number_format (number, decimals, dec_point, thousands_sep) {
     }
     return s.join(dec);
 }
+
+
+function in_array(needle, haystack) {
+    var length = haystack.length;
+    for(var i = 0; i < length; i++) {
+        if(haystack[i] == needle) return true;
+    }
+    return false;
+}

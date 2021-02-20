@@ -81,7 +81,7 @@
                         <span class="input-group-text btn btn-danger"><i class="la la-times"></i></span>
                     </div>
                     <input type="number" max="0" class="form-control col-md-2 input-sm wrong-point" name="wrong_point" style="display:none" disabled required>
-                    
+
                     <div class="input-group-prepend correct-point" style="padding-right: 0; margin-left:15px; display:none">
                         <span class="input-group-text btn btn-success"><i class="la la-check"></i></span>
                     </div>
@@ -107,8 +107,8 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
     <div class="col-md-2">
-        <input data-repeater-delete="" type="button" value="X Delete Question" class="btn btn-danger"/>  
+        <input data-repeater-delete="" type="button" value="X Delete Question" class="btn btn-danger"/>
     </div>
 </div>

@@ -36,7 +36,16 @@ class AuthController extends Controller
                 return redirect()->back()->withErrors("Invalid Credential");
 
             // get token
-            $token = $user->createToken($user->email,['admin'])->accessToken;
+            if($user->level == 'admin'){
+                $token = $user->createToken($user->email,['admin'])->accessToken;
+                $route_name = 'admin.dashboard';
+            }elseif($user->level == 'instructor'){
+                $token = $user->createToken($user->email,['instructor'])->accessToken;
+                $route_name = 'admin.dashboard';
+            }else{
+                $token = $user->createToken($user->email,['entry'])->accessToken;
+                $route_name = 'register-session';
+            }
 
             if ($token) {
                 // get feature
@@ -58,7 +67,7 @@ class AuthController extends Controller
                     'granted_features'  => array_column($features, 'key'),
                 ]);
 
-                return redirect()->route('admin.dashboard');
+                return redirect()->route($route_name);
             }else
                 return redirect()->back()->withErrors("Invalid Credential");
         }else
