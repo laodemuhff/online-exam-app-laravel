@@ -181,11 +181,15 @@ class ExamController extends Controller
      */
     public function edit($id)
     {
-        $data['exam'] = Exam::find($id)->toArray();
-        $data['subjects'] = json_encode(Subject::all()->toArray());
-        $data['exam_base_questions'] = ExamBaseQuestion::with(['question' => function($query){ $query->with('options'); }])->where('id_exam', $id)->get()->toArray();
+        $data['exam'] = Exam::find($id);
+        if(!empty($data['exam'])){
+            $data['subjects'] = json_encode(Subject::all()->toArray());
+            $data['exam_base_questions'] = ExamBaseQuestion::with(['question' => function($query){ $query->with('options'); }])->where('id_exam', $id)->get()->toArray();
 
-        return view('exam::edit', $data);
+            return view('exam::edit', $data);
+        }
+
+        return redirect()->route('admin.dashboard');
     }
 
     /**
@@ -206,7 +210,7 @@ class ExamController extends Controller
                 'max_score' => $post['max_score'],
                 'default_wrong_point' => $post['default_wrong_point'],
                 'default_correct_point' => $post['default_correct_point'],
-                'exam_status' => isset($post['oecp_1']) ? 'Active' : 'Inactive',
+                'exam_status' => isset($post['exam_status']) ? 'Active' : 'Inactive',
                 'oecp_1' => isset($post['oecp_1']) ? '1' : '0',
                 'oecp_2' => isset($post['oecp_2']) ? '1' : '0',
                 'oecp_3' => isset($post['oecp_3']) ? '1' : '0',

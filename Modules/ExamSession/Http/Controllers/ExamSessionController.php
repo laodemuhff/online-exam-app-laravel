@@ -240,4 +240,14 @@ class ExamSessionController extends Controller
 
         return redirect()->back()->withErrors(['Exam Session failed to end']);
     }
+
+    public function cekAndUpdateExamSession($id_user){
+        $data = ExamSessionUserEnroll::with('exam_session')->where('id_user', $id_user)->first();
+
+        if(!empty($data['exam_session']['exam_datetime'])){
+            if(strtotime($data['exam_session']['exam_datetime']) < strtotime(date('Y-m-d H:i:s'))){
+                ExamSession::where('id', $data['id_exam_session'])->update(['exam_session_status' => 'Terminated']);
+            }
+        }
+    }
 }

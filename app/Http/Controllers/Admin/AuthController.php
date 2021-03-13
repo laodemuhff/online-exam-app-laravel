@@ -44,7 +44,7 @@ class AuthController extends Controller
                 $route_name = 'admin.dashboard';
             }else{
                 $token = $user->createToken($user->email,['entry'])->accessToken;
-                $route_name = 'register-session';
+                $route_name = 'home';
             }
 
             if ($token) {

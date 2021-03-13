@@ -12,5 +12,7 @@
 */
 
 Route::group(['prefix' => 'doexam', 'middleware' => 'validate_session:entry'], function() {
-    Route::get('register-session', 'DoExamController@index')->name('register-session');
+    Route::get('home', 'DoExamController@index')->name('home')->middleware('restrict_exam_session');
+    Route::get('session', 'DoExamController@showSession')->name('show-session')->middleware('restrict_exam_session');
+    Route::post('register-session', 'DoExamController@registerSession')->name('register-session');
 });

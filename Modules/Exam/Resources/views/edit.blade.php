@@ -13,7 +13,7 @@
     <style>
         .badge-info{
             margin-left: 4px !important;
-        
+
         }
 
         /* autocomplete tagsinput*/
@@ -164,7 +164,7 @@
                                         <span class="input-group-text btn btn-danger"><i class="la la-times"></i></span>
                                     </div>
                                     <input type="number" max="0" class="form-control col-md-3" name="default_wrong_point" value="{{old('default_wrong_point') ?? $exam['default_wrong_point']}}" required>
-                                    
+
                                     <div class="input-group-prepend" style="padding-right: 0; margin-left:15px">
                                         <span class="input-group-text btn btn-success"><i class="la la-check"></i></span>
                                     </div>
@@ -379,7 +379,7 @@
                                             <textarea class="summernote question_description" name="question_description" required>{{$question['question']['question_description']??null}}</textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group row options" @if(isset($question['question']['options']) && !empty($question['question']['options']))  @else style="display: none" @endif>
+                                    <div class="form-group row options" @if($question['question']['type'] == 'multiple_choice') @else style="display: none" @endif>
                                         <div class="col-md-3">
                                             <label for="" class="col-form-label pull-right">
                                                 Options <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Subjects"></i>
@@ -389,7 +389,7 @@
                                             <!-- innner repeater -->
                                             <div class="inner-repeater">
                                                 <div data-repeater-list="group-options">
-                                                    @if(isset($question['question']['options']) && !empty($question['question']['options'])) 
+                                                    @if(isset($question['question']['options']) && !empty($question['question']['options']))
                                                         @foreach ($question['question']['options'] as $key2 => $option)
                                                             <div data-repeater-item style="margin-bottom:1%" class="inner-repeater-item">
                                                                 <div class="input-group row">
@@ -406,6 +406,21 @@
                                                                 </div>
                                                             </div>
                                                         @endforeach
+                                                    @else
+                                                        <div data-repeater-item style="margin-bottom:1%" class="inner-repeater-item">
+                                                            <div class="input-group row">
+                                                                <div class="input-group-prepend col-md-2" style="padding-right:0 !important">
+                                                                    <a type="button" class="btn btn-light" style="width: 100%; border:solid 1px rgb(197, 194, 194)">Label</a>
+                                                                </div>
+                                                                <input type="text" name="option_label" class="form-control-sm col-md-2 option_label" value="A" style="border:solid 1px rgb(197, 194, 194); max-width:12% !important; text-align:center" readonly/>
+                                                                <div class="input-group-prepend col-md-2" style="padding-right:0 !important;padding-left:0 !important">
+                                                                    <a type="button" class="btn btn-light" style="width: 100%; border:solid 1px rgb(197, 194, 194)">Value</a>
+                                                                </div>
+                                                                <input type="text" name="option_description" class="form-control-sm col-md-4 input-sm option_description" value="Jawaban Option" style="border:solid 1px rgb(197, 194, 194)" required/>
+                                                                <input type="checkbox" name="answer_status" class="form-control-sm col-md-1 answer_status" onclick="reinitAnswerStatus(this)"/>
+                                                                <input data-repeater-delete type="button" class="btn btn-danger col-md-1 btn-delete-inner-repeater-item" value="X" onclick="reArrangeOptionLabel(this)"/>
+                                                            </div>
+                                                        </div>
                                                     @endif
                                                 </div>
                                                 <input data-repeater-create type="button" value="+ Add Option" class="btn btn-light btn-add-inner-repeater-item" style="border:solid 1px rgb(197, 194, 194)" onclick="setNextLabel(this)"/>
@@ -424,7 +439,7 @@
                                                     <span class="input-group-text btn btn-danger"><i class="la la-times"></i></span>
                                                 </div>
                                                 <input type="number" max="0" class="form-control col-md-2 input-sm wrong-point" name="wrong_point" style="display:none" value="{{$question['question']['wrong_point']}}" disabled required>
-                                                
+
                                                 <div class="input-group-prepend correct-point" style="padding-right: 0; margin-left:15px; display:none">
                                                     <span class="input-group-text btn btn-success"><i class="la la-check"></i></span>
                                                 </div>
@@ -450,9 +465,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                                 <div class="col-md-2">
-                                    <input data-repeater-delete="" type="button" value="X Delete Question" class="btn btn-danger"/>  
+                                    <input data-repeater-delete="" type="button" value="X Delete Question" class="btn btn-danger"/>
                                 </div>
                             </div>
                         @endforeach
@@ -471,10 +486,10 @@
                     <div class="kt-form__actions ">
                         <div class="pull-right">
                             <a class="btn btn-success btn-sm white-text" id="add-questions-button">
-                                <i class="la la-edit" style="font-weight: bold"></i> <span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Create Questions & Answers</span> 
+                                <i class="la la-edit" style="font-weight: bold"></i> <span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Create Questions & Answers</span>
                             </a>
                             <button type="submit" class="btn btn-primary btn-sm">
-                                <span style="font-size: 1.1em; font-weight:bold">Submit Update</span> 
+                                <span style="font-size: 1.1em; font-weight:bold">Submit Update</span>
                             </button>
                         </div>
                     </div>
@@ -524,16 +539,16 @@
     </div>
 @endsection
 
-@section('scripts') 
+@section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
     <script src="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    <script src="{{url('assets/demo/demo11/custom/crud/forms/widgets/form-repeater.js')}}" type="text/javascript"></script> 
+    <script src="{{url('assets/demo/demo11/custom/crud/forms/widgets/form-repeater.js')}}" type="text/javascript"></script>
 
     <script>
         $(document).ready(function() {
-            
+
             setSubjects();
 
             var data = '<?php echo $subjects ?>'
@@ -572,7 +587,7 @@
                     ['view', ['fullscreen', 'codeview', 'help']]
                 ]
             });
-                        
+
             //handle click on add repeater item (questions)
             $("#kt_repeater_2").on('click','.btn-add-repeater-item', function(){
                 $('#kt_repeater_2').find('.summernote').summernote({
@@ -623,7 +638,7 @@
         task.initialize();
 
         var elt = $("#tag1");
-        
+
         elt.tagsinput({
             itemValue: "id",
             itemText: "name",
@@ -637,9 +652,9 @@
         //insert data to input in load page
         function setSubjects(){
             var data_subject_awal = '<?= $exam['subjects'] ?>';
-            
+
             data_subject_awal = JSON.parse(data_subject_awal)
-            
+
             //clear values
             elt.tagsinput('removeAll');
 
@@ -700,7 +715,7 @@
         function setOptionGroup(selectedOption){
             var index = getIndexItemRepeater(selectedOption)
             var value = selectedOption.value
-            
+
             if(value == 'multiple_choice'){
                 $('.options').eq(index).slideDown(150);
                 $('.options').eq(index).find('.option_description').prop('disabled', false)
@@ -715,7 +730,7 @@
             var option_length = $('.repeater-item').eq(index_repeater).find('.inner-repeater-item').length
             var index = $('.btn-add-inner-repeater-item').index(selectedAddButton)
             var label_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-            
+
             $('.inner-repeater').eq(index).on('click', '.btn-add-inner-repeater-item', function(e){
                 var last_label = $('.inner-repeater').eq(index).find('.option_label').eq(-2).val();
                 var last_index = label_names.indexOf(last_label)
@@ -730,15 +745,15 @@
                         $('.btn-add-inner-repeater-item').eq(index).prop('disabled', false)
                     }
                 }
-                
+
                 $('.repeater-item').eq(index_repeater).find('.option_description').prop('disabled', false)
 
                 if(option_length == 0){
                     let answer_status_length = $('.repeater-item').eq(index_repeater).find('.answer_status').length;
                     let is_checked_exist = false;
                     for(let i = 0; i < answer_status_length; i++){
-                        if($('.repeater-item').eq(index_repeater).find('.answer_status').eq(i).prop('checked') == true) 
-                            is_checked_exist = true;  
+                        if($('.repeater-item').eq(index_repeater).find('.answer_status').eq(i).prop('checked') == true)
+                            is_checked_exist = true;
                     }
 
                     if(!is_checked_exist)
@@ -758,13 +773,13 @@
 
             var count = 0;
             var check_answer_status = true;
-            
-            
+
+
             for (let index = 0; index < option_length; index++) {
                 if(index != index_deleted_option){
                     $('.repeater-item').eq(index_repeater).find('.option_label').eq(index).val(label_names[count++]);
                     $('.repeater-item').eq(index_repeater).find('.btn-delete-inner-repeater-item').eq(index).prop('disabled', true);
-                    
+
                     if(check_answer_status && $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index_deleted_option).prop('checked') == true){
                         $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index).prop('checked', true);
                         check_answer_status = false;
@@ -775,7 +790,7 @@
 
             setTimeout(function(){ $('.repeater-item').eq(index_repeater).find('.btn-delete-inner-repeater-item').prop('disabled', false) }, 500);
             $('.btn-add-inner-repeater-item').eq(index_repeater).prop('disabled', false)
-        } 
+        }
 
         // handle bug delete confirmation on inner repeater triggering twice
         function handleErrorDeleteOption(){
@@ -797,11 +812,11 @@
                     $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index).prop('checked', false);
                 }
             }
-        
+
             if($(checkedAnswerStatus).prop('checked') == false){
                 $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index_checked_answer_status).prop('checked', true);
             }
-            
+
         }
 
     </script>

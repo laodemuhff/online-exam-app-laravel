@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'entry' => \App\Http\Middleware\EntryMiddleware::class,
         'validate_session' => \App\Http\Middleware\ValidateSession::class,
         'feature_control' => \App\Http\Middleware\FeatureControl::class,
+        'restrict_exam_session' => \App\Http\Middleware\ExamSessionMiddleware::class,
     ];
 
     /**

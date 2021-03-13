@@ -17,7 +17,11 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
             $success['token'] = $user->createToken('appToken')->accessToken;
-           //After successfull authentication, notice how I return json parameters
+            //After successfull authentication, notice how I return json parameters
+
+            // cek & update exam session associated with this user
+
+
             return response()->json([
                 'success' => true,
                 'token' => $success,
