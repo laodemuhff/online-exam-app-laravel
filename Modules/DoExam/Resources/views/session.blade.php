@@ -81,10 +81,12 @@
             </div>
         </div>
         <div class="col-md-8">
-            <form action="#" method="post">
+            <form action="{{route('submit-exam')}}" method="post">
+                @csrf
+                <input type="hidden" name="user_session_code" value="{{$user_session_code}}">
                 <div class="row">
                     @foreach ($questions as $key => $item)
-                        <div class="card col-md-12 box-soal" @if($key > 0) style="display:none" @endif data-index="{{$key}}">
+                        <div class="card col-md-12 box-soal" @if(isset($current_active_nav)) @if($current_active_nav != $key) style="display: none" @endif @else @if($key != 0) style="display:none" @endif @endif data-index="{{$key}}">
                             <div class="card-body">
                                 <h5 class="card-title">Soal {{++$key}}</h5>
                                 <p class="card-text">
@@ -97,7 +99,7 @@
                                         <tr>
                                             <td style="width: 10%">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary question{{$item['question']['id']}}_option" onclick="handleOption(this)" data-index={{$key_option}} data-question-index="{{$key}}">
+                                                    <label class="btn btn-secondary @if($item['question']['answer'] == $option['id']) changeToGreen @endif question{{$item['question']['id']}}_option" onclick="handleOption(this)" data-index={{$key_option}} data-question-index="{{$key}}" data-option-id="{{$option['id']}}" data-answer-status="{{$option['answer_status']}}" data-question-type="{{$item['question']['type']}}" data-question-id="{{$item['question']['id']}}">
                                                         <input type="radio" name="question{{$item['question']['id']}}_option[]">{{$option['option_label']}}
                                                     </label>
                                                 </div>
@@ -132,7 +134,7 @@
                                     <div class="col-md-12" style="border: 1px dotted black; margin-top:10px">
                                         @foreach ($questions as $key => $item)
                                             <div style="float:left; margin:3px; min-width: 45px">
-                                                <a href="#" class="btn btn-outline-primary nav-link @if($key == 0) active @endif" style="width: 100%" data-index="{{$key}}">{{++$key}}</a>
+                                                <a href="#" class="btn @if(!empty($item['question']['answer'])) btn-primary @else btn-outline-primary @endif  nav-link @if(isset($current_active_nav)) @if($current_active_nav == $key) active @endif @else @if($key == 0) active @endif @endif" style="width: 100%" data-index="{{$key}}">{{++$key}}</a>
                                             </div>
                                         @endforeach
                                     </div>
@@ -148,7 +150,7 @@
                                     <div class="col-md-12" style="border: 1px dotted black; margin-top:10px">
                                         @foreach ($questions as $key => $item)
                                             <div style="float:left; margin:3px; min-width: 45px">
-                                                <a href="#" class="btn btn-outline-primary nav-link @if($key == 0) active @endif" style="width: 100%" onclick="navigate(this)" data-index="{{$key}}">{{++$key}}</a>
+                                                <a href="#" class="btn @if(!empty($item['question']['answer'])) btn-primary @else btn-outline-primary @endif  nav-link @if(isset($current_active_nav)) @if($current_active_nav == $key) active @endif @else @if($key == 0) active @endif @endif" style="width: 100%" onclick="navigate(this)" data-index="{{$key}}">{{++$key}}</a>
                                             </div>
                                         @endforeach
                                     </div>
@@ -158,7 +160,7 @@
                     </div>
                 </div>
                  <div style="float:right; margin:3px; min-width: 45px">
-                    <a href="#" class="btn btn-outline-danger" style="width: 100%">Submit Exam</a>
+                    <button type="submit" class="btn btn-outline-danger" style="width: 100%" onclick="confirm('Yakin ingin submit ujian ini?')">Submit Exam</button>
                 </div>
             </form>
         </div>
@@ -167,6 +169,11 @@
 
 @section('scripts')
     <script>
+        // save answer
+        let url = $('meta[name="url"]').attr('content')
+        let token = $('meta[name="csrf-token"]').attr('content')
+        let user_session_code = "<?php echo $user_session_code ?>"
+
         function handleOption(e){
             let question_index = $(e).data('question-index')
             let option_index = $(e).data('index');
@@ -189,6 +196,31 @@
                 $(e).addClass('changeToGreen');
                 $('.nav-link').eq(question_index - 1).removeClass('btn-outline-primary').addClass('btn-primary')
             }
+
+
+
+            let option_id = $(e).data('option-id')
+            let answer_status = $(e).data('answer-status')
+            let question_type = $(e).data('question-type')
+            let id_question = $(e).data('question-id')
+
+            $.ajax({
+                'type' : 'POST',
+                'dataType' : 'json',
+                'url' : url+'/answer/save',
+                'data' : {
+                    'id_question' : id_question,
+                    'user_session_code' : user_session_code,
+                    'question_type' : question_type,
+                    'option_id' : option_id,
+                    'answer_status' : answer_status,
+                    '_token' : token
+                }
+            }).done(function(result){
+
+            }).fail(function(result){
+                console.log(result)
+            });
         }
 
         function navigate(e, next_index = undefined){
@@ -219,6 +251,21 @@
             }else{
                 $(e).addClass('active')
             }
+
+            $.ajax({
+                'type' : 'POST',
+                'dataType' : 'json',
+                'url' : url+'/answer/save-nav-position',
+                'data' : {
+                    'user_session_code' : user_session_code,
+                    'current_active_nav' : clicked_navigation_index,
+                    '_token' : token
+                }
+            }).done(function(result){
+
+            }).fail(function(result){
+
+            });
 
         }
 

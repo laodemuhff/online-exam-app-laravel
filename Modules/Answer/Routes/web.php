@@ -12,5 +12,6 @@
 */
 
 Route::prefix('answer')->group(function() {
-    Route::get('/', 'AnswerController@index');
+    Route::post('save', 'AnswerController@saveAnswer')->name('answer.save');
+    Route::post('save-nav-position', 'AnswerController@saveNavPosition')->name('nav.save');
 });

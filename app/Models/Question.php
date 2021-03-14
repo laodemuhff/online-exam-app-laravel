@@ -59,6 +59,11 @@ class Question extends Model
         return $this->hasMany(QuestionSubject::class, 'id_question', 'id');
     }
 
+    public function answers()
+    {
+        return $this->hasMany(ExamSessionAnswer::class, 'id_question');
+    }
+
     public static function getPossibleEnumValues ($column) {
         // Create an instance of the model to be able to get the table name
         $instance = new static;

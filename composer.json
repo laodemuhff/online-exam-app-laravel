@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "doctrine/dbal": "^2.0",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.18.35",
         "laravel/passport": "^9.3",
@@ -43,7 +44,7 @@
             "database/seeds",
             "database/factories"
         ],
-        "files": ["app/Lib/GlobalHelper.php"] 
+        "files": ["app/Lib/GlobalHelper.php"]
     },
     "autoload-dev": {
         "psr-4": {

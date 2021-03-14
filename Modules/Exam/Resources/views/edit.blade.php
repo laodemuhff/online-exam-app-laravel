@@ -427,7 +427,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row points" style="display: none">
+                                    <div class="form-group row points" @if($question['question']['use_default_wrong_point'] || $question['question']['use_default_correct_point']) style="display: none" @endif>
                                         <label class="col-md-3">
                                             <div class="col-form-label pull-right">
                                                 Point <span style="color:red;">*</span> <i class="flaticon-info" data-toggle="kt-tooltip" data-placement="top" data-original-title="Exam Status"></i>
@@ -435,15 +435,15 @@
                                         </label>
                                         <div class="col-md-9">
                                             <div class="input-grup row" style="margin-left: 1px">
-                                                <div class="input-group-prepend wrong-point" style="padding-right: 0; display:none">
+                                                <div class="input-group-prepend wrong-point" style="padding-right: 0; @if($question['question']['use_default_wrong_point']) display:none @endif">
                                                     <span class="input-group-text btn btn-danger"><i class="la la-times"></i></span>
                                                 </div>
-                                                <input type="number" max="0" class="form-control col-md-2 input-sm wrong-point" name="wrong_point" style="display:none" value="{{$question['question']['wrong_point']}}" disabled required>
+                                                <input type="number" max="0" class="form-control col-md-2 input-sm wrong-point" name="wrong_point" @if($question['question']['use_default_wrong_point']) style="display:none" disabled @endif value="{{$question['question']['wrong_point']}}" required>
 
-                                                <div class="input-group-prepend correct-point" style="padding-right: 0; margin-left:15px; display:none">
+                                                <div class="input-group-prepend correct-point" style="padding-right: 0; margin-left:15px; @if($question['question']['use_default_correct_point']) display:none @endif">
                                                     <span class="input-group-text btn btn-success"><i class="la la-check"></i></span>
                                                 </div>
-                                                <input type="number" min="0" class="form-control col-md-2 input-sm correct-point" name="correct_point" style="display:none" value="{{$question['question']['correct_point']}}" disabled required>
+                                                <input type="number" min="0" class="form-control col-md-2 input-sm correct-point" name="correct_point" @if($question['question']['use_default_correct_point']) style="display:none" disabled @endif value="{{$question['question']['correct_point']}}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -452,7 +452,7 @@
                                         <div class="col-md-9">
                                             <div class="form-check">
                                                 <input type="checkbox" name="use_default_correct_point" class="form-check-input default-correct-checkbox" onchange="handleDefaultCorrectPoint(this)" @if($question['question']['use_default_correct_point'] == '1') checked @endif>
-                                                <label class="form-check-label default-correct-label" for="exampleCheck1">Use Default Correct Point</label>
+                                                <label class="form-check-label default-correct-label"  @if(!$question['question']['use_default_correct_point']) style="text-decoration:line-through" @endif for="exampleCheck1">Use Default Correct Point</label>
                                             </div>
                                         </div>
                                     </div>
@@ -461,7 +461,7 @@
                                         <div class="col-md-9">
                                             <div class="form-check">
                                                 <input type="checkbox" name="use_default_wrong_point" class="form-check-input default-wrong-checkbox" onchange="handleDefaultWrongPoint(this)" @if($question['question']['use_default_wrong_point'] == '1') checked @endif>
-                                                <label class="form-check-label default-wrong-label" for="exampleCheck1">Use Default Wrong Point</label>
+                                                <label class="form-check-label default-wrong-label"  @if(!$question['question']['use_default_wrong_point']) style="text-decoration:line-through" @endif for="exampleCheck1">Use Default Wrong Point</label>
                                             </div>
                                         </div>
                                     </div>

@@ -5,75 +5,46 @@ namespace Modules\Answer\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use App\Models\ExamSessionAnswer;
+use App\Models\ExamSessionUserEnroll;
+use App\Models\Question;
 
 class AnswerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function index()
-    {
-        return view('answer::index');
-    }
+   public function saveAnswer(Request $r){
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('answer::create');
-    }
+        $question = Question::with('options')->where('id', $r->id_question)->first();
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $given_point = null;
+        if($r->question_type == 'multiple_choice'){
+            if($r->answer_status){
+                // if correct
+                $given_point = $question['correct_point'];
+            }else{
+                // if wrong
+                $given_point = $question['wrong_point'];
+            }
+        }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('answer::show');
-    }
+        $save = ExamSessionAnswer::updateOrCreate(
+        [
+            'id_question' => $r->id_question,
+            'user_session_code' => $r->user_session_code
+        ],
+        [
+            'user_session_code' => $r->user_session_code,
+            'id_question' => $r->id_question,
+            'multiple_choice_answer' => $r->question_type == 'multiple_choice' ? $r->option_id : null ,
+            'essay_answer' => $r->question_type == 'essay' ? $r->essay_answer : null,
+            'given_point' => $given_point
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        return view('answer::edit');
-    }
+        return $save;
+   }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+   public function saveNavPosition(Request $r){
+        $update = ExamSessionUserEnroll::where('user_session_code', $r->user_session_code)->update(['current_active_nav' => $r->current_active_nav]);
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+        return $update;
+   }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\Models\ExamSessionUserEnroll;
 use App\Models\ExamSession;
+use App\Models\ExamSessionAnswer;
 use Auth;
 use Validator;
 
@@ -77,19 +78,39 @@ class DoExamController extends Controller
 
         $id_exam_session = $request->session()->get('registered_exam_session');
 
-        $raw_data = ExamSessionUserEnroll::with(['examSession' => function($query){
-            $query->with(['exam' => function($query){
-                $query->with(['examBaseQuestions' => function($query){
-                    $query->with(['question' => function($query){
-                        $query->with('options');
-                    }])->where('question_validity','Valid');
+        $raw_data = ExamSessionUserEnroll::with([
+            'examSession' => function($query){
+                $query->with(['exam' => function($query){
+                    $query->with(['examBaseQuestions' => function($query){
+                        $query->with(['question' => function($query){
+                            $query->with('options');
+                        }])->where('question_validity','Valid');
+                    }]);
                 }]);
-            }]);
-        }])->where('id_user', auth()->user()->id)->where('id_exam_session', $id_exam_session)->get()->toArray();
+            }
+        ])->where('id_user', auth()->user()->id)->where('id_exam_session', $id_exam_session)->get()->toArray();
+
 
         $data['questions'] = $raw_data[0]['exam_session']['exam']['exam_base_questions'];
+        $data['current_active_nav'] = $raw_data[0]['current_active_nav'];
         $data['setting'] =$raw_data[0]['exam_session'];
+        $data['user_session_code'] = $raw_data[0]['user_session_code'];
         $data['setting']['subject'] = $data['setting']['exam']['exam_title'];
+        $data['history_answer'] = ExamSessionAnswer::where('user_session_code', $data['user_session_code'])->get()->toArray();
+
+        foreach ($data['questions'] as $key => $value) {
+            $answer = null;
+            foreach ( $data['history_answer']  as $key2 => $value2) {
+                if($value2['id_question'] == $value['question']['id']){
+                    if($value['question']['type'] == 'multiple_choice')
+                        $answer = $value2['multiple_choice_answer'];
+                    else
+                        $answer = $value2['essay_answer'];
+                    break;
+                }
+            }
+            $data['questions'][$key]['question']['answer'] = $answer;
+        }
 
         unset($data['setting']['exam']);
 
@@ -97,34 +118,11 @@ class DoExamController extends Controller
         return view('doexam::session', $data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        return view('doexam::edit');
-    }
+    public function submitExam(Request $r){
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+        ExamSessionUserEnroll::where('user_session_code', $r->user_session_code)->update([
+            'is_submitted' => 1
+        ]);
+        $answers = ExamSessionAnswer::where('user_session_code', $r->user_session_code)->get();
     }
 }
