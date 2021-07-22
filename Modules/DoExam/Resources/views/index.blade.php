@@ -45,7 +45,13 @@
                     <td>{{++$key}}</td>
                     <td>{{$item['examSession']['exam']['exam_title']}}</td>
                     <td>{{$item['examSession']['exam_session_code']}}</td>
-                    <td>{{$item['examSession']['exam_datetime'] ?? '-'}}</td>
+                    <td>
+                        @if (!empty($item['examSession']['started_on_going_at']))
+                            {{$item['examSession']['started_on_going_at'] ?? '-'}}
+                        @else
+                            {{$item['examSession']['exam_datetime'] ?? '-'}}
+                        @endif
+                    </td>
                     <td>{{isset($item['examSession']['exam_duration']) ? $item['examSession']['exam_duration'].' minutes' : '-'}}</td>
                     <td>{{isset($item['examSession']['register_duration']) ? $item['examSession']['register_duration'].' minutes' : '-'}}</td>
                     <td>{{$item['examSession']['question_type']}}</td>
@@ -61,10 +67,10 @@
 
                     </td>
                     <td>
-                        @if ($item['examSession']['exam_session_status'] == 'On Going')
+                        @if ($item['examSession']['exam_session_status'] == 'On Going' && $item['examSession']['registration_status'] != 'expired')
                             <a data-toggle='modal' data-target='#register-session-{{$item['examSession']['id']}}' type="button" class="btn btn-primary" style="color: white"><span class="flaticon-user-ok"></span> Register</a>
                         @else
-                            <a data-toggle='modal' data-target='#register-session-{{$item['examSession']['id']}}' type="button" class="btn btn-light" style="color: white; background-color: #EBEDF2; border-color: #EBEDF2;" disabled><span class="flaticon-user-ok"></span> Register</a>
+                            <a @if($item['examSession']['registration_status'] == 'expired' || $item['examSession']['exam_session_status'] == 'Terminated') title="Register Session is Ended" @else title="Register Session is not Yet Started" @endif data-toggle="tooltip" type="button" class="btn btn-light" style="color: white; background-color: #EBEDF2; border-color: #EBEDF2;" disabled><span class="flaticon-user-ok"></span> Register</a>
                         @endif
                     </td>
                 </tr>

@@ -26,7 +26,7 @@
             height: 45%;
             border: 1px solid #9C9C9C;
             background-color: #EAEAEA;
-        
+
         }
 
         #login .container #login-row #login-column #login-box #login-form {
@@ -61,7 +61,7 @@
                         <form id="login-form" class="form" action="{{route('admin.login.post')}}" method="post">
                             @csrf
                             <div class="image">
-                                <img alt="Online Exam" src="{{env('APP_URL').'assets/img/logo.png'}}" width="130">
+                                <img alt="Online Exam" src="{{asset('assets/img/logo.png')}}" width="130">
                             </div>
                             @include('layouts.notification')
                             <div class="form-group">

@@ -28,12 +28,34 @@ class ExamSessionAnswer extends Model
      */
     protected $fillable = ['exam_session_code', 'id_user', 'user_session_code', 'id_question', 'multiple_choice_answer', 'essay_answer', 'created_at', 'updated_at', 'given_point'];
 
+    protected $appends = [
+        'final_score',
+        'right_answer',
+        'wrong_answer'
+    ];
+
     public function exam_session_user_enroll(){
         return $this->belongsTo(ExamSessionUserEnroll::class, 'user_session_code');
     }
 
     public function question(){
         return $this->belongsTo(Question::class, 'id_question');
+    }
+
+    public function option(){
+        return $this->belongsTo(Option::class, 'multiple_choice_answer', 'id');
+    }
+
+    public function getFinalScoreAttribute(){
+        return Self::where('user_session_code', $this->user_session_code)->sum('given_point');
+    }
+
+    public function getRightAnswerAttribute(){
+        return Self::whereHas('option', function($q){$q->where('answer_status', '1');})->where('user_session_code', $this->user_session_code)->count();
+    }
+
+    public function getWrongAnswerAttribute(){
+        return Self::whereHas('option', function($q){$q->where('answer_status', '0');})->where('user_session_code', $this->user_session_code)->count();
     }
 
 }

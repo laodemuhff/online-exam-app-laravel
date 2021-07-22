@@ -35,6 +35,11 @@ class Option extends Model
         return $this->belongsTo(Question::class, 'id_question');
     }
 
+    public function exam_session_answers()
+    {
+        return $this->hasMany(ExamSessionAnswer::class, 'multiple_choice_answer', 'id');
+    }
+
     public static function getPossibleEnumValues ($column) {
         // Create an instance of the model to be able to get the table name
         $instance = new static;

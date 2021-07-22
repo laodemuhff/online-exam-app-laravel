@@ -27,8 +27,6 @@
                 <tr>
                     <th></th>
                     <th>Name</th>
-                    <th>List Exams</th>
-                    <th>List Questions</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -38,21 +36,13 @@
                         <td>{{ ++$key }}</td>
                         <td>{{ $subject->name }}</td>
                         <td>
-                            <a href="#" title="{{$subject->count_exam_subject}}" type="button" class="btn btn-success btn-sm"><i class="la la-list"></i></a>
-                            &nbsp;{{ $subject->count_exam_subject ?? 0 }} Exams
-                        </td>
-                        <td>
-                            <a href="#" title="{{$subject->count_question_subject}}" type="button" class="btn btn-info btn-sm"><i class="la la-list"></i></a>
-                            &nbsp;{{ $subject->count_question_subject ?? 0 }} Questions
-                        </td>
-                        <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <a href="#" title="{{$subject->name}}" type="button" class="btn btn-warning btn-sm" data-toggle='modal' data-target='#editModal{{$subject->id}}'><i class="la la-edit"></i></a>
                                 <a href="{{route('subject.delete', $subject->id)}}" title="{{$subject->name}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a>
                             </div>
                         </td>
                     </tr>
-                            
+
                     <!-- Edit Modal -->
                     <div class="modal fade" id="editModal{{$subject->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -82,7 +72,7 @@
                 @endforeach
             </tbody>
         </table>
-        
+
         <!-- Add Modal -->
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

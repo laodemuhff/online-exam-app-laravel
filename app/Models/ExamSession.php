@@ -39,6 +39,8 @@ class ExamSession extends Model
         'id_exam',
         'exam_session_code',
         'exam_datetime',
+        'started_on_going_at',
+        'started_by',
         'exam_duration',
         'register_duration',
         'use_base_questions',
@@ -49,6 +51,7 @@ class ExamSession extends Model
         'check_on_exam_similarity',
         'exam_similarity_value',
         'exam_session_status',
+        'registration_status',
         'created_at',
         'updated_at'];
 

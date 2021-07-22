@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Cache;
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Exam Session')
@@ -61,7 +65,13 @@
                                     <tr>
                                         <td>Schedule</td>
                                         <td>:</td>
-                                        <td>{{$setting['exam_datetime']}}</td>
+                                        <td>
+                                            @if (!empty($setting['started_on_going_at']))
+                                                {{ $setting['started_on_going_at'] }}
+                                            @else
+                                                {{$setting['exam_datetime']}}
+                                            @endif
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Duration</td>
@@ -85,6 +95,11 @@
                 @csrf
                 <input type="hidden" name="user_session_code" value="{{$user_session_code}}">
                 <div class="row">
+                    @php
+                        if(Cache::has('questions')){
+                            $questions = Cache::get('questions'.$user_session_code);
+                        }
+                    @endphp
                     @foreach ($questions as $key => $item)
                         <div class="card col-md-12 box-soal" @if(isset($current_active_nav)) @if($current_active_nav != $key) style="display: none" @endif @else @if($key != 0) style="display:none" @endif @endif data-index="{{$key}}">
                             <div class="card-body">
@@ -160,7 +175,29 @@
                     </div>
                 </div>
                  <div style="float:right; margin:3px; min-width: 45px">
-                    <button type="submit" class="btn btn-outline-danger" style="width: 100%" onclick="confirm('Yakin ingin submit ujian ini?')">Submit Exam</button>
+                    <button type="button" data-toggle="modal" data-target="#submitExam" class="btn btn-outline-danger" style="width: 100%" onclick="cekExamSessionStatus()">Submit Exam</button>
+                </div>
+
+                <div id="submitExam" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="my-modal-title">Apakah Anda Yakin ini Submit Ujian Ini?</h5>
+                                <button class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Exam Info
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-group" role="group" aria-label="Button group">
+                                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -173,6 +210,7 @@
         let url = $('meta[name="url"]').attr('content')
         let token = $('meta[name="csrf-token"]').attr('content')
         let user_session_code = "<?php echo $user_session_code ?>"
+        let exam_sess_code = "<?php echo $setting['exam_session_code'] ?>"
 
         function handleOption(e){
             let question_index = $(e).data('question-index')
@@ -214,10 +252,14 @@
                     'question_type' : question_type,
                     'option_id' : option_id,
                     'answer_status' : answer_status,
+                    'exam_session_code' : exam_sess_code,
                     '_token' : token
                 }
             }).done(function(result){
-
+                if(result['status'] == 'fail'){
+                    alert('Session already Terminated')
+                    window.location = url+"/doexam/session";
+                }
             }).fail(function(result){
                 console.log(result)
             });
@@ -259,10 +301,15 @@
                 'data' : {
                     'user_session_code' : user_session_code,
                     'current_active_nav' : clicked_navigation_index,
+                    'exam_session_code' : exam_sess_code,
                     '_token' : token
                 }
             }).done(function(result){
-
+                console.log(result)
+                if(result['status'] == 'fail'){
+                    alert('Session already Terminated')
+                    window.location = url+"/doexam/session";
+                }
             }).fail(function(result){
 
             });
@@ -321,6 +368,26 @@
             console.log(current_nav_index)
 
             navigate(e,--current_nav_index)
+        }
+
+        function cekExamSessionStatus(e){
+            $.ajax({
+                'type' : 'POST',
+                'dataType' : 'json',
+                'url' : url+'/doexam/submit/check',
+                'data' : {
+                    'exam_session_code' : exam_sess_code,
+                    '_token' : token
+                }
+            }).done(function(result){
+                console.log(result)
+                if(result['status'] == 'fail'){
+                    alert('Session already Terminated')
+                    window.location = url+"/doexam/session";
+                }
+            }).fail(function(result){
+
+            });
         }
     </script>
 @endsection

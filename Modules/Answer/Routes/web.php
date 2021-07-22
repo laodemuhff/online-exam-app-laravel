@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix('answer')->group(function() {
+Route::prefix('answer')->middleware('validate_session')->group(function() {
     Route::post('save', 'AnswerController@saveAnswer')->name('answer.save');
     Route::post('save-nav-position', 'AnswerController@saveNavPosition')->name('nav.save');
 });

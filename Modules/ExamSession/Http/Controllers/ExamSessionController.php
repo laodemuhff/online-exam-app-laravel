@@ -9,7 +9,10 @@ use App\Models\Exam;
 use App\Models\ExamSession;
 use App\Models\ExamSessionQuestion;
 use App\Models\ExamSessionUserEnroll;
+use App\Models\ExamSessionAnswer;
+use Cache;
 use Carbon;
+use Auth;
 
 class ExamSessionController extends Controller
 {
@@ -205,7 +208,11 @@ class ExamSessionController extends Controller
     }
 
     public function startSession($id){
-        $update = ExamSession::where('id', $id)->update(['exam_session_status' => 'On Going']);
+        $update = ExamSession::where('id', $id)->update([
+            'exam_session_status' => 'On Going',
+            'started_on_going_at' => date('Y-m-d H:i:s'),
+            'started_by' => Auth::user()->id
+        ]);
 
         if($update){
             $user_enrolls = ExamSessionUserEnroll::with('user')->where('id_exam_session', $id)->get();
@@ -226,13 +233,30 @@ class ExamSessionController extends Controller
     }
 
     public function endSession($id){
-        $update = ExamSession::where('id', $id)->update(['exam_session_status' => 'Terminated']);
+        $update = ExamSession::where('id', $id)->update([
+            'exam_session_status' => 'Terminated',
+            'registration_status' => 'expired'
+        ]);
 
         if($update){
             $user_enrolls = ExamSessionUserEnroll::with('user')->where('id_exam_session', $id)->get();
 
-            foreach($user_enrolls as $enroll){
-                $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => null]);
+            foreach($user_enrolls as $key => $enroll){
+                if(strpos($enroll->user_session_code, 'EN-') !== false){
+                    $exam_answer = ExamSessionAnswer::where('user_session_code', $enroll->user_session_code)->first();
+
+                    if(Cache::has('questions'.$enroll->user_session_code)){
+                        Cache::forget('questions'.$enroll->user_session_code);
+                    }
+
+                    $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update([
+                        'is_registered' => 0,
+                        'is_cached' => 0,
+                        'is_submitted' => 1,
+                        'final_score' => $exam_answer['final_score'],
+                        'final_score_status' => 'Ready to evaluate'
+                    ]);
+                }
             }
 
             return redirect()->back()->with('success',['Exam Session Ended At :'.date('Y-m-d H:i:s')]);
@@ -246,7 +270,10 @@ class ExamSessionController extends Controller
 
         if(!empty($data['exam_session']['exam_datetime'])){
             if(strtotime($data['exam_session']['exam_datetime']) < strtotime(date('Y-m-d H:i:s'))){
-                ExamSession::where('id', $data['id_exam_session'])->update(['exam_session_status' => 'Terminated']);
+                ExamSession::where('id', $data['id_exam_session'])->update([
+                    'exam_session_status' => 'Terminated',
+                    'registration_status' => 'expired'
+                ]);
             }
         }
     }

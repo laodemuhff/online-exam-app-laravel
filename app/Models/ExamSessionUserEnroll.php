@@ -25,7 +25,19 @@ class ExamSessionUserEnroll extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_exam_session', 'id_user', 'user_type', 'user_session_code', 'is_registered', 'current_active_nav', 'final_score', 'final_score_status', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'id_exam_session',
+        'id_user',
+        'user_type',
+        'user_session_code',
+        'is_registered',
+        'is_cached',
+        'is_submitted',
+        'current_active_nav',
+        'final_score',
+        'final_score_status',
+        'created_at',
+        'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

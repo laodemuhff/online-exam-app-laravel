@@ -156,15 +156,24 @@
                     <a href="{{route('exam-session', 'Pending')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">Pending</span>
+
+                        @if (session()->has('counter_pending'))
+                            <span class="kt-menu__link-badge">
+                                <span class="kt-badge kt-badge--warning kt-badge--inline" style="color: white">{{ session('counter_pending')}}</span>
+                            </span>
+                        @endif
                     </a>
                 </li>
                 <li class="kt-menu__item @yield('exam-session-list-on-going')" aria-haspopup="true">
                     <a href="{{route('exam-session', 'On Going')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">On Going</span>
-                        <span class="kt-menu__link-badge">
-                            <span class="kt-badge kt-badge--primary kt-badge--inline" style="color: white">6</span>
-                        </span>
+
+                        @if (session()->has('counter_on_going'))
+                            <span class="kt-menu__link-badge">
+                                <span class="kt-badge kt-badge--primary kt-badge--inline" style="color: white">{{session('counter_on_going')}}</span>
+                            </span>
+                        @endif
                     </a>
                 </li>
                 <li class="kt-menu__item @yield('exam-session-list-terminated')" aria-haspopup="true">
