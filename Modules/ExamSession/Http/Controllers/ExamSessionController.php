@@ -10,6 +10,7 @@ use App\Models\ExamSession;
 use App\Models\ExamSessionQuestion;
 use App\Models\ExamSessionUserEnroll;
 use App\Models\ExamSessionAnswer;
+use App\Jobs\SendEmail;
 use Cache;
 use Carbon;
 use Auth;
@@ -22,7 +23,7 @@ class ExamSessionController extends Controller
      */
     public function index($status)
     {
-        $data['exam_sessions'] = ExamSession::with('exam', 'examSessionUserEnrolls')->where('exam_session_status', $status)->get();
+        $data['exam_sessions'] = ExamSession::with('exam', 'examSessionUserEnrolls')->where('exam_session_status', $status)->orderBy('created_at', 'desc')->get();
         $data['status'] = str_replace(' ', '-', strtolower($status));
 
         return view('examsession::index', $data);
@@ -119,7 +120,7 @@ class ExamSessionController extends Controller
         $create_session = ExamSession::create($post);
 
         if($create_session){
-            return redirect()->back()->with('success', ['Exam Session berhasil ditambahkan']);
+            return redirect()->route('exam-session', 'Pending')->with('success', ['Exam Session berhasil ditambahkan']);
         }
 
         return redirect()->back()->withErrors(['Exam Session gagal ditambahkan'])->withInput();
@@ -215,15 +216,18 @@ class ExamSessionController extends Controller
         ]);
 
         if($update){
-            $user_enrolls = ExamSessionUserEnroll::with('user')->where('id_exam_session', $id)->get();
+            $user_enrolls = ExamSessionUserEnroll::with(['user', 'examSession.exam'])->where('id_exam_session', $id)->get();
 
             foreach($user_enrolls as $enroll){
                 $type = 'EN';
                 if($enroll['user']->level == 'instructor'){
                     $type = 'INS';
                 }
+                $generated_user_session_code = Self::generateUserExamSessionCode($type, 4);
+                $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => $generated_user_session_code]);
 
-                $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => Self::generateUserExamSessionCode($type, 4)]);
+                $details = ['enroll' => $enroll, 'session_code' => $generated_user_session_code];
+                SendEmail::dispatch($details);
             }
 
             return redirect()->back()->with('success',['Exam Session Started At :'.date('Y-m-d H:i:s')]);
@@ -249,11 +253,11 @@ class ExamSessionController extends Controller
                         Cache::forget('questions'.$enroll->user_session_code);
                     }
 
-                    $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update([
+                    $update_user_enroll = ExamSessionUserEnroll::where('is_registered', 1)->where('id', $enroll->id)->update([
                         'is_registered' => 0,
                         'is_cached' => 0,
                         'is_submitted' => 1,
-                        'final_score' => $exam_answer['final_score'],
+                        'final_score' => $exam_answer['final_score'] ?? null,
                         'final_score_status' => 'Ready to evaluate'
                     ]);
                 }

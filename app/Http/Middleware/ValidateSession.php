@@ -6,6 +6,7 @@ use Closure;
 use App\Models\ExamSession;
 use App\Models\ExamSessionUserEnroll;
 use Modules\ExamSession\Http\Controllers\ExamSessionController;
+use App\Jobs\SendEmail;
 
 class ValidateSession
 {
@@ -66,15 +67,18 @@ class ValidateSession
                 ]);
 
                 if($update){
-                    $user_enrolls = ExamSessionUserEnroll::with('user')->where('id_exam_session', $item['id'])->get();
+                    $user_enrolls = ExamSessionUserEnroll::with(['user', 'examSession.exam'])->where('id_exam_session', $item['id'])->get();
 
                     foreach($user_enrolls as $enroll){
                         $type = 'EN';
                         if($enroll['user']->level == 'instructor'){
                             $type = 'INS';
                         }
+                        $generated_user_session_code = (new ExamSessionController)->generateUserExamSessionCode($type, 4);
+                        $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => $generated_user_session_code]);
 
-                        $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => (new ExamSessionController)->generateUserExamSessionCode($type, 4)]);
+                        $details = ['enroll' => $enroll, 'session_code' => $generated_user_session_code];
+                        SendEmail::dispatch($details);
                     }
                 }
             }
@@ -102,7 +106,7 @@ class ValidateSession
     }
 
     public function handleOecp5(){
-        $exam_session = ExamSession::where('exam_session_status', 'On Going')->get();
+        $exam_session = ExamSession::whereNotNull('exam_duration')->where('exam_session_status', 'On Going')->get();
 
         foreach($exam_session as $key => $item){
             $start_at = $item['exam_datetime'];

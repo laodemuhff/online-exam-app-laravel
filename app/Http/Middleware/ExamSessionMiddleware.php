@@ -31,6 +31,12 @@ class ExamSessionMiddleware
             // sblm alihkan ke session, cek dulu apakah sesi ujian sudah Terminated
             $status = ExamSession::where('id', session('registered_exam_session'))->first()['exam_session_status'];
             if($status == 'Terminated'){
+                // pastikan is_submitted == 1, jika masih 0 paksa jadi 1, ujian tidak jadi diperiksa karena invalid (belum tekan submit exam)
+                ExamSessionUserEnroll::where('id_user', auth()->user()->id)->update([
+                    'is_submitted' => 1,
+                    'is_registered' => 0,
+                    'is_cached' => 0
+                ]);
                 session()->forget('registered_exam_session');
 
                 return redirect()->route('home')->withErrors('You\'re not registered to any session');

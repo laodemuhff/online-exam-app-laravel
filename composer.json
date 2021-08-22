@@ -15,6 +15,7 @@
         "laravel/passport": "^9.3",
         "laravel/tinker": "^2.0",
         "nwidart/laravel-modules": "^6.2",
+        "ognjen/laravel-async-mail": "v2.0.0",
         "orangehill/iseed": "^2.6",
         "yajra/laravel-datatables-oracle": "~9.0"
     },

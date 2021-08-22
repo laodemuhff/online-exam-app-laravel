@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2237b4fbdcf8a34e4aee3592fec135be",
+    "content-hash": "5d86c1d07c3f92db35e9fe18a409bb02",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -2040,6 +2040,49 @@
                 }
             ],
             "time": "2021-02-18T15:41:32+00:00"
+        },
+        {
+            "name": "ognjen/laravel-async-mail",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ognjen-petrovic/laravel-async-mail.git",
+                "reference": "e3b6f206b598671324257868bbd9a9f758e0d191"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ognjen-petrovic/laravel-async-mail/zipball/e3b6f206b598671324257868bbd9a9f758e0d191",
+                "reference": "e3b6f206b598671324257868bbd9a9f758e0d191",
+                "shasum": ""
+            },
+            "require": {
+                "ognjen/laravel-async-mail": "v2.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ognjen\\Laravel\\AsyncMailProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ognjen\\Laravel\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ognjen Petrovic",
+                    "email": "ognjen.petrovic2@gmail.com"
+                }
+            ],
+            "description": "Send async mails from Laravel",
+            "time": "2020-09-25T17:18:52+00:00"
         },
         {
             "name": "opis/closure",

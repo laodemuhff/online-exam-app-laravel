@@ -22,8 +22,14 @@ class DoExamController extends Controller
     {
         $id_user = Auth::user()->id;
 
-        $data['exam_session'] = ExamSessionUserEnroll::with(['examSession' => function($query){$query->with('exam');}])->where('id_user', $id_user)->where('is_submitted', 0)->get();
-        // dd($data);
+        $data['exam_session'] = ExamSessionUserEnroll::with([
+                'examSession' => function($query){
+                    $query->with('exam');
+                }])
+                ->where('id_user', $id_user)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
         return view('doexam::index', $data);
     }
 
