@@ -215,7 +215,7 @@
                             <div class="kt-container  kt-container--fluid ">
                                 <div class="kt-footer__wrapper">
                                     <div class="kt-footer__copyright">
-                                        2020&nbsp;&copy;&nbsp;<a href="#" target="_blank" class="kt-link">Hemofilia Kita</a>
+                                        2021&nbsp;&copy;&nbsp;<a href="#" target="_blank" class="kt-link">Online Exam</a>
                                     </div>
                                 </div>
                             </div>

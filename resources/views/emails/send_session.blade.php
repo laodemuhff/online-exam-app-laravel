@@ -1,10 +1,23 @@
 @component('mail::message')
-Exam Name : {{$exam_name}}<br>
-Exam Code (Session Code): {{$exam_session_code}}<br>
-@if (!empty($schedule))
-    Scheduled At : {{$schedule}}<br>
-@endif
 
+<table class="table table-light">
+    <tbody>
+        <tr>
+            <td>Exam Name</td>
+            <td>{{$exam_name}}</td>
+        </tr>
+        <tr>
+            <td>Exam Code (Session Code)</td>
+            <td>{{$exam_session_code}}</td>
+        </tr>
+        @if (!empty($schedule))
+            <tr>
+                <td>Scheduled At</td>
+                <td>{{$schedule}}</td>
+            </tr>
+        @endif
+    </tbody>
+</table>
 <br>
 
 Use this code to enter your exam session<br>

@@ -201,7 +201,7 @@ class ExamController extends Controller
     public function update(Request $request, $id)
     {
         $post = $request->except('_token');
-
+        // dd($post);
         DB::beginTransaction();
 
         try{
