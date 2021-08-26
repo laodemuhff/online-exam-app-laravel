@@ -73,18 +73,19 @@ class DoExamController extends Controller
 
         $raw_data = ExamSessionUserEnroll::with([
             'examSession' => function($query){
-                $query->with(['exam' => function($query){
-                    $query->with(['examBaseQuestions' => function($query){
+                $query->with([
+                    'exam',
+                    'examSessionBaseQuestions' => function($query){
                         $query->with(['question' => function($query){
                             $query->with('options');
                         }])->where('question_validity','Valid');
-                    }]);
-                }]);
+                    }
+                ]);
             }
         ])->where('id_user', auth()->user()->id)->where('id_exam_session', $id_exam_session)->get()->toArray();
 
 
-        $data['questions'] = $raw_data[0]['exam_session']['exam']['exam_base_questions'];
+        $data['questions'] = $raw_data[0]['exam_session']['exam_session_base_questions'];
         $data['current_active_nav'] = $raw_data[0]['current_active_nav'];
         $data['setting'] =$raw_data[0]['exam_session'];
         $data['user_session_code'] = $raw_data[0]['user_session_code'];
@@ -94,7 +95,7 @@ class DoExamController extends Controller
         foreach ($data['questions'] as $key => $value) {
             $answer = null;
             foreach ( $data['history_answer']  as $key2 => $value2) {
-                if($value2['id_question'] == $value['question']['id']){
+                if($value2['id_exam_session_question'] == $value['question']['id']){
                     if($value['question']['type'] == 'multiple_choice')
                         $answer = $value2['multiple_choice_answer'];
                     else
@@ -121,7 +122,7 @@ class DoExamController extends Controller
             $cached_question = Cache::get('questions'.$data['user_session_code']);
             $exam_answer = ExamSessionAnswer::where('user_session_code', $data['user_session_code'])->get()->map(function($item){
                 return [
-                    'id_question' => $item['id_question'],
+                    'id_question' => $item['id_exam_session_question'],
                     'multiple_choice_answer' => $item['multiple_choice_answer'],
                     'essay_answer' => $item['essay_answer']
                 ];
@@ -130,9 +131,9 @@ class DoExamController extends Controller
             $qs = [];
             foreach($exam_answer as $key => $item){
                 if(!empty($item['multiple_choice_answer']))
-                    $qs[$item['id_question']] = $item['multiple_choice_answer'];
+                    $qs[$item['id_exam_session_question']] = $item['multiple_choice_answer'];
                 else
-                    $qs[$item['id_question']] = $item['essay_answer'];
+                    $qs[$item['id_exam_session_question']] = $item['essay_answer'];
             }
 
             foreach($cached_question as $key => $item){

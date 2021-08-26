@@ -26,7 +26,17 @@ class ExamSessionAnswer extends Model
     /**
      * @var array
      */
-    protected $fillable = ['exam_session_code', 'id_user', 'user_session_code', 'id_question', 'multiple_choice_answer', 'essay_answer', 'created_at', 'updated_at', 'given_point'];
+    protected $fillable = [
+        'exam_session_code',
+        'id_user',
+        'user_session_code',
+        'id_exam_session_question',
+        'multiple_choice_answer',
+        'essay_answer',
+        'created_at',
+        'updated_at',
+        'given_point'
+    ];
 
     protected $appends = [
         'final_score',
@@ -39,11 +49,11 @@ class ExamSessionAnswer extends Model
     }
 
     public function question(){
-        return $this->belongsTo(Question::class, 'id_question');
+        return $this->belongsTo(ExamSessionQuestion::class, 'id_exam_session_question', 'id');
     }
 
     public function option(){
-        return $this->belongsTo(Option::class, 'multiple_choice_answer', 'id');
+        return $this->belongsTo(ExamSessionOption::class, 'multiple_choice_answer', 'id');
     }
 
     public function getFinalScoreAttribute(){

@@ -6,14 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\Models\Exam;
+use App\Models\ExamBaseQuestion;
+use App\Models\Question;
+use App\Models\Option;
 use App\Models\ExamSession;
 use App\Models\ExamSessionQuestion;
+use App\Models\ExamSessionOption;
+use App\Models\ExamSessionBaseQuestion;
 use App\Models\ExamSessionUserEnroll;
 use App\Models\ExamSessionAnswer;
 use App\Jobs\SendEmail;
 use Cache;
 use Carbon;
 use Auth;
+use DB;
 
 class ExamSessionController extends Controller
 {
@@ -77,8 +83,60 @@ class ExamSessionController extends Controller
         return $exam_session;
     }
 
+    public function copyExamBaseQuestion($id_exam, $id_exam_session){
+        try {
+            $id_questions = ExamBaseQuestion::where('id_exam', $id_exam)->get()->map(function($item){
+                return $item->id_question;
+            });
+
+            // create exam session question
+            foreach($id_questions as $id_question){
+                $question = Question::find($id_question);
+
+                if($question){
+                    $exam_session_question = ExamSessionQuestion::create([
+                        "question_description" => $question->question_description,
+                        "type" => $question->type,
+                        "use_default_correct_point" => $question->use_default_correct_point,
+                        "use_default_wrong_point" => $question->use_default_wrong_point,
+                        "correct_point" => $question->correct_point,
+                        "wrong_point" => $question->wrong_point
+                    ]);
+
+                    if($exam_session_question){
+                        // create exam option if exist
+                        $options = Option::where('id_question', $id_question)->get();
+                        foreach($options as $option){
+                            ExamSessionOption::create([
+                                'id_exam_session_question' => $exam_session_question->id,
+                                'option_label' => $option->option_label,
+                                'option_description' => $option->option_description,
+                                'answer_status' => $option->answer_status
+                            ]);
+                        }
+
+                        //create exam session base question
+                        ExamSessionBaseQuestion::create([
+                            'id_exam_session' => $id_exam_session,
+                            'id_exam_session_question' => $exam_session_question->id,
+                            'question_validity' => 'Valid'
+                        ]);
+                    }
+                }
+            }
+
+            return true;
+        } catch (\Throwable $th) {
+            // return $th->getMessage();
+            return false;
+        }
+
+    }
+
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         $post = $request->except('_token');
 
         $post['exam_session_code'] = Self::generateExamSessionCode(4);
@@ -120,9 +178,16 @@ class ExamSessionController extends Controller
         $create_session = ExamSession::create($post);
 
         if($create_session){
-            return redirect()->route('exam-session', 'Pending')->with('success', ['Exam Session berhasil ditambahkan']);
+            // create the copy of questions, options, and exam base questions
+            $copyExam = Self::copyExamBaseQuestion($post['id_exam'], $create_session->id);
+
+            if($copyExam){
+                DB::commit();
+                return redirect()->route('exam-session', 'Pending')->with('success', ['Exam Session berhasil ditambahkan']);
+            }
         }
 
+        DB::rollback();
         return redirect()->back()->withErrors(['Exam Session gagal ditambahkan'])->withInput();
 
     }
@@ -205,6 +270,12 @@ class ExamSessionController extends Controller
      */
     public function delete($id)
     {
+        $exam_session_base_question = ExamSessionBaseQuestion::where('id_exam_session', $id)->get();
+
+        foreach($exam_session_base_question as $value){
+            ExamSessionQuestion::where('id', $value->id_exam_session_question)->delete();
+        }
+
         return ExamSession::where('id', $id)->delete();
     }
 

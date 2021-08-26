@@ -67,6 +67,11 @@ class ExamSession extends Model
         return $this->belongsTo(Exam::class, 'id_exam');
     }
 
+    public function examSessionBaseQuestions()
+    {
+        return $this->hasMany(ExamSessionBaseQuestion::class, 'id_exam_session');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

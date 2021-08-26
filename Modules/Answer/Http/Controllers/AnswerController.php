@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 use App\Models\ExamSession;
 use App\Models\ExamSessionAnswer;
 use App\Models\ExamSessionUserEnroll;
-use App\Models\Question;
+use App\Models\ExamSessionQuestion;
 
 class AnswerController extends Controller
 {
@@ -17,7 +17,7 @@ class AnswerController extends Controller
         if(ExamSession::where('exam_session_code', $r->exam_session_code)->first()['exam_session_status'] == 'Terminated'){
             return response()->json(['status' => 'fail']);
         }else{
-            $question = Question::with('options')->where('id', $r->id_question)->first();
+            $question = ExamSessionQuestion::with('options')->where('id', $r->id_question)->first();
 
             $given_point = null;
             if($r->question_type == 'multiple_choice'){
@@ -32,12 +32,12 @@ class AnswerController extends Controller
 
             $save = ExamSessionAnswer::updateOrCreate(
             [
-                'id_question' => $r->id_question,
+                'id_exam_session_question' => $r->id_question,
                 'user_session_code' => $r->user_session_code
             ],
             [
                 'user_session_code' => $r->user_session_code,
-                'id_question' => $r->id_question,
+                'id_exam_session_question' => $r->id_question,
                 'multiple_choice_answer' => $r->question_type == 'multiple_choice' ? $r->option_id : null ,
                 'essay_answer' => $r->question_type == 'essay' ? $r->essay_answer : null,
                 'given_point' => $given_point

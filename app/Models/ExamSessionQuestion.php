@@ -16,32 +16,34 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ExamSessionQuestion extends Model
 {
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'integer';
+    protected $fillable = [
+        'question_description',
+        'type',
+        'use_default_correct_point',
+        'use_default_wrong_point',
+        'correct_point',
+        'wrong_point'
+    ];
 
     /**
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    protected $fillable = ['exam_session_code', 'id_question', 'question_validity', 'created_at', 'updated_at'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function examSession()
+    public function examSessionBaseQuestions()
     {
-        return $this->belongsTo(ExamSession::class, 'exam_session_code', 'exam_session_code');
+        return $this->hasMany(ExamSessionBaseQuestion::class, 'id_exam_session_question');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function question()
+    public function options()
     {
-        return $this->belongsTo(Question::class, 'id_question');
+        return $this->hasMany(ExamSessionOption::class, 'id_exam_session_question');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(ExamSessionAnswer::class, 'id_exam_session_question');
     }
 
     public static function getPossibleEnumValues ($column) {

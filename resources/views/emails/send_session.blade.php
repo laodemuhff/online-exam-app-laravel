@@ -4,15 +4,18 @@
     <tbody>
         <tr>
             <td>Exam Name</td>
+            <td>:</td>
             <td>{{$exam_name}}</td>
         </tr>
         <tr>
-            <td>Exam Code (Session Code)</td>
+            <td>Exam Session Code</td>
+            <td>:</td>
             <td>{{$exam_session_code}}</td>
         </tr>
         @if (!empty($schedule))
             <tr>
                 <td>Scheduled At</td>
+                <td>:</td>
                 <td>{{$schedule}}</td>
             </tr>
         @endif

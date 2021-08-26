@@ -367,14 +367,10 @@ class ExamController extends Controller
                         }
                     }
                 }
-
-                DB::commit();
-
-                return redirect()->back()->with('success', ['Exam berhasil diupdate']);
             }
 
-            DB::rollback();
-            return redirect()->back()->withErrors(['Exam gagal diupdate']);
+            DB::commit();
+            return redirect()->back()->with('success', ['Exam berhasil diupdate']);
 
         }catch(\Throwable $th){
             DB::rollback();

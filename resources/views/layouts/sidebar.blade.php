@@ -176,14 +176,14 @@
                         @endif
                     </a>
                 </li>
-                {{-- <li class="kt-menu__item @yield('exam-session-list-terminated')" aria-haspopup="true">
+                <li class="kt-menu__item @yield('exam-session-list-terminated')" aria-haspopup="true">
                     <a href="{{route('exam-session', 'Terminated')}}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">Terminated</span>
                     </a>
-                </li> --}}
+                </li>
 
-                <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--open kt-menu__item--here" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+                {{-- <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--open kt-menu__item--here" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                     <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i>
                         <span class="kt-menu__link-text">Terminated</span>
@@ -192,26 +192,26 @@
                     <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                         <ul class="kt-menu__subnav">
                             <li class="kt-menu__item " aria-haspopup="true">
-                                <a href="{{route('exam-session', 'Terminated')}}" class="kt-menu__link ">
+                                <a href="{{route('exam-session', 'Terminated')}}?evaluate_status=Ready to Evaluate" class="kt-menu__link ">
                                     <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                                     <span class="kt-menu__link-text">Ready to Evaluate</span>
                                 </a>
                             </li>
                             <li class="kt-menu__item " aria-haspopup="true">
-                                <a href="{{route('exam-session', 'Terminated')}}" class="kt-menu__link ">
+                                <a href="{{route('exam-session', 'Terminated')}}?evaluate_status=Verified" class="kt-menu__link ">
                                     <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                                     <span class="kt-menu__link-text">Evaluated</span>
                                 </a>
                             </li>
                             <li class="kt-menu__item " aria-haspopup="true">
-                                <a href="{{route('exam-session', 'Terminated')}}" class="kt-menu__link ">
+                                <a href="{{route('exam-session', 'Terminated')}}?evaluate_status=Invalid" class="kt-menu__link ">
                                     <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                                     <span class="kt-menu__link-text">Invalid</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </li>
