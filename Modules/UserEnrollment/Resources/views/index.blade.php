@@ -66,22 +66,36 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Action</th>
+                        @if (!$this_session['enrollment_status'])
+                            <th>Action</th>
+                        @endif
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $count_instructor = 0;
+                    @endphp
                     @if (!empty($user_enroll_instructor))
                         @foreach ($user_enroll_instructor as $key => $item)
                             <tr>
                                 <td>{{++$key}}</td>
-                                <td><a href="{{route('user-enrollment-delete', $item['id'])}}" title="{{$item['user']['email']}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a></td>
+                                @if (!$this_session['enrollment_status'])
+                                    <td>
+                                        <a href="{{route('user-enrollment-delete', $item['id'])}}" title="{{$item['user']['email']}}" type="button" class="btn btn-danger btn-delete btn-sm">
+                                            <i class="la la-trash"></i>
+                                        </a>
+                                    </td>
+                                @endif
                                 <td>{{$item['user']['name']}}</td>
                                 <td>{{$item['user']['email']}}</td>
                                 <td>{{$item['user']['phone']}}</td>
                             </tr>
+                            @php
+                                $count_instructor++;
+                            @endphp
                         @endforeach
                     @else
                         <tr>
@@ -90,11 +104,13 @@
                     @endif
                 </tbody>
             </table>
-            <div class="btn-group-horizontal mt-2" role="group" aria-label="Horizontal button group">
-                <button data-target="#searchInstructor" data-toggle="modal" class="btn btn-primary"><i class="la la-search"></i> Search and Add Instructor</button>
-                {{-- <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-download"></i> Download Sample File</a>
-                <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-upload"></i> Upload List Instructor</a> --}}
-            </div>
+            @if (!$this_session['enrollment_status'])
+                <div class="btn-group-horizontal mt-2" role="group" aria-label="Horizontal button group">
+                    <button data-target="#searchInstructor" data-toggle="modal" class="btn btn-primary"><i class="la la-search"></i> Search and Add Instructor</button>
+                    {{-- <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-download"></i> Download Sample File</a>
+                    <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-upload"></i> Upload List Instructor</a> --}}
+                </div>
+            @endif
         </div>
 
         <div class="container mt-5">
@@ -102,22 +118,36 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Action</th>
+                        @if (!$this_session['enrollment_status'])
+                            <th>Action</th>
+                        @endif
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $count_entry = 0;
+                    @endphp
                     @if (!empty($user_enroll_entry))
                         @foreach ($user_enroll_entry as $key => $item)
                             <tr>
                                 <td>{{++$key}}</td>
-                                <td><a href="{{route('user-enrollment-delete', $item['id'])}}" title="{{$item['user']['email']}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a></td>
+                                @if (!$this_session['enrollment_status'])
+                                    <td>
+                                        <a href="{{route('user-enrollment-delete', $item['id'])}}" title="{{$item['user']['email']}}" type="button" class="btn btn-danger btn-delete btn-sm">
+                                            <i class="la la-trash"></i>
+                                        </a>
+                                    </td>
+                                @endif
                                 <td>{{$item['user']['name']}}</td>
                                 <td>{{$item['user']['email']}}</td>
                                 <td>{{$item['user']['phone']}}</td>
                             </tr>
+                            @php
+                                $count_entry++;
+                            @endphp
                         @endforeach
                     @else
                         <tr>
@@ -126,11 +156,13 @@
                     @endif
                 </tbody>
             </table>
-            <div class="btn-group-horizontal mt-2" role="group" aria-label="Horizontal button group">
-                <button data-target="#searchEntry" data-toggle="modal" class="btn btn-primary"><i class="la la-search"></i> Search and Add Entry</button>
-                {{-- <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-download"></i> Download Sample File</a>
-                <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-upload"></i> Upload List Entry</a> --}}
-            </div>
+            @if (!$this_session['enrollment_status'])
+                <div class="btn-group-horizontal mt-2" role="group" aria-label="Horizontal button group">
+                    <button data-target="#searchEntry" data-toggle="modal" class="btn btn-primary"><i class="la la-search"></i> Search and Add Entry</button>
+                    {{-- <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-download"></i> Download Sample File</a>
+                    <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-upload"></i> Upload List Entry</a> --}}
+                </div>
+            @endif
         </div>
     </div>
 </div>
@@ -140,7 +172,16 @@
         <div class="kt-portlet__foot kt-portlet__foot--fit" id="create-portlet" style="border-top: 0">
             <div class="kt-form__actions ">
                 <div class="pull-right">
-                    <a class="btn btn-secondary btn-sm white-text" id="add-questions-button" href="{{route('exam-session', 'Pending')}}">
+                    @if ($count_instructor > 0 && $count_entry > 0 && !$this_session['enrollment_status'])
+                        <a class="btn btn-success btn-sm white-text" id="add-questions-button" data-target="#modal-submit-enrollment" data-toggle="modal">
+                            <i class="la la-check"></i><span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Submit Enrollment</span>
+                        </a>
+                    @else
+                        <a class="btn btn-secondary btn-sm white-text" id="add-questions-button" type="button" data-toggle="tooltip" title="User Enrollment Still Empty or it's already submitted">
+                            <i class="la la-check"></i><span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Submit Enrollment</span>
+                        </a>
+                    @endif
+                    <a class="btn btn-secondary btn-sm white-text" id="add-questions-button" href="{{route('exam-session', $this_session['exam_session_status'])}}">
                         <i class="la la-ban"></i><span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Cancel</span>
                     </a>
                 </div>
@@ -204,6 +245,27 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-submit-enrollment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Submit Enrollment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <h5>Are You Sure Want to Submit This Enrollment? You Can't Edit Enrollment After this.</h5>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <a href="{{route('exam-session.submit-enrollment', $this_session['id'])}}" type="submit" class="btn btn-danger">Yes!</a>
+        </div>
+    </div>
+    </div>
+            </div>
 @endsection
 
 @section('scripts')

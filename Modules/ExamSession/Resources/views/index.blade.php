@@ -60,28 +60,28 @@
                                     @if ($session['exam_session_status'] != 'On Going')
                                         @if ($session['exam_session_status'] == 'Pending')
                                             @php
-                                                $is_instructor_exist = false;
-                                                $is_entry_exist = false;
+                                                // $is_instructor_exist = false;
+                                                // $is_entry_exist = false;
 
                                                 $instructor_numbers = 0;
                                                 $entry_numbers = 0;
 
                                                 foreach ($session['examSessionUserEnrolls'] as $key => $user_enrolls) {
                                                     if($user_enrolls['user_type'] == 'instructor'){
-                                                        $is_instructor_exist = true;
+                                                        // $is_instructor_exist = true;
                                                         $instructor_numbers++;
                                                     }
 
                                                     if($user_enrolls['user_type'] == 'entry'){
-                                                        $is_entry_exist = true;
+                                                        // $is_entry_exist = true;
                                                         $entry_numbers++;
                                                     }
                                                 }
                                             @endphp
-                                            @if($is_instructor_exist && $is_entry_exist)
+                                            @if($session['enrollment_status'])
                                                 <a title="Start Exam Session {{$session['exam_session_code']}}" type="button" class="btn btn-success btn-sm" data-toggle='modal' data-target="#startSessionModal{{$session['id']}}"><i class="la la-play" style="color: white"></i></a>
                                             @else
-                                                <a type="button" class="btn btn-light btn-sm" data-toggle='kt-tooltip' title data-placement="left" data-original-title="Can not Start Exam Session, User Enrollment is Empty"> <i class="la la-play" style="color: white"></i></a>
+                                                <a type="button" class="btn btn-light btn-sm" data-toggle='kt-tooltip' title data-placement="left" data-original-title="Can not Start Exam Session, User Enrollment is Not Yet Submitted"> <i class="la la-play" style="color: white"></i></a>
                                             @endif
                                             <a href="{{route('exam-session.edit',$session['id'])}}" title="Edit {{$session['exam_session_code']}}" type="button" class="btn btn-warning btn-sm"><i class="la la-edit"></i></a>
                                             <a href="{{route('user-enrollment',$session['id'])}}" title="User Enrollment - {{$session['exam_session_code']}}" type="button" class="btn btn-info btn-sm"><i class="la la-users" style="color: white"></i></a>
@@ -93,7 +93,8 @@
 
                                         <a href="{{route('exam-session.delete', $session['id'])}}" title="Delete {{$session['exam_session_code']}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a>
                                     @else
-                                        <a href="#" title="Monitor Session - {{$session['exam_session_code']}}" type="button" class="btn btn-info btn-sm"><i class="la la-tv" style="color: white"></i></a>
+                                        {{-- <a href="#" title="Monitor Session - {{$session['exam_session_code']}}" type="button" class="btn btn-success btn-sm"><i class="la la-tv" style="color: white"></i></a> --}}
+                                        <a href="{{route('user-enrollment',$session['id'])}}" title="User Enrollment - {{$session['exam_session_code']}}" type="button" class="btn btn-info btn-sm"><i class="la la-users" style="color: white"></i></a>
                                         <a title="End Exam Session {{$session['exam_session_code']}}" type="button" class="btn btn-danger btn-sm" data-toggle='modal' data-target="#endSessionModal{{$session['id']}}"><i class="la la-stop" style="color: white"></i></a>
                                     @endif
 

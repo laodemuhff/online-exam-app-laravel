@@ -127,7 +127,7 @@
                                 @else
                                     <div class="form-group">
                                         <label for="my-textarea">Answer : </label>
-                                        <textarea id="my-textarea" name="question{{$item['question']['id']}}}_essay[]" class="form-control" name="" rows="8"></textarea>
+                                        <textarea id="my-textarea" name="question{{$item['question']['id']}}_essay" class="form-control" name="" rows="8" onchange="handleEssay(this)" data-question-type="{{$item['question']['type']}}" data-question-id="{{$item['question']['id']}}" data-question-index="{{$key}}">{{$item['question']['answer']}}</textarea>
                                     </div>
                                 @endif
                             </div>
@@ -212,9 +212,49 @@
         let user_session_code = "<?php echo $user_session_code ?>"
         let exam_sess_code = "<?php echo $setting['exam_session_code'] ?>"
 
+        function handleEssay(e){
+            const essay_answer = $(e).val()
+
+            let question_index = $(e).data('question-index')
+            let question_type = $(e).data('question-type')
+            let id_question = $(e).data('question-id')
+            let is_delete = 0;
+
+            if(essay_answer){
+                $('.nav-link').eq(question_index - 1).removeClass('btn-outline-primary').addClass('btn-primary')
+                is_delete = 0;
+            }else{
+                $('.nav-link').eq(question_index - 1).removeClass('btn-primary').addClass('btn-outline-primary')
+                is_delete = 1;
+            }
+
+            $.ajax({
+                'type' : 'POST',
+                'dataType' : 'json',
+                'url' : url+'/answer/save',
+                'data' : {
+                    'id_question' : id_question,
+                    'user_session_code' : user_session_code,
+                    'question_type' : question_type,
+                    'essay_answer' : essay_answer,
+                    'exam_session_code' : exam_sess_code,
+                    'is_delete' : is_delete,
+                    '_token' : token
+                }
+            }).done(function(result){
+                if(result['status'] == 'fail'){
+                    alert('Session already Terminated')
+                    window.location = url+"/doexam/session";
+                }
+            }).fail(function(result){
+                console.log(result)
+            });
+        }
+
         function handleOption(e){
             let question_index = $(e).data('question-index')
             let option_index = $(e).data('index');
+            let is_delete = 0;
 
             // $(e).css('background-color', 'red !important');
             let option_elements_name = $(e).children().attr('name');
@@ -230,12 +270,12 @@
             if(classname.indexOf('changeToGreen') > -1){
                 $(e).removeClass('changeToGreen')
                 $('.nav-link').eq(question_index - 1).removeClass('btn-primary').addClass('btn-outline-primary')
+                is_delete = 1;
             }else{
                 $(e).addClass('changeToGreen');
                 $('.nav-link').eq(question_index - 1).removeClass('btn-outline-primary').addClass('btn-primary')
+                is_delete = 0;
             }
-
-
 
             let option_id = $(e).data('option-id')
             let answer_status = $(e).data('answer-status')
@@ -252,16 +292,18 @@
                     'question_type' : question_type,
                     'option_id' : option_id,
                     'answer_status' : answer_status,
+                    'is_delete' : is_delete,
                     'exam_session_code' : exam_sess_code,
                     '_token' : token
                 }
             }).done(function(result){
+                console.log(result)
                 if(result['status'] == 'fail'){
                     alert('Session already Terminated')
                     window.location = url+"/doexam/session";
                 }
             }).fail(function(result){
-                console.log(result)
+                // console.log(result)
             });
         }
 

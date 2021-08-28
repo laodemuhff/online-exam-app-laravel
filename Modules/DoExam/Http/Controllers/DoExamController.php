@@ -66,11 +66,7 @@ class DoExamController extends Controller
         return redirect()->back()->withErrors('Pendaftaran Gagal !');
     }
 
-    public function showSession(Request $request)
-    {
-        // protect by middleware
-        $id_exam_session = $request->session()->get('registered_exam_session');
-
+    public function updateQuestionAndAnswer($id_exam_session){
         $raw_data = ExamSessionUserEnroll::with([
             'examSession' => function($query){
                 $query->with([
@@ -92,6 +88,7 @@ class DoExamController extends Controller
         $data['setting']['subject'] = $data['setting']['exam']['exam_title'];
         $data['history_answer'] = ExamSessionAnswer::where('user_session_code', $data['user_session_code'])->get()->toArray();
 
+        // dd(Cache::get('questions'.$data['user_session_code']));
         foreach ($data['questions'] as $key => $value) {
             $answer = null;
             foreach ( $data['history_answer']  as $key2 => $value2) {
@@ -108,7 +105,6 @@ class DoExamController extends Controller
 
         unset($data['setting']['exam']);
 
-        // acak urutan soal dan jawaban/options saat register pertama kali
         $exam_user_enroll = ExamSessionUserEnroll::where('user_session_code', $data['user_session_code']);
         if(!$exam_user_enroll->first()['is_cached']){
             // if question answer not yet cached
@@ -122,7 +118,7 @@ class DoExamController extends Controller
             $cached_question = Cache::get('questions'.$data['user_session_code']);
             $exam_answer = ExamSessionAnswer::where('user_session_code', $data['user_session_code'])->get()->map(function($item){
                 return [
-                    'id_question' => $item['id_exam_session_question'],
+                    'id_exam_session_question' => $item['id_exam_session_question'],
                     'multiple_choice_answer' => $item['multiple_choice_answer'],
                     'essay_answer' => $item['essay_answer']
                 ];
@@ -139,11 +135,24 @@ class DoExamController extends Controller
             foreach($cached_question as $key => $item){
                 if(in_array($item['question']['id'], array_keys($qs))){
                     $cached_question[$key]['question']['answer'] = $qs[$item['question']['id']];
+                }else{
+                    $cached_question[$key]['question']['answer'] = null;
                 }
             }
 
             Cache::put('questions'.$data['user_session_code'], $cached_question);
         }
+
+        return $data;
+    }
+
+    public function showSession(Request $request)
+    {
+        // protect by middleware
+        $id_exam_session = $request->session()->get('registered_exam_session');
+
+        // acak urutan soal dan jawaban/options saat register pertama kali
+        $data = Self::updateQuestionAndAnswer($id_exam_session);
 
         return view('doexam::session', $data);
     }
@@ -157,7 +166,7 @@ class DoExamController extends Controller
     }
 
     public function submitExam(Request $r){
-
+        // dd($r->all());
         $exam_answer = ExamSessionAnswer::where('user_session_code', $r->user_session_code)->first();
         $exam = ExamSessionUserEnroll::with('examSession.exam')->where('user_session_code',  $r->user_session_code)->first()->examSession->exam->exam_title ?? null;
 
@@ -180,6 +189,7 @@ class DoExamController extends Controller
             'final_score' => $exam_answer['final_score'],
             'right_answer' => $exam_answer['right_answer'],
             'wrong_answer' => $exam_answer['wrong_answer'],
+            'essay_answer_count' => $exam_answer['essay_answer_count'],
             'exam' => $exam
         ];
 

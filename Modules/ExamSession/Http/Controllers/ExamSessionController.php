@@ -352,4 +352,12 @@ class ExamSessionController extends Controller
             }
         }
     }
+
+    public function submitEnrollment($id_exam_session){
+        ExamSession::where('id', $id_exam_session)->update([
+            'enrollment_status' => 1
+        ]);
+
+        return redirect()->route('exam-session', 'Pending');
+    }
 }

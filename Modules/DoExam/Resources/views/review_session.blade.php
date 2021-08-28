@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    {{-- <div class="row">
         <div class="card">
             <div class="card-header">
                 <h3>Your Exam Summary</h3>
@@ -51,7 +51,43 @@
                 <a type="button" class="btn btn-primary" href="{{route('home')}}"><i class="la la-home"></i> Back to Home Registration</a>
             </div>
         </div>
+    </div> --}}
 
-
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-light alert-elevate fade show" role="alert">
+                <div class="alert-icon"><i class="flaticon2-checkmark kt-font-brand"></i></div>
+                <div class="alert-text">
+                    <b>Your Exam Session Has Been Submitted. Now You're Currently Waiting for Evaluation.</b> <a href="{{route('home')}}">Go Back Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-light alert-elevate fade show" role="alert">
+                <div class="alert-text" style="color: rgb(13, 184, 13)">
+                    <b>{{$right_answer}} Right Answer</b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-light alert-elevate fade show" role="alert">
+                <div class="alert-text" style="color: rgb(216, 12, 12) ">
+                    <b>{{$wrong_answer}} Wrong Answer</b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-light alert-elevate fade show" role="alert">
+                <div class="alert-text" style="color: rgb(187, 187, 8)">
+                    <b>{{$essay_answer_count}} Answer Waiting for Evaluation</b>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

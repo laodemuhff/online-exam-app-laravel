@@ -13,7 +13,7 @@
     <style>
         .badge-info{
             margin-left: 4px !important;
-           
+
         }
 
         /* autocomplete tagsinput*/
@@ -169,7 +169,7 @@
                                         <span class="input-group-text btn btn-danger"><i class="la la-times"></i></span>
                                     </div>
                                     <input type="number" max="0" class="form-control col-md-3" name="default_wrong_point" value="{{old('default_wrong_point') ?? '0'}}" required>
-                                    
+
                                     <div class="input-group-prepend" style="padding-right: 0; margin-left:15px">
                                         <span class="input-group-text btn btn-success"><i class="la la-check"></i></span>
                                     </div>
@@ -319,7 +319,7 @@
             </div>
         </div>
 
-    
+
         <div class="kt-portlet" id="questions-form" style="display: none">
             <div class="row">
                 <div class="col-md-12">
@@ -329,14 +329,13 @@
                                 <h5>Questions & Answers</h5>
                             </div>
                         </div>
-                        {{-- <div class="kt-portlet__head-caption">
+                        <div class="kt-portlet__head-caption">
                             <div class="kt-portlet__head-title" style="padding-top: 4%">
                                 <div class="btn-group-horizontal" role="group" aria-label="Horizontal button group">
-                                    <a type="button" class="btn btn-info" data-toggle='modal' data-target='#search-questions-modal' style="color: white"><i class="la la-search"></i> Search Questions</a>
-                                    <a type="button" class="btn btn-info" style="color: white"><i class="la la-copy"></i> Copy Existing Exam</a>
+                                    <a type="button" class="btn btn-info" data-toggle='modal' data-target='#search-questions-modal' style="color: white"><i class="la la-search"></i>Search Questions</a>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -422,7 +421,7 @@
                                             <span class="input-group-text btn btn-danger"><i class="la la-times"></i></span>
                                         </div>
                                         <input type="number" max="0" class="form-control col-md-2 input-sm wrong-point" name="wrong_point" style="display:none" disabled required>
-                                        
+
                                         <div class="input-group-prepend correct-point" style="padding-right: 0; margin-left:15px; display:none">
                                             <span class="input-group-text btn btn-success"><i class="la la-check"></i></span>
                                         </div>
@@ -448,9 +447,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="col-md-2">
-                            <input data-repeater-delete="" type="button" value="X Delete Question" class="btn btn-danger"/>  
+                            <input data-repeater-delete="" type="button" value="X Delete Question" class="btn btn-danger"/>
                         </div>
                     </div>
                 </div>
@@ -464,10 +463,10 @@
                     <div class="kt-form__actions ">
                         <div class="pull-right">
                             <a class="btn btn-success btn-sm white-text" id="add-questions-button">
-                                <i class="la la-edit" style="font-weight: bold"></i> <span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Create Questions & Answers</span> 
+                                <i class="la la-edit" style="font-weight: bold"></i> <span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Create Questions & Answers</span>
                             </a>
                             <button type="submit" class="btn btn-primary btn-sm">
-                                <span style="font-size: 1.1em; font-weight:bold">Submit Create</span> 
+                                <span style="font-size: 1.1em; font-weight:bold">Submit Create</span>
                             </button>
                         </div>
                     </div>
@@ -477,40 +476,42 @@
     </form>
 
     <div id="search-questions-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document"  style="max-width:90%">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="my-modal-title">Filter Existing Questions</h5>
+                    <h5 class="modal-title" id="my-modal-title">Select Existing Questions</h5>
                     <button class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="get" action="" class="form">
+                    <form method="get" action="" class="form-inline">
                         @csrf
-                        <div class="form-group">
-                            <label for="filter_subjects">Subjects</label>
-                            <div id="bloodhound">
-                                <input id="filter_subjects" class="form-control typeahead tags" type="text" name="subjects" autocomplete="off">
-                            </div>
+
+                        <label for="filter_subjects">Subjects</label>
+                        <div id="bloodhound">
+                            <input id="filter_subjects" class="form-control typeahead tags mb-2 mr-sm-2" type="text" name="subjects" autocomplete="off">
                         </div>
-                        <div class="form-group">
-                            <label for="filter_type">Text</label>
-                            <select id="filter_type" class="custom-select" name="type">
-                                <option value="multiple_choice">Multiple Choice</option>
-                                <option value="essay">Essay</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="question_keyword">Question Keyword</label>
-                            <input id="question_keyword" class="form-control input-sm" type="text" name="keyword"  autocomplete="off">
+
+
+                        <label for="filter_type">Type</label>
+                        <select id="filter_type" class="custom-select mb-2 mr-sm-2" name="type">
+                            <option value="">All</option>
+                            <option value="multiple_choice">Multiple Choice</option>
+                            <option value="essay">Essay</option>
+                        </select>
+
+
+                        <label for="question_keyword">Question Keyword</label>
+                        <input id="question_keyword" class="form-control input-sm mb-2 mr-sm-2" type="text" name="keyword"  autocomplete="off">
+
+                        <div class="btn-group float-right" role="group" aria-label="a">
+                            <a href="" type="button" class="btn btn-info"><i class="la la-search"></i> Search</a>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <div class="btn-group float-right" role="group" aria-label="a">
-                        <a href="" type="button" class="btn btn-info"><i class="la la-search"></i> Search</a>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -520,13 +521,13 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
     <script src="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    <script src="{{url('assets/demo/demo11/custom/crud/forms/widgets/form-repeater.js')}}" type="text/javascript"></script> 
-    
+    <script src="{{url('assets/demo/demo11/custom/crud/forms/widgets/form-repeater.js')}}" type="text/javascript"></script>
+
     <script>
         $(document).ready(function() {
-            
+
             var data = '<?php echo $subjects ?>'
 
             //get data pass to json
@@ -563,7 +564,7 @@
                     ['view', ['fullscreen', 'codeview', 'help']]
                 ]
             });
-                        
+
             //handle click on add repeater item (questions)
             $("#kt_repeater_2").on('click','.btn-add-repeater-item', function(){
                 $('#kt_repeater_2').find('.summernote').summernote({
@@ -580,7 +581,7 @@
                     ]
                 });
 
-            
+
                 // $('.kt_repeater_2').find(".tags").tagsinput({
                 //     itemValue: "id",
                 //     itemText: "name",
@@ -652,7 +653,7 @@
         function setOptionGroup(selectedOption){
             var index = getIndexItemRepeater(selectedOption)
             var value = selectedOption.value
-            
+
             if(value == 'multiple_choice'){
                 $('.options').eq(index).slideDown(150);
                 $('.options').eq(index).find('.option_description').prop('disabled', false)
@@ -667,7 +668,7 @@
             var option_length = $('.repeater-item').eq(index_repeater).find('.inner-repeater-item').length
             var index = $('.btn-add-inner-repeater-item').index(selectedAddButton)
             var label_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-            
+
             $('.inner-repeater').eq(index).on('click', '.btn-add-inner-repeater-item', function(e){
                 var last_label = $('.inner-repeater').eq(index).find('.option_label').eq(-2).val();
                 var last_index = label_names.indexOf(last_label)
@@ -682,15 +683,15 @@
                         $('.btn-add-inner-repeater-item').eq(index).prop('disabled', false)
                     }
                 }
-                
+
                 $('.repeater-item').eq(index_repeater).find('.option_description').prop('disabled', false)
 
                 if(option_length == 0){
                     let answer_status_length = $('.repeater-item').eq(index_repeater).find('.answer_status').length;
                     let is_checked_exist = false;
                     for(let i = 0; i < answer_status_length; i++){
-                        if($('.repeater-item').eq(index_repeater).find('.answer_status').eq(i).prop('checked') == true) 
-                            is_checked_exist = true;  
+                        if($('.repeater-item').eq(index_repeater).find('.answer_status').eq(i).prop('checked') == true)
+                            is_checked_exist = true;
                     }
 
                     if(!is_checked_exist)
@@ -710,13 +711,13 @@
 
             var count = 0;
             var check_answer_status = true;
-            
-            
+
+
             for (let index = 0; index < option_length; index++) {
                 if(index != index_deleted_option){
                     $('.repeater-item').eq(index_repeater).find('.option_label').eq(index).val(label_names[count++]);
                     $('.repeater-item').eq(index_repeater).find('.btn-delete-inner-repeater-item').eq(index).prop('disabled', true);
-                    
+
                     if(check_answer_status && $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index_deleted_option).prop('checked') == true){
                         $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index).prop('checked', true);
                         check_answer_status = false;
@@ -727,7 +728,7 @@
 
             setTimeout(function(){ $('.repeater-item').eq(index_repeater).find('.btn-delete-inner-repeater-item').prop('disabled', false) }, 500);
             $('.btn-add-inner-repeater-item').eq(index_repeater).prop('disabled', false)
-        } 
+        }
 
         // handle bug delete confirmation on inner repeater triggering twice
         function handleErrorDeleteOption(){
@@ -749,11 +750,11 @@
                     $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index).prop('checked', false);
                 }
             }
-           
+
             if($(checkedAnswerStatus).prop('checked') == false){
                 $('.repeater-item').eq(index_repeater).find('.answer_status').eq(index_checked_answer_status).prop('checked', true);
             }
-            
+
         }
 
     </script>

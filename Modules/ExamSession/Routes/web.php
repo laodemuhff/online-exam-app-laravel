@@ -20,4 +20,5 @@ Route::group(['prefix' => 'exam-session', 'middleware' => 'validate_session'], f
     Route::delete('/delete/{id}', 'ExamSessionController@delete')->name('exam-session.delete');
     Route::get('/start/{id}', 'ExamSessionController@startSession')->name('exam-session.start');
     Route::get('/end/{id}', 'ExamSessionController@endSession')->name('exam-session.end');
+    Route::get('/submit/{id}', 'ExamSessionController@submitEnrollment')->name('exam-session.submit-enrollment');
 });

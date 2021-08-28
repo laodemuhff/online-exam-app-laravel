@@ -45,23 +45,23 @@ class ValidateSession
         // dd($exam_session);
         foreach($exam_session as $key => $item)
         {
-            $is_entry_exist = false;
-            $is_instructor_exist = false;
+            // $is_entry_exist = false;
+            // $is_instructor_exist = false;
 
-            foreach($item['examSessionUserEnrolls'] as $key2 => $user_enroll)
-            {
-                if($user_enroll['user_type'] == 'entry')
-                {
-                    $is_entry_exist = true;
-                }
+            // foreach($item['examSessionUserEnrolls'] as $key2 => $user_enroll)
+            // {
+            //     if($user_enroll['user_type'] == 'entry')
+            //     {
+            //         $is_entry_exist = true;
+            //     }
 
-                if($user_enroll['user_type'] == 'instructor')
-                {
-                    $is_instructor_exist = true;
-                }
-            }
+            //     if($user_enroll['user_type'] == 'instructor')
+            //     {
+            //         $is_instructor_exist = true;
+            //     }
+            // }
 
-            if($is_entry_exist && $is_instructor_exist){
+            if($item['enrollment_status']){
                 $update = ExamSession::where('id', $item['id'])->update([
                     'exam_session_status' => 'On Going'
                 ]);

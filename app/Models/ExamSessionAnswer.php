@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\ExamSessionUserEnroll;
 /**
  * @property integer $id
  * @property string $exam_session_code
@@ -41,7 +41,8 @@ class ExamSessionAnswer extends Model
     protected $appends = [
         'final_score',
         'right_answer',
-        'wrong_answer'
+        'wrong_answer',
+        'essay_answer_count'
     ];
 
     public function exam_session_user_enroll(){
@@ -65,7 +66,17 @@ class ExamSessionAnswer extends Model
     }
 
     public function getWrongAnswerAttribute(){
-        return Self::whereHas('option', function($q){$q->where('answer_status', '0');})->where('user_session_code', $this->user_session_code)->count();
+        $exam_session_user_enroll = ExamSessionUserEnroll::where("user_session_code", $this->user_session_code)->first();
+        $id_exam_session = $exam_session_user_enroll['id_exam_session'];
+
+        $wrong_answer = Self::whereHas('option', function($q){$q->where('answer_status', '0');})->where('user_session_code', $this->user_session_code)->count();
+        $unanswered = ExamSessionBaseQuestion::where('id_exam_session', $id_exam_session)->count() -  Self::where('user_session_code', $this->user_session_code)->count();
+
+        return $wrong_answer + $unanswered;
+    }
+
+    public function getEssayAnswerCountAttribute(){
+        return Self::where('user_session_code', $this->user_session_code)->whereNotNull('essay_answer')->count();
     }
 
 }

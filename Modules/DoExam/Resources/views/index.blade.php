@@ -21,7 +21,6 @@
 
 @section('content')
     @include('layouts.notification')
-
     <ul class="nav nav-pills nav-fill" role="tablist">
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#pending_exam">Pending Exam</a>
