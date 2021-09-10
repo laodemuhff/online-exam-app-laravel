@@ -15,7 +15,8 @@ use App\Models\ExamSessionOption;
 use App\Models\ExamSessionBaseQuestion;
 use App\Models\ExamSessionUserEnroll;
 use App\Models\ExamSessionAnswer;
-use App\Jobs\SendEmail;
+use App\Jobs\JobSendSessionCode;
+use App\Jobs\JobSendBeritaAcara;
 use Cache;
 use Carbon;
 use Auth;
@@ -298,7 +299,7 @@ class ExamSessionController extends Controller
                 $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => $generated_user_session_code]);
 
                 $details = ['enroll' => $enroll, 'session_code' => $generated_user_session_code];
-                SendEmail::dispatch($details);
+                JobSendSessionCode::dispatch($details);
             }
 
             return redirect()->back()->with('success',['Exam Session Started At :'.date('Y-m-d H:i:s')]);
@@ -354,9 +355,24 @@ class ExamSessionController extends Controller
     }
 
     public function submitEnrollment($id_exam_session){
-        ExamSession::where('id', $id_exam_session)->update([
-            'enrollment_status' => 1
-        ]);
+        $exam_session = ExamSession::find($id_exam_session);
+
+        DB::beginTransaction();
+
+        if($exam_session){
+            $exam_session->enrollment_status = 1;
+            $exam_session->save();
+
+            $enroll = ExamSessionUserEnroll::with('user')->where('id_exam_session', $exam_session->id)->get()->toArray();
+           
+            foreach($enroll as $er){
+                JobSendBeritaAcara::dispatch($enroll, $er, $exam_session->toArray());
+            }
+
+            DB::commit();
+        }
+
+        DB::rollback();
 
         return redirect()->route('exam-session', 'Pending');
     }

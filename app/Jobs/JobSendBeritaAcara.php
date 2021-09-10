@@ -7,22 +7,26 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Mail\SendSessionCode;
+use App\Mail\SendBeritaAcara;
 use Mail;
 
-class SendEmail implements ShouldQueue
+class JobSendBeritaAcara implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $details;
+    protected $users;
+    protected $enroll;
+    protected $exam_session;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($users, $enroll, $exam_session)
     {
-        $this->details = $details;
+        $this->users = $users;
+        $this->enroll = $enroll;
+        $this->exam_session = $exam_session;
     }
 
     /**
@@ -32,7 +36,7 @@ class SendEmail implements ShouldQueue
      */
     public function handle()
     {
-        $email = new SendSessionCode($this->details);
-        Mail::to($this->details['enroll']['user']->email)->send($email);
+        $email = new SendBeritaAcara($this->users, $this->enroll['user'], $this->exam_session);
+        Mail::to($this->enroll['user']['email'])->send($email);
     }
 }

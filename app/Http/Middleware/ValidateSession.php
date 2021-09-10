@@ -6,7 +6,7 @@ use Closure;
 use App\Models\ExamSession;
 use App\Models\ExamSessionUserEnroll;
 use Modules\ExamSession\Http\Controllers\ExamSessionController;
-use App\Jobs\SendEmail;
+use App\Jobs\JobSendSessionCode;
 
 class ValidateSession
 {
@@ -78,7 +78,7 @@ class ValidateSession
                         $update_user_enroll = ExamSessionUserEnroll::where('id', $enroll->id)->update(['user_session_code' => $generated_user_session_code]);
 
                         $details = ['enroll' => $enroll, 'session_code' => $generated_user_session_code];
-                        SendEmail::dispatch($details);
+                        JobSendSessionCode::dispatch($details);
                     }
                 }
             }
