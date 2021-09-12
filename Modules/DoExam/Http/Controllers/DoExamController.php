@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\ExamSessionUserEnroll;
 use App\Models\ExamSession;
 use App\Models\ExamSessionAnswer;
+use App\Models\ExamSessionBaseQuestion;
 use Auth;
 use Validator;
 
@@ -166,15 +167,21 @@ class DoExamController extends Controller
     }
 
     public function submitExam(Request $r){
-        // dd($r->all());
         $exam_answer = ExamSessionAnswer::where('user_session_code', $r->user_session_code)->first();
-        $exam = ExamSessionUserEnroll::with('examSession.exam')->where('user_session_code',  $r->user_session_code)->first()->examSession->exam->exam_title ?? null;
+        $exam_session = ExamSession::where('exam_session_code', $r->exam_session_code)->first(); 
+       
+        $final_score = !empty($exam_answer) ? $exam_answer['final_score'] : 0;
+        $right_answer = !empty($exam_answer) ? $exam_answer['right_answer'] : 0;
+        $wrong_answer = !empty($exam_answer) ? $exam_answer['wrong_answer'] : (!empty($exam_session) ? ExamSessionBaseQuestion::where('id_exam_session', $exam_session->id)->count() : 0);
+        $essay_answer_count = !empty($exam_answer) ? $exam_answer['essay_answer_count'] : 0;
 
+        $exam = ExamSessionUserEnroll::with('examSession.exam')->where('user_session_code',  $r->user_session_code)->first()->examSession->exam->exam_title ?? null;
+        
         ExamSessionUserEnroll::where('user_session_code', $r->user_session_code)->update([
             'is_registered' => 0,
             'is_cached' => 0,
             'is_submitted' => 1,
-            'final_score' => $exam_answer['final_score'],
+            'final_score' => $final_score,
             'final_score_status' => 'Ready to evaluate'
         ]);
 
@@ -184,12 +191,11 @@ class DoExamController extends Controller
         if(Cache::has('questions'.$r->user_session_code)){
             Cache::forget('questions'.$r->user_session_code);
         }
-
         $summary = [
-            'final_score' => $exam_answer['final_score'],
-            'right_answer' => $exam_answer['right_answer'],
-            'wrong_answer' => $exam_answer['wrong_answer'],
-            'essay_answer_count' => $exam_answer['essay_answer_count'],
+            'final_score' => $final_score,
+            'right_answer' => $right_answer,
+            'wrong_answer' => $wrong_answer,
+            'essay_answer_count' => $essay_answer_count,
             'exam' => $exam
         ];
 

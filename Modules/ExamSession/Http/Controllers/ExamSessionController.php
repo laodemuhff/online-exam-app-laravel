@@ -329,7 +329,7 @@ class ExamSessionController extends Controller
                         'is_registered' => 0,
                         'is_cached' => 0,
                         'is_submitted' => 1,
-                        'final_score' => $exam_answer['final_score'] ?? null,
+                        'final_score' => !empty($exam_answer) ? $exam_answer['final_score'] : 0,
                         'final_score_status' => 'Ready to evaluate'
                     ]);
                 }
@@ -376,4 +376,113 @@ class ExamSessionController extends Controller
 
         return redirect()->route('exam-session', 'Pending');
     }
+
+    public function evaluate($id_exam_session){
+        $data = ExamSession::with(['exam','examSessionUserEnrolls' => function($query){
+            $query->with('user');
+        }])->where('id', $id_exam_session)->first();
+        // dd($data);
+        return view('examsession::evaluate', [
+            'id' => $data['id'],
+            'exam_title' => $data['exam']['exam_title'],
+            'exam_session_code' => $data['exam_session_code'],
+            'status' => strtolower($data['exam_session_status']),
+            'enrolls' => $data['examSessionUserEnrolls']
+        ]);
+    }
+
+    public function evaluateAnswer(Request $r, $user_session_code){ 
+        $answers = ExamSessionAnswer::where('user_session_code', $user_session_code)->get()->toArray();
+        
+        $exam_session_id = $r->get('exam_session_id');
+        $exam_session_base_question = ExamSessionBaseQuestion::with(['question' => function($query){
+            $query->with('options');
+        }])->where('id_exam_session', $exam_session_id)->get()->toArray();
+        
+        foreach($exam_session_base_question as $key => $base_question){
+            foreach($answers as $key2 => $answer){
+                if($answer['id_exam_session_question'] == $base_question['id_exam_session_question']){
+                    if($base_question['question']['type'] == 'multiple_choice'){
+                        $exam_session_base_question[$key]['answer'] = $answer; 
+                        foreach($base_question['question']['options'] as $key3 => $opt){
+                            if($opt['id'] == $answer['multiple_choice_answer']){
+                                $exam_session_base_question[$key]['question']['options'][$key3]['is_user_answer'] = 1;
+                            }else{
+                                $exam_session_base_question[$key]['question']['options'][$key3]['is_user_answer'] = 0;
+                            }   
+                        }
+                    }else{
+                        $exam_session_base_question[$key]['answer'] = $answer; 
+                    }
+                    break;
+                }
+            }
+        }
+
+        $need_to_evaluate = 0;
+        foreach($exam_session_base_question as $key => $base_question){
+            if($base_question['question']['type'] == 'essay'){
+               $need_to_evaluate++;
+            }
+        }
+        
+        foreach($answers as $key => $answer){
+            $exam_session_question = ExamSessionQuestion::where('id', $answer['id_exam_session_question'])->first();
+
+            if($exam_session_question['type'] == 'essay' && !is_null($answer['given_point'])){
+                $need_to_evaluate--;
+            }
+        }
+
+        $exam_session_user_enroll = ExamSessionUserEnroll::where('user_session_code', $user_session_code);
+
+        // update final score status
+        if(!is_null((clone $exam_session_user_enroll)->first()['final_score_status'])){
+            $final_score_status = $need_to_evaluate == 0 ? 'Verified' : 'Ready to Evaluate';
+            (clone $exam_session_user_enroll)->update([
+                'final_score_status' => $final_score_status
+            ]);
+        }
+    
+        $user_enrollment = (clone $exam_session_user_enroll)->first();
+        // dd($exam_session_base_question);
+    
+        return view('examsession::evaluate_answer', [
+            'user_enrollment' => $user_enrollment,
+            'exam_session_base_question' => $exam_session_base_question,
+            'need_to_evaluate' => $need_to_evaluate
+        ]);
+    }
+
+    function updateFinalScore(Request $request){
+        $id_exam_session_question = $request->id_exam_session_question;
+        $user_session_code = $request->user_session_code;
+        $given_point = $request->given_point;
+
+        $answer = ExamSessionAnswer::updateOrCreate(
+            [
+                'id_exam_session_question' => $id_exam_session_question,
+                'user_session_code' => $user_session_code
+            ],
+            [
+               'given_point' => $given_point,
+
+            ]
+        );
+
+        if($answer){
+            ExamSessionUserEnroll::where('user_session_code', $user_session_code)->update([
+                'final_score' => $answer['final_score']
+            ]);
+            return response()->json([
+                'status' => true,
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+        ]);
+
+    }
+    
 }

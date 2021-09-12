@@ -21,4 +21,7 @@ Route::group(['prefix' => 'exam-session', 'middleware' => 'validate_session'], f
     Route::get('/start/{id}', 'ExamSessionController@startSession')->name('exam-session.start');
     Route::get('/end/{id}', 'ExamSessionController@endSession')->name('exam-session.end');
     Route::get('/submit/{id}', 'ExamSessionController@submitEnrollment')->name('exam-session.submit-enrollment');
+    Route::get('/evaluate/{id}', 'ExamSessionController@evaluate')->name('exam-session.evaluate');
+    Route::get('/evaluate-answer/{id}', 'ExamSessionController@evaluateAnswer')->name('exam-session.evaluate-answer');
+    Route::post('/update-final-score', 'ExamSessionController@updateFinalScore')->name('update-final-score');
 });

@@ -93,6 +93,7 @@
         <div class="col-md-8">
             <form action="{{route('submit-exam')}}" method="post">
                 @csrf
+                <input type="hidden" name="exam_session_code" value="{{$setting['exam_session_code']}}">
                 <input type="hidden" name="user_session_code" value="{{$user_session_code}}">
                 <div class="row">
                     @php

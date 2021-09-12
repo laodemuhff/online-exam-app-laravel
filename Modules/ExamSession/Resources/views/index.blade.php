@@ -14,12 +14,12 @@
         {{ucfirst($status)}} Exam Session
     </h3>
     <span class="kt-subheader__separator kt-hidden"></span>
-    <div class="kt-subheader__breadcrumbs">
+    {{-- <div class="kt-subheader__breadcrumbs">
         <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
         <a href="{{route('exam-session', $status)}}" class="kt-subheader__breadcrumbs-link">
             List Exam Session
         </a>
-    </div>
+    </div> --}}
 @endsection
 
 @section('content')
@@ -88,7 +88,7 @@
                                         @endif
 
                                         @if ($session['exam_session_status'] == 'Terminated')
-                                            <a href="#" title="Evaluate Session - {{$session['exam_session_code']}}" type="button" class="btn btn-info btn-sm"><i class="la la-check-square" style="color: white"></i></a>
+                                            <a href="{{route('exam-session.evaluate', $session['id'])}}" title="Evaluate Session - {{$session['exam_session_code']}}" type="button" class="btn btn-info btn-sm"><i class="la la-check-square" style="color: white"></i></a>
                                         @endif
 
                                         <a href="{{route('exam-session.delete', $session['id'])}}" title="Delete {{$session['exam_session_code']}}" type="button" class="btn btn-danger btn-delete btn-sm"><i class="la la-trash"></i></a>
