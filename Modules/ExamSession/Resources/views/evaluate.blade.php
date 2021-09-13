@@ -89,12 +89,37 @@
             <div class="kt-portlet__foot kt-portlet__foot--fit" id="create-portlet" style="border-top: 0">
                 <div class="kt-form__actions ">
                     <div class="pull-right">
-                        <a class="btn btn-success btn-sm white-text" type="button" data-toggle="tooltip" title="">
+                        <a class="btn btn-success btn-sm white-text" type="button" data-toggle="modal" title="" data-target="#confirmSend">
                             <i class="la la-check"></i><span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Commit Evaluation Result</span>
                         </a>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="confirmSend" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="{{route('send-evaluation-result')}}" method="POST">
+                @csrf
+                <input type="hidden" name="id_exam_session" value="{{$id}}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Modal</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        Are You Sure Want to Send Evaluation Resut to All User ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection

@@ -24,4 +24,5 @@ Route::group(['prefix' => 'exam-session', 'middleware' => 'validate_session'], f
     Route::get('/evaluate/{id}', 'ExamSessionController@evaluate')->name('exam-session.evaluate');
     Route::get('/evaluate-answer/{id}', 'ExamSessionController@evaluateAnswer')->name('exam-session.evaluate-answer');
     Route::post('/update-final-score', 'ExamSessionController@updateFinalScore')->name('update-final-score');
+    Route::post('/send-evaluation-result', 'ExamSessionController@sendEvaluationResult')->name('send-evaluation-result');
 });

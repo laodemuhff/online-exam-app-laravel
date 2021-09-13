@@ -11,7 +11,9 @@
             {{-- <th>Total Questions</th> --}}
             <th>Session Status</th>
             <th>Review Status</th>
-            <th>Action</th>
+            @if($history_status == 'running_exam')
+                <th>Action</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -72,19 +74,25 @@
                         @elseif ($item['final_score_status'] == null && $item['examSession']['exam_session_status'] != 'Terminated')
                             <span class="badge badge-pill badge-warning" style="font-size: 1.1em">Pending</span>
                         @elseif($item['final_score_status'] == 'Ready to evaluate')
-                            <span class="badge badge-pill badge-success" style="font-size: 1.1em">Waiting Evaluation</span>
+                            <span class="badge badge-pill badge-primary" style="font-size: 1.1em">Waiting Evaluation</span>
                         @else
-                            <span class="badge badge-pill badge-primary" style="font-size: 1.1em"><a href="#">Final Result</a></span>
+                            @if ($item['examSession']['is_evaluation_send'])
+                                <span class="badge badge-pill badge-success" style="font-size: 1.1em">Sent</span>
+                            @else
+                                <span class="badge badge-pill badge-success" style="font-size: 1.1em">Evaluated</span>
+                            @endif
                         @endif
 
                     </td>
-                    <td>
-                        @if ($item['examSession']['exam_session_status'] == 'On Going' && !$item['is_submitted'] && $item['examSession']['registration_status'] != 'expired')
-                            <a data-toggle='modal' data-target='#register-session-{{$item['examSession']['id']}}' type="button" class="btn btn-primary" style="color: white"><span class="flaticon-user-ok"></span> Register</a>
-                        @else
-                            <a @if($item['examSession']['registration_status'] == 'expired' || $item['examSession']['exam_session_status'] == 'Terminated') title="Register Session is Ended" @else title="Register Session is not Yet Started" @endif data-toggle="tooltip" type="button" class="btn btn-light" style="color: white; background-color: #EBEDF2; border-color: #EBEDF2;" disabled><span class="flaticon-user-ok"></span> Register</a>
-                        @endif
-                    </td>
+                    @if($history_status == 'running_exam')
+                        <td>
+                            @if ($item['examSession']['exam_session_status'] == 'On Going' && !$item['is_submitted'] && $item['examSession']['registration_status'] != 'expired')
+                                <a data-toggle='modal' data-target='#register-session-{{$item['examSession']['id']}}' type="button" class="btn btn-primary" style="color: white"><span class="flaticon-user-ok"></span> Register</a>
+                            @else
+                                <a @if($item['examSession']['registration_status'] == 'expired' || $item['examSession']['exam_session_status'] == 'Terminated') title="Register Session is Ended" @else title="Register Session is not Yet Started" @endif data-toggle="tooltip" type="button" class="btn btn-light" style="color: white; background-color: #EBEDF2; border-color: #EBEDF2;" disabled><span class="flaticon-user-ok"></span> Register</a>
+                            @endif
+                        </td>
+                    @endif
                 </tr>
 
                 <div id="register-session-{{$item['examSession']['id']}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">

@@ -19,32 +19,36 @@
             <td>Exam Title</td>
             <td>{{$exam_session['exam']['exam_title'] ?? 'Judul Exam'}}</td>
         </tr>
-        <tr>
-            <td>Exam Date Time</td>
-            <td>{{isset($exam_session['exam_datetime']) ? tgl_indo(date('Y-m-d', strtotime($exam_session['exam_datetime']))).' - '.date('H.i', strtotime($exam_session['exam_datetime']))  : 'Not Set'}}</td>
-        </tr>
     </table>
 
-    <h4 style="font-family: Arial, Helvetica, sans-serif">Berita Acara - Daftar Peserta Ujian</h3>
+    <h4 style="font-family: Arial, Helvetica, sans-serif">Rekap Hasil Evaluasi Peserta Ujian</h3>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <td>No.</td>
                 <td>Email</td>
                 <td>Name</td>
-                <td>Phone</td>
-                <td>Level</td>
+                <td>Final Score</td>
+                <td>Status</td>
             </tr>
         </thead>
         <tbody>
             @foreach ($all_user as $key => $usr)
-                <tr>
-                    <td>{{ ++$key }}</td>
-                    <td>{{$usr['user']['email']}}</td>
-                    <td>{{$usr['user']['name']}}</td>
-                    <td>{{$usr['user']['phone']}}</td>
-                    <td>{{$usr['user']['level']}}</td>
-                </tr>
+                @if ($usr['user']['level'] === 'entry')
+                    <tr>
+                        <td>{{ ++$key }}</td>
+                        <td>{{$usr['user']['email']}}</td>
+                        <td>{{$usr['user']['name']}}</td>
+                        <td>{{$usr['final_score']}}</td>
+                        <td>
+                            @if (!is_null($usr['final_score_status']))
+                                Verified
+                            @else
+                                <span style="color: rgb(224, 9, 9)">Invalid</span>
+                            @endif
+                        </td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

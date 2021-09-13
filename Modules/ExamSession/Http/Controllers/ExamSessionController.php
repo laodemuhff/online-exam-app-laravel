@@ -17,6 +17,7 @@ use App\Models\ExamSessionUserEnroll;
 use App\Models\ExamSessionAnswer;
 use App\Jobs\JobSendSessionCode;
 use App\Jobs\JobSendBeritaAcara;
+use App\Jobs\JobSendHasilEvaluasi;
 use Cache;
 use Carbon;
 use Auth;
@@ -355,18 +356,17 @@ class ExamSessionController extends Controller
     }
 
     public function submitEnrollment($id_exam_session){
-        $exam_session = ExamSession::find($id_exam_session);
+        $exam_session = ExamSession::with('exam')->where('id', $id_exam_session);
 
         DB::beginTransaction();
 
-        if($exam_session){
-            $exam_session->enrollment_status = 1;
-            $exam_session->save();
+        if($exs = (clone $exam_session)->first()){
+            (clone $exam_session)->update(['enrollment_status' => 1]);
 
-            $enroll = ExamSessionUserEnroll::with('user')->where('id_exam_session', $exam_session->id)->get()->toArray();
+            $enroll = ExamSessionUserEnroll::with('user')->where('id_exam_session', $id_exam_session)->get()->toArray();
            
             foreach($enroll as $er){
-                JobSendBeritaAcara::dispatch($enroll, $er, $exam_session->toArray());
+                JobSendBeritaAcara::dispatch($enroll, $er, $exs);
             }
 
             DB::commit();
@@ -482,7 +482,28 @@ class ExamSessionController extends Controller
         return response()->json([
             'status' => false,
         ]);
+    }
 
+    function sendEvaluationResult(Request $request){
+
+        $exam_session = ExamSession::with('exam')->where('id', $request->id_exam_session);
+
+        DB::beginTransaction();
+        if($exs = (clone $exam_session)->first()){
+            (clone $exam_session)->update(['is_evaluation_send' => 1]);
+
+            $enroll = ExamSessionUserEnroll::with('user')->where('id_exam_session', $request->id_exam_session)->get()->toArray();
+            // dd($enroll);
+            foreach($enroll as $er){
+                JobSendHasilEvaluasi::dispatch($enroll, $er, $exs);
+            }
+
+            DB::commit();
+        }
+
+        DB::rollback();
+
+        return redirect()->back()->with('success', ['Success Send Evaluation Result to All User']);
     }
     
 }

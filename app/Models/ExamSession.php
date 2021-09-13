@@ -50,8 +50,10 @@ class ExamSession extends Model
         'disallow_navigation',
         'check_on_exam_similarity',
         'exam_similarity_value',
+        'enrollment_status',
         'exam_session_status',
         'registration_status',
+        'is_evaluation_send',
         'created_at',
         'updated_at'];
 

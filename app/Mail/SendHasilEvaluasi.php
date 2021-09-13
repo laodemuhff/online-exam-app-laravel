@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use PDF;
 
-class SendBeritaAcara extends Mailable
+class SendHasilEvaluasi extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +23,8 @@ class SendBeritaAcara extends Mailable
     public function __construct($all_user, $user, $exam_session)
     {
         $this->exam_session = $exam_session;
-        $this->pdf = PDF::loadView('pdf.berita_acara', [
+
+        $this->pdf = PDF::loadView('pdf.hasil_evaluasi', [
             'all_user' => $all_user,
             'user' => $user,
             'exam_session' => $exam_session
@@ -38,9 +39,9 @@ class SendBeritaAcara extends Mailable
     public function build()
     {
         return $this->from(env('MAIL_FROM_ADDRESS', 'Online Exam'))
-                    ->markdown('emails.send_berita_acara', [
+                    ->markdown('emails.send_hasil_evaluasi', [
                         'exam_session' => $this->exam_session
                     ])
-                    ->attachData($this->pdf->output(), 'berita_acara.pdf');
+                    ->attachData($this->pdf->output(), 'hasil_evaluasi.pdf');
     }
-} 
+}
