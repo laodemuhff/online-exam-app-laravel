@@ -66,7 +66,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        @if (!$this_session['enrollment_status'])
+                        @if (!$this_session['enrollment_status'] && Auth::user()->level != 'instructor')
                             <th>Action</th>
                         @endif
                         <th>Name</th>
@@ -82,7 +82,7 @@
                         @foreach ($user_enroll_instructor as $key => $item)
                             <tr>
                                 <td>{{++$key}}</td>
-                                @if (!$this_session['enrollment_status'])
+                                @if (!$this_session['enrollment_status'] && Auth::user()->level != 'instructor')
                                     <td>
                                         <a href="{{route('user-enrollment-delete', $item['id'])}}" title="{{$item['user']['email']}}" type="button" class="btn btn-danger btn-delete btn-sm">
                                             <i class="la la-trash"></i>
@@ -104,7 +104,7 @@
                     @endif
                 </tbody>
             </table>
-            @if (!$this_session['enrollment_status'])
+            @if (!$this_session['enrollment_status'] && Auth::user()->level != 'instructor')
                 <div class="btn-group-horizontal mt-2" role="group" aria-label="Horizontal button group">
                     <button data-target="#searchInstructor" data-toggle="modal" class="btn btn-primary"><i class="la la-search"></i> Search and Add Instructor</button>
                     {{-- <a href="{{'#'}}" type="button" class="btn btn-secondary"><i class="la la-download"></i> Download Sample File</a>

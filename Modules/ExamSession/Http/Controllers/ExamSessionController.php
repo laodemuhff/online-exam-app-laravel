@@ -197,6 +197,15 @@ class ExamSessionController extends Controller
             // create the copy of questions, options, and exam base questions
             $copyExam = Self::copyExamBaseQuestion($post['id_exam'], $create_session->id);
 
+            $user = Auth::user();
+            if($user->level === 'instructor'){
+                ExamSessionUserEnroll::create([
+                    'id_exam_session' => $create_session->id,
+                    'id_user' => $user->id,
+                    'user_type' => $user->level
+                ]);
+            }
+
             if($copyExam){
                 DB::commit();
                 return redirect()->route('exam-session', 'Pending')->with('success', ['Exam Session berhasil ditambahkan']);

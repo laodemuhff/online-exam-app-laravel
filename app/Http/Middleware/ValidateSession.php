@@ -7,6 +7,8 @@ use App\Models\ExamSession;
 use App\Models\ExamSessionUserEnroll;
 use Modules\ExamSession\Http\Controllers\ExamSessionController;
 use App\Jobs\JobSendSessionCode;
+use Illuminate\Database\Eloquent\Builder;
+use Auth;
 
 class ValidateSession
 {
@@ -26,12 +28,26 @@ class ValidateSession
             Self::handleOecp2();
             Self::handleOecp5();
 
-            $counter_pending = ExamSession::where('exam_session_status', 'Pending')->count();
-            $counter_on_going = ExamSession::where('exam_session_status', 'On Going')->count();
+            $user = Auth::user();
+            
+            $counter_pending = ExamSession::where('exam_session_status', 'Pending');
+            $counter_on_going = ExamSession::where('exam_session_status', 'On Going');
+
+            if($user->level === 'instructor'){
+                $id_user = $user->id;
+                
+                $counter_pending->whereHas('examSessionUserEnrolls', function(Builder $query) use($id_user){
+                    $query->where('id_user', $id_user);
+                });
+
+                $counter_on_going->whereHas('examSessionUserEnrolls', function(Builder $query) use($id_user){
+                    $query->where('id_user', $id_user);
+                });
+            }
 
             session([
-                'counter_pending' => $counter_pending,
-                'counter_on_going' => $counter_on_going
+                'counter_pending' => $counter_pending->count(),
+                'counter_on_going' => $counter_on_going->count()
             ]);
 
             return $next($request);
