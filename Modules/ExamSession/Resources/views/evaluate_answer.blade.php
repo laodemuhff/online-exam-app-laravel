@@ -109,13 +109,15 @@
                                 </div>
                                 @if (!is_null($user_enrollment['final_score_status']))
                                     <div style="width: 100%; border-top: solid 1px rgb(218, 212, 212); padding: 10px; padding-left:0">
-                                        <div class="input-group flex-nowrap col-md-6">
+                                        <div class="input-group flex-nowrap @if(!$is_evaluation_sent) col-md-6 @else col-md-3 @endif">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="addon-wrapping">Given Point</span>
                                             </div>
-                                            <input type="number" class="form-control" id="given_point_{{$item['question']['id']}}" name="given_point_{{$item['question']['id']}}" placeholder="Given Point" aria-label="Given Point" aria-describedby="addon-wrapping" value="{{$item['answer']['given_point'] ?? null}}">
+                                            <input type="number" class="form-control" id="given_point_{{$item['question']['id']}}" name="given_point_{{$item['question']['id']}}" placeholder="Given Point" aria-label="Given Point" aria-describedby="addon-wrapping" value="{{$item['answer']['given_point'] ?? null}}" @if($is_evaluation_sent) disabled @endif>
                                             &nbsp;
-                                            <button class="btn btn-light" style="border: 1px solid #e2e5ec" onclick="updateFinalScore(this)" data-id-exam-session-question="{{$item['question']['id']}}">Save</button>
+                                            @if (!$is_evaluation_sent)
+                                                <button class="btn btn-light" style="border: 1px solid #e2e5ec" onclick="updateFinalScore(this)" data-id-exam-session-question="{{$item['question']['id']}}">Save</button>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif

@@ -89,9 +89,13 @@
             <div class="kt-portlet__foot kt-portlet__foot--fit" id="create-portlet" style="border-top: 0">
                 <div class="kt-form__actions ">
                     <div class="pull-right">
-                        <a class="btn btn-success btn-sm white-text" type="button" data-toggle="modal" title="" data-target="#confirmSend">
-                            <i class="la la-check"></i><span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Commit Evaluation Result</span>
-                        </a>
+                        @if ($is_evaluation_sent)
+                            Evaluation Has Been Sent
+                        @else
+                            <a class="btn btn-success btn-sm white-text" type="button" data-toggle="modal" title="" data-target="#confirmSend">
+                                <i class="la la-check"></i><span style="font-size: 1.1em; font-weight:bold" id="add-question-text">Commit Evaluation Result</span>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

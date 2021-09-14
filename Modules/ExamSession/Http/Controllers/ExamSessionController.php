@@ -18,6 +18,7 @@ use App\Models\ExamSessionAnswer;
 use App\Jobs\JobSendSessionCode;
 use App\Jobs\JobSendBeritaAcara;
 use App\Jobs\JobSendHasilEvaluasi;
+use Illuminate\Database\Eloquent\Builder;
 use Cache;
 use Carbon;
 use Auth;
@@ -31,7 +32,20 @@ class ExamSessionController extends Controller
      */
     public function index($status)
     {
-        $data['exam_sessions'] = ExamSession::with('exam', 'examSessionUserEnrolls')->where('exam_session_status', $status)->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+
+        $exam_session_snap = ExamSession::with('exam', 'examSessionUserEnrolls')->where('exam_session_status', $status);
+        if($user->level == 'instructor'){
+            $id_user = $user->id;
+
+            $data['exam_sessions'] = (clone $exam_session_snap)->whereHas('examSessionUserEnrolls', function(Builder $query) use($id_user){
+                $query->where('id_user', $id_user);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+        }else{
+            $data['exam_sessions'] = (clone $exam_session_snap)->orderBy('created_at', 'desc')->get();
+        }
         $data['status'] = str_replace(' ', '-', strtolower($status));
 
         return view('examsession::index', $data);
@@ -386,6 +400,7 @@ class ExamSessionController extends Controller
             'id' => $data['id'],
             'exam_title' => $data['exam']['exam_title'],
             'exam_session_code' => $data['exam_session_code'],
+            'is_evaluation_sent' => $data['is_evaluation_send'],
             'status' => strtolower($data['exam_session_status']),
             'enrolls' => $data['examSessionUserEnrolls']
         ]);
@@ -450,7 +465,8 @@ class ExamSessionController extends Controller
         return view('examsession::evaluate_answer', [
             'user_enrollment' => $user_enrollment,
             'exam_session_base_question' => $exam_session_base_question,
-            'need_to_evaluate' => $need_to_evaluate
+            'need_to_evaluate' => $need_to_evaluate,
+            'is_evaluation_sent' => ExamSession::find($exam_session_id)->is_evaluation_send
         ]);
     }
 
