@@ -4,16 +4,56 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
-use Validator;
 use App\Models\User;
 use App\Models\AdminFeature;
 use App\Models\UserAdminFeature;
+use App\Models\Subject;
+use App\Models\ExamSession;
+use App\Models\Exam;
+use App\Models\Question;
+use Auth;
+use Validator;
+use DB;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
     public function dashboard(){
-        return view('dashboard');
+
+        $question_subject = DB::table('question_subjects')
+                            ->select('id_subject', DB::raw('count(*) as total'))
+                            ->groupBy('id_subject')
+                            ->orderBy('total', 'desc')
+                            ->get();
+       
+        $treshold = 5;
+        $popular_subjects = [];
+        foreach($question_subject as $key => $item){
+            if($key == 5) break;
+            $subject = Subject::where('id', $item->id_subject)->first();
+            $popular_subjects[$key]['subject'] = $subject->name;
+            $popular_subjects[$key]['total'] = $item->total;
+        }
+
+        $ratings = [];
+
+        $ratings['all_time']['exams_created'] = Exam::all()->count();
+        $ratings['all_time']['questions_created'] = Question::all()->count();
+        $ratings['all_time']['session_enrolled'] = ExamSession::all()->count();
+        $ratings['all_time']['session_evaluated'] = ExamSession::where('is_evaluation_send', 1)->count();
+
+        $awal_bulan = Carbon::now()->startOfMonth();
+        $akhir_bulan = Carbon::now()->endOfMonth();
+      
+        $ratings['monthly']['exams_created'] = Exam::whereBetween('created_at', [$awal_bulan, $akhir_bulan])->count();
+        $ratings['monthly']['questions_created'] = Question::whereBetween('created_at', [$awal_bulan, $akhir_bulan])->count();
+        $ratings['monthly']['session_enrolled'] = ExamSession::whereBetween('created_at', [$awal_bulan, $akhir_bulan])->count();
+        $ratings['monthly']['session_evaluated'] = ExamSession::whereBetween('created_at', [$awal_bulan, $akhir_bulan])->where('is_evaluation_send', 1)->count();
+        
+        return view('dashboard', [
+            'ratings' => $ratings,
+            'popular_subjects' => $popular_subjects
+        ]);
     }
 
     public function login(){

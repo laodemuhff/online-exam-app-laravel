@@ -24,7 +24,7 @@
                     <ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#kt_widget11_tab1_content" role="tab">
-                                Last Month
+                                This Month
                             </a>
                         </li>
                         <li class="nav-item">
@@ -47,38 +47,17 @@
                                         <tr>
                                             <td style=" width: 20%;">Stats</td>
                                             <td style=" width: 10%;">Total</td>
-                                            <td style=" width: 10%; text-align:center">Contribution</td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Session Enrolled</span>
-                                            </td>
-                                            <td>19</td>
-                                            <td style="color: rgb(7, 7, 160); text-align: center">10%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Session Evaluated</span>
-                                            </td>
-                                            <td>10</td>
-                                            <td style="color: rgb(7, 7, 160); text-align: center">25%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Exam Created</span>
-                                            </td>
-                                            <td>12</td>
-                                            <td style="color: rgb(7, 7, 160); text-align: center">30%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Questions Created</span>
-                                            </td>
-                                            <td>120</td>
-                                            <td style="color: rgb(7, 7, 160); text-align: center">18%</td>
-                                        </tr>
+                                        @foreach ($ratings['monthly'] as $key => $total)
+                                            <tr>
+                                                <td>
+                                                    <span class="kt-widget11__title">{{str_replace('_',' ',ucwords($key))}}</span>
+                                                </td>
+                                                <td>{{$total}}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -99,30 +78,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Session Enrolled</span>
-                                            </td>
-                                            <td>59</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Session Evaluated</span>
-                                            </td>
-                                            <td>50</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Exam Created</span>
-                                            </td>
-                                            <td>22</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="kt-widget11__title">Questions Created</span>
-                                            </td>
-                                            <td>545</td>
-                                        </tr>
+                                        @foreach ($ratings['all_time'] as $key => $total)
+                                            <tr>
+                                                <td>
+                                                    <span class="kt-widget11__title">{{str_replace('_', ' ', ucwords($key))}}</span>
+                                                </td>
+                                                <td>{{$total}}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -150,30 +113,14 @@
             <div class="kt-portlet__body kt-portlet__body--fluid kt-portlet__body--fit">
                 <div class="kt-widget4 kt-widget4--sticky">
                     <div class="kt-widget4__items kt-portlet__space-x kt-margin-t-15">
-                        <div class="kt-widget4__item">
-                            <a href="#" class="kt-widget4__title">
-                                Pemrograman Web Dasar
-                            </a>
-                            <span class="kt-widget4__number kt-font-brand">500</span>
-                        </div>
-                        <div class="kt-widget4__item">
-                            <a href="#" class="kt-widget4__title">
-                                Mobile Apps
-                            </a>
-                            <span class="kt-widget4__number kt-font-success">64</span>
-                        </div>
-                        <div class="kt-widget4__item">
-                            <a href="#" class="kt-widget4__title">
-                                Kalkulus
-                            </a>
-                            <span class="kt-widget4__number kt-font-danger">30</span>
-                        </div>
-                        <div class="kt-widget4__item">
-                            <a href="#" class="kt-widget4__title">
-                                Matematika Diskrit
-                            </a>
-                            <span class="kt-widget4__number kt-font-warning">19</span>
-                        </div>
+                        @foreach ($popular_subjects as $item)
+                            <div class="kt-widget4__item">
+                                <a href="#" class="kt-widget4__title">
+                                    {{$item['subject']}}
+                                </a>
+                                <span class="kt-widget4__number kt-font-brand">{{$item['total']}}</span>
+                            </div>
+                        @endforeach
                     </div>
                     <div class="kt-widget4__chart kt-margin-t-15">
                         <canvas id="kt_chart_latest_updates" style="height: 150px;"></canvas>
