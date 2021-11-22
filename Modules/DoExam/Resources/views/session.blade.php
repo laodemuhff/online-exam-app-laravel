@@ -89,6 +89,36 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="card col-md-11">
+                    <div class="card-body">
+                        <h5 class="card-title">User Info</h5>
+                        <p class="card-text">
+                            <table class="table table-light">
+                                <tbody>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>:</td>
+                                        <td>{{Auth::user()->name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>:</td>
+                                        <td>{{Auth::user()->email}}</td>
+                                    </tr>
+                                    <tr>
+                                    </tr>
+                                    <tr>
+                                        <td>Level</td>
+                                        <td>:</td>
+                                        <td>{{Auth::user()->level}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-8">
             <form action="{{route('submit-exam')}}" method="post">
@@ -104,6 +134,11 @@
                     @foreach ($questions as $key => $item)
                         <div class="card col-md-12 box-soal" @if(isset($current_active_nav)) @if($current_active_nav != $key) style="display: none" @endif @else @if($key != 0) style="display:none" @endif @endif data-index="{{$key}}">
                             <div class="card-body">
+                                @if ($setting['disallow_navigation'])
+                                    <div class="alert alert-warning" role="alert">
+                                        <strong>Navigasi Dinonaktifkan! Harap mengecek ulang jawaban anda sebelum lanjut ke soal berikutnya</strong>
+                                    </div>
+                                @endif
                                 <h5 class="card-title">Soal {{++$key}}</h5>
                                 <p class="card-text">
                                     <?php echo $item['question']['question_description'];?>
@@ -144,13 +179,17 @@
                                     <div class="col-md-12" style="text-align: center">
                                         <div class="btn-group" id="nav-arrow" role="group" aria-label="Button group">
                                             {{-- <a href="#" class="btn btn-outline-primary" style="width: 100%"><i class="la la-arrow-left"></i></a> --}}
-                                            <a href="#" class="btn btn-outline-primary" style="width: 100%" onclick="confirmNext(this)"><i class="la la-arrow-right"></i></a>
+                                            {{-- <a href="#" class="btn btn-outline-primary" style="width: 100%" onclick="confirmNext(this)"><i class="la la-arrow-right"></i></a> --}}
+                                            <a href="#" class="btn btn-outline-primary" style="width: 100%" onclick="setNext(this)"><i class="la la-arrow-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-md-12" style="border: 1px dotted black; margin-top:10px">
                                         @foreach ($questions as $key => $item)
                                             <div style="float:left; margin:3px; min-width: 45px">
                                                 <a href="#" class="btn @if(!empty($item['question']['answer'])) btn-primary @else btn-outline-primary @endif  nav-link @if(isset($current_active_nav)) @if($current_active_nav == $key) active @endif @else @if($key == 0) active @endif @endif" style="width: 100%" data-index="{{$key}}">{{++$key}}</a>
+                                                @if ($item['question']['type'] === 'essay')
+                                                    <div style="text-align: center">essay</div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
@@ -167,6 +206,9 @@
                                         @foreach ($questions as $key => $item)
                                             <div style="float:left; margin:3px; min-width: 45px">
                                                 <a href="#" class="btn @if(!empty($item['question']['answer'])) btn-primary @else btn-outline-primary @endif  nav-link @if(isset($current_active_nav)) @if($current_active_nav == $key) active @endif @else @if($key == 0) active @endif @endif" style="width: 100%" onclick="navigate(this)" data-index="{{$key}}">{{++$key}}</a>
+                                                @if ($item['question']['type'] === 'essay')
+                                                    <div style="text-align: center">essay</div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
@@ -212,6 +254,7 @@
         let token = $('meta[name="csrf-token"]').attr('content')
         let user_session_code = "<?php echo $user_session_code ?>"
         let exam_sess_code = "<?php echo $setting['exam_session_code'] ?>"
+        let is_navigation_disallowed = "{!! $setting['disallow_navigation'] !!}";
 
         function handleEssay(e){
             const essay_answer = $(e).val()
@@ -391,7 +434,13 @@
             });
 
             if(current_nav_index == navlinks.length - 1){
-                navigate(e,0)
+                if(is_navigation_disallowed){
+                    $('#nav-arrow').hide()
+                    $('#submit-all').show()
+                }else{
+                    console.log('tets')
+                    navigate(e,0)
+                }
             }else{
                 navigate(e,++current_nav_index)
             }
