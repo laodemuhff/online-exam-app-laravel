@@ -9,7 +9,7 @@
     <span class="kt-subheader__separator kt-hidden"></span>
     <div class="kt-subheader__breadcrumbs">
         <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-        <a href="{{route('register-session')}}" class="kt-subheader__breadcrumbs-link">
+        <a href="#" class="kt-subheader__breadcrumbs-link">
             Summary
         </a>
     </div>
